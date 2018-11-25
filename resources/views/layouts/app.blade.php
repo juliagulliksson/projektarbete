@@ -1,3 +1,5 @@
+<!-- NOT IN USE-->
+
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 <head>
@@ -18,6 +20,8 @@
         @include('includes.nav')
 
         @yield('content')
+        <!-- Vue.js router -->
+        <router-view></router-view>
     </div>
 
     <!-- Scripts -->
