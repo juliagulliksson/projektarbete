@@ -23,17 +23,19 @@ export default {
   destroyToken(context) {
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + context.state.token;
-    if (context.getters.loggedIn) {
+    if (context.getters.isAuthenticated) {
       return new Promise((resolve, reject) => {
         axios
           .post("/api/logout")
           .then(response => {
             localStorage.removeItem("access_token");
+            localStorage.removeItem("user");
             context.commit("destroyToken");
             resolve(response);
           })
           .catch(error => {
             localStorage.removeItem("access_token");
+            localStorage.removeItem("user");
             context.commit("destroyToken");
             reject(error.data.message);
           });
@@ -70,6 +72,7 @@ export default {
         .then(response => {
           console.log(response);
           resolve(response);
+          context.commit("updateUserQuestions", response.data);
         })
         .catch(error => {
           reject(error.data.message);
@@ -83,7 +86,7 @@ export default {
         .then(response => {
           console.log(response);
           resolve(response);
-          context.commit("getQuestions", response.data);
+          context.commit("setQuestions", response.data);
         })
         .catch(error => {
           reject(error.data.message);
@@ -111,6 +114,7 @@ export default {
         .get(`api/questions/${id}`)
         .then(response => {
           console.log(response);
+          context.commit("setQuestion", response.data);
           resolve(response);
         })
         .catch(error => {

@@ -4,7 +4,12 @@
       <h3>
         <router-link :to="questionUrl(question.id)">{{question.title}}</router-link>
       </h3>
-      <small>Asked on {{slicedDate(question.created_at)}} by</small>
+      <small>
+        Asked on {{slicedDate(question.created_at)}}
+        <span
+          v-if="question.user != undefined"
+        >by {{question.user.name}}</span>
+      </small>
     </div>
   </div>
 </template>

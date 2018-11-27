@@ -7,3 +7,26 @@ a {
 li {
   list-style-type: none;
 }
+
+body {
+  font-family: $main_font;
+  font-size: 1.8em;
+}
+
+.welcome-container {
+  text-align: center;
+}
+
+main {
+  max-width: 80em;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.login-button-wrapper {
+  text-align: left;
+}
+
+.register-button-wrapper {
+  text-align: right;
+}

@@ -13,7 +13,8 @@ export const store = new Vuex.Store({
     user: user ? JSON.parse(user) : null,
     token: localStorage.getItem("access_token") || null,
     questions: [],
-    userQuestions: []
+    userQuestions: [],
+    question: {}
   },
   getters,
   mutations,

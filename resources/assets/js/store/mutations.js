@@ -5,7 +5,7 @@ export default {
   destroyToken(state) {
     state.token = null;
   },
-  getQuestions(state, questions) {
+  setQuestions(state, questions) {
     state.questions = questions;
   },
   setUser(state, user) {
@@ -13,5 +13,11 @@ export default {
   },
   setUserQuestions(state, questions) {
     state.userQuestions = questions;
+  },
+  setQuestion(state, question) {
+    state.question = question;
+  },
+  updateUserQuestions(state, question) {
+    state.userQuestions.push(question);
   }
 };

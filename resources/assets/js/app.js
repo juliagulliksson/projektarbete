@@ -17,7 +17,7 @@ const router = new Router({
  */
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!store.getters.loggedIn) {
+    if (!store.getters.isAuthenticated) {
       next({
         path: "/login"
       });
@@ -25,7 +25,7 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else if (to.matched.some(record => record.meta.requiresGuest)) {
-    if (store.getters.loggedIn) {
+    if (store.getters.isAuthenticated) {
       next({
         path: "/dashboard"
       });

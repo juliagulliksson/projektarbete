@@ -12073,7 +12073,7 @@ router.beforeEach(function (to, from, next) {
   if (to.matched.some(function (record) {
     return record.meta.requiresAuth;
   })) {
-    if (!__WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].getters.loggedIn) {
+    if (!__WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].getters.isAuthenticated) {
       next({
         path: "/login"
       });
@@ -12083,7 +12083,7 @@ router.beforeEach(function (to, from, next) {
   } else if (to.matched.some(function (record) {
     return record.meta.requiresGuest;
   })) {
-    if (__WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].getters.loggedIn) {
+    if (__WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].getters.isAuthenticated) {
       next({
         path: "/dashboard"
       });
@@ -46420,8 +46420,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   methods: {
     postQuestion: function postQuestion() {
+      var _this = this;
+
       this.$store.dispatch("postQuestion", {
         title: this.title
+      }).then(function (response) {
+        console.log(response);
+        _this.title = "";
       });
     }
   },
@@ -46699,6 +46704,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -46713,8 +46726,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     questions: function questions() {
       return this.$store.getters.questions;
     },
-    loggedIn: function loggedIn() {
-      return this.$store.getters.loggedIn;
+    isAuthenticated: function isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
     }
   },
   created: function created() {
@@ -46786,6 +46799,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -46829,8 +46847,13 @@ var render = function() {
       _vm._v(" "),
       _c("small", [
         _vm._v(
-          "Asked on " + _vm._s(_vm.slicedDate(_vm.question.created_at)) + " by"
-        )
+          "\n      Asked on " +
+            _vm._s(_vm.slicedDate(_vm.question.created_at)) +
+            "\n      "
+        ),
+        _vm.question.user != undefined
+          ? _c("span", [_vm._v("by " + _vm._s(_vm.question.user.name))])
+          : _vm._e()
       ])
     ])
   ])
@@ -46855,67 +46878,77 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "container" },
     [
-      _c("h1", [_vm._v("Welcome to What's What!")]),
-      _vm._v(" "),
-      _c("p", [
-        _vm._v(
-          "Here you can read and post questions and answers to life's great mysteries."
-        )
-      ]),
-      _vm._v(" "),
-      !_vm.loggedIn
-        ? [
+      _c("div", { staticClass: "grid welcome-container" }, [
+        _c("div", { staticClass: "col" }),
+        _vm._v(" "),
+        _c(
+          "div",
+          { staticClass: "col-8_sm-12" },
+          [
+            _c("h1", [_vm._v("Welcome to What's What!")]),
+            _vm._v(" "),
             _c("p", [
               _vm._v(
-                "Register and/or login to post questions and answers of your own."
+                "Here you can read and post questions and answers to life's great mysteries."
               )
             ]),
             _vm._v(" "),
-            _c("div", { staticClass: "login-container" }, [
-              _c("div", { staticClass: "login-box" }, [
-                _c(
-                  "li",
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-primary",
-                        attrs: { to: { name: "login" } }
-                      },
-                      [_vm._v("Login")]
-                    )
-                  ],
-                  1
-                )
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "register-box" }, [
-                _c(
-                  "li",
-                  [
-                    _c(
-                      "router-link",
-                      {
-                        staticClass: "btn btn-success",
-                        attrs: { to: { name: "register" } }
-                      },
-                      [_vm._v("Register")]
-                    )
-                  ],
-                  1
-                )
-              ])
-            ])
-          ]
-        : _vm._e(),
+            !_vm.isAuthenticated
+              ? [
+                  _c("div", { staticClass: "grid" }, [
+                    _c("div", { staticClass: "col register-button-wrapper" }, [
+                      _c(
+                        "li",
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              staticClass: "btn btn-success",
+                              attrs: { to: { name: "register" } }
+                            },
+                            [_vm._v("Sign up")]
+                          )
+                        ],
+                        1
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(0),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col login-button-wrapper" }, [
+                      _c(
+                        "li",
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { to: { name: "login" } }
+                            },
+                            [_vm._v("Sign in")]
+                          )
+                        ],
+                        1
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v("to post questions and answers")])
+                ]
+              : _vm._e()
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col" })
+      ]),
       _vm._v(" "),
       _vm._l(_vm.questions, function(question) {
         return [
           _c(
             "div",
-            { key: question.id, staticClass: "row" },
+            { key: question.id, staticClass: "grid-6_sm-12" },
             [_c("question-card", { attrs: { question: question } })],
             1
           )
@@ -46925,7 +46958,14 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-2" }, [_c("p", [_vm._v("or")])])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -46962,7 +47002,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     user: user ? JSON.parse(user) : null,
     token: localStorage.getItem("access_token") || null,
     questions: [],
-    userQuestions: []
+    userQuestions: [],
+    question: {}
   },
   getters: __WEBPACK_IMPORTED_MODULE_2__getters_js__["a" /* default */],
   mutations: __WEBPACK_IMPORTED_MODULE_4__mutations_js__["a" /* default */],
@@ -47920,7 +47961,7 @@ var index_esm = {
 
 "use strict";
 /* harmony default export */ __webpack_exports__["a"] = ({
-  loggedIn: function loggedIn(state) {
+  isAuthenticated: function isAuthenticated(state) {
     return state.token !== null;
   },
   questions: function questions(state) {
@@ -47931,6 +47972,9 @@ var index_esm = {
   },
   userQuestions: function userQuestions(state) {
     return state.userQuestions;
+  },
+  singleQuestion: function singleQuestion(state) {
+    return state.question;
   }
 });
 
@@ -47960,14 +48004,16 @@ var index_esm = {
   },
   destroyToken: function destroyToken(context) {
     axios.defaults.headers.common["Authorization"] = "Bearer " + context.state.token;
-    if (context.getters.loggedIn) {
+    if (context.getters.isAuthenticated) {
       return new Promise(function (resolve, reject) {
         axios.post("/api/logout").then(function (response) {
           localStorage.removeItem("access_token");
+          localStorage.removeItem("user");
           context.commit("destroyToken");
           resolve(response);
         }).catch(function (error) {
           localStorage.removeItem("access_token");
+          localStorage.removeItem("user");
           context.commit("destroyToken");
           reject(error.data.message);
         });
@@ -47998,6 +48044,7 @@ var index_esm = {
       }).then(function (response) {
         console.log(response);
         resolve(response);
+        context.commit("updateUserQuestions", response.data);
       }).catch(function (error) {
         reject(error.data.message);
       });
@@ -48008,7 +48055,7 @@ var index_esm = {
       axios.get("api/questions").then(function (response) {
         console.log(response);
         resolve(response);
-        context.commit("getQuestions", response.data);
+        context.commit("setQuestions", response.data);
       }).catch(function (error) {
         reject(error.data.message);
       });
@@ -48030,6 +48077,7 @@ var index_esm = {
     return new Promise(function (resolve, reject) {
       axios.get("api/questions/" + id).then(function (response) {
         console.log(response);
+        context.commit("setQuestion", response.data);
         resolve(response);
       }).catch(function (error) {
         reject(error.data.message);
@@ -48050,7 +48098,7 @@ var index_esm = {
   destroyToken: function destroyToken(state) {
     state.token = null;
   },
-  getQuestions: function getQuestions(state, questions) {
+  setQuestions: function setQuestions(state, questions) {
     state.questions = questions;
   },
   setUser: function setUser(state, user) {
@@ -48058,6 +48106,12 @@ var index_esm = {
   },
   setUserQuestions: function setUserQuestions(state, questions) {
     state.userQuestions = questions;
+  },
+  setQuestion: function setQuestion(state, question) {
+    state.question = question;
+  },
+  updateUserQuestions: function updateUserQuestions(state, question) {
+    state.userQuestions.push(question);
   }
 });
 
@@ -48116,8 +48170,6 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navbar__ = __webpack_require__(66);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navbar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Navbar__);
-//
-//
 //
 //
 //
@@ -48253,11 +48305,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
-    loggedIn: function loggedIn() {
-      return this.$store.getters.loggedIn;
+    isAuthenticated: function isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    },
+    user: function user() {
+      return this.$store.getters.user;
     }
   }
 });
@@ -48296,15 +48353,13 @@ var render = function() {
           attrs: { id: "app-navbar-collapse" }
         },
         [
-          _c("ul", { staticClass: "nav navbar-nav" }, [
-            _vm._v("\n              \n               \n          ")
-          ]),
+          _c("ul", { staticClass: "nav navbar-nav" }, [_vm._v(" ")]),
           _vm._v(" "),
           _c(
             "ul",
             { staticClass: "nav navbar-nav navbar-right" },
             [
-              !_vm.loggedIn
+              !_vm.isAuthenticated
                 ? [
                     _c(
                       "li",
@@ -48338,12 +48393,41 @@ var render = function() {
                   ]
                 : [
                     _c("li", { staticClass: "dropdown" }, [
-                      _vm._m(1),
+                      _c(
+                        "a",
+                        {
+                          staticClass: "dropdown-toggle",
+                          attrs: {
+                            href: "#",
+                            "data-toggle": "dropdown",
+                            role: "button",
+                            "aria-expanded": "false",
+                            "aria-haspopup": "true"
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n              " +
+                              _vm._s(_vm.user.name) +
+                              "\n              "
+                          ),
+                          _c("span", { staticClass: "caret" })
+                        ]
+                      ),
                       _vm._v(" "),
                       _c("ul", { staticClass: "dropdown-menu" }, [
                         _c(
                           "li",
                           [
+                            _c(
+                              "router-link",
+                              {
+                                staticClass: "nav-link",
+                                attrs: { to: { name: "dashboard" } }
+                              },
+                              [_vm._v("Dashboard")]
+                            ),
+                            _vm._v(" "),
                             _c(
                               "router-link",
                               {
@@ -48392,29 +48476,6 @@ var staticRenderFns = [
         _c("span", { staticClass: "icon-bar" })
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "a",
-      {
-        pre: true,
-        attrs: {
-          href: "#",
-          class: "dropdown-toggle",
-          "data-toggle": "dropdown",
-          role: "button",
-          "aria-expanded": "false",
-          "aria-haspopup": "true"
-        }
-      },
-      [
-        _vm._v("\n                          Username "),
-        _c("span", { attrs: { class: "caret" } })
-      ]
-    )
   }
 ]
 render._withStripped = true
@@ -48436,13 +48497,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    [
-      _c("Navbar"),
-      _vm._v(" "),
-      _c("main", [
-        _c("div", { staticClass: "container" }, [_c("router-view")], 1)
-      ])
-    ],
+    [_c("Navbar"), _vm._v(" "), _c("main", [_c("router-view")], 1)],
     1
   )
 }
@@ -48548,24 +48603,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      question: {}
-    };
-  },
-
   computed: {
     slicedDate: function slicedDate(date) {
       return function (date) {
-        return date.slice(0, 16);
+        if (date != undefined) {
+          return date.slice(0, 16);
+        }
+      };
+    },
+    question: function question() {
+      return this.$store.getters.singleQuestion;
+    },
+    username: function username(name) {
+      return function (user) {
+        if (user != undefined) {
+          return user.name;
+        }
       };
     }
   },
   created: function created() {
-    var _this = this;
-
     this.$store.dispatch("getSingleQuestion", this.$route.params.id).then(function (response) {
-      _this.question = response.data;
+      console.log(response);
     });
   }
 });
@@ -48580,19 +48639,18 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
     _c("div", { staticClass: "col-md-6 col-sm-12 col-md-offset-3" }, [
-      _vm.question != undefined
-        ? _c("div", { staticClass: "well" }, [
-            _c("h3", [_vm._v(_vm._s(_vm.question.title))]),
-            _vm._v(" "),
-            _c("small", [
-              _vm._v(
-                "Asked on " +
-                  _vm._s(_vm.slicedDate(_vm.question.created_at)) +
-                  " by"
-              )
-            ])
-          ])
-        : _vm._e()
+      _c("div", { staticClass: "well" }, [
+        _c("h3", [_vm._v(_vm._s(_vm.question.title))]),
+        _vm._v(" "),
+        _c("small", [
+          _vm._v(
+            "Asked on " +
+              _vm._s(_vm.slicedDate(_vm.question.created_at)) +
+              " by " +
+              _vm._s(_vm.username(_vm.question.user))
+          )
+        ])
+      ])
     ])
   ])
 }

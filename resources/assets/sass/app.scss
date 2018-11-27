@@ -4,8 +4,16 @@
 // Bootstrap
 @import "~bootstrap-sass/assets/stylesheets/bootstrap";
 
-@import "_mobile";
-
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
 @import "~@fortawesome/fontawesome-free/scss/brands.scss";
+
+@import "_mobile";
+
+@media screen and (min-width: 760px) {
+  @import "_tablet";
+}
+
+@media screen and (min-width: 120px) {
+  @import "_desktop";
+}

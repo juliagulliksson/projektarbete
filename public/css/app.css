@@ -1,45 +1,5 @@
 @charset "UTF-8";
 
-/* // Body
-$body-bg: #f5f8fa;
-
-// Borders
-$laravel-border-color: darken($body-bg, 10%);
-$list-group-border: $laravel-border-color;
-$navbar-default-border: $laravel-border-color;
-$panel-default-border: $laravel-border-color;
-$panel-inner-border: $laravel-border-color;
-
-
-
-// Brands
-$brand-primary: #3097d1;
-$brand-info: #8eb4cb;
-$brand-success: #2ab27b;
-$brand-warning: #cbb956;
-$brand-danger: #bf5329;
-
-// Typography
-$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
-$font-family-sans-serif: "Raleway", sans-serif;
-$font-size-base: 14px;
-$line-height-base: 1.6;
-$text-color: #636b6f;
-
-// Navbar
-$navbar-default-bg: #fff;
-
-// Buttons
-$btn-default-color: $text-color;
-
-// Inputs
-$input-border: lighten($text-color, 40%);
-$input-border-focus: lighten($brand-primary, 25%);
-$input-color-placeholder: lighten($text-color, 30%);
-
-// Panels
-$panel-default-heading-bg: #fff; */
-
 /*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
@@ -8390,14 +8350,6 @@ button.close {
   }
 }
 
-a.router-link-exact-active {
-  color: red;
-}
-
-li {
-  list-style-type: none;
-}
-
 /*!
  * Font Awesome Free 5.5.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
@@ -13726,5 +13678,42 @@ readers do not read off random characters that represent icons */
 
 .fab {
   font-family: 'Font Awesome 5 Brands';
+}
+
+a.router-link-exact-active {
+  color: red;
+}
+
+li {
+  list-style-type: none;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 1.8em;
+}
+
+.welcome-container {
+  text-align: center;
+}
+
+main {
+  max-width: 80em;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.login-button-wrapper {
+  text-align: left;
+}
+
+.register-button-wrapper {
+  text-align: right;
+}
+
+@media screen and (min-width: 120px) {
+  main {
+    padding: 0;
+  }
 }
 

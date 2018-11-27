@@ -33,9 +33,14 @@ export default {
   },
   methods: {
     postQuestion() {
-      this.$store.dispatch("postQuestion", {
-        title: this.title
-      });
+      this.$store
+        .dispatch("postQuestion", {
+          title: this.title
+        })
+        .then(response => {
+          console.log(response);
+          this.title = "";
+        });
     }
   },
   computed: {

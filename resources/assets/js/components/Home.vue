@@ -1,27 +1,35 @@
 <template>
-  <div class="container">
-    <h1>Welcome to What's What!</h1>
-    <p>Here you can read and post questions and answers to life's great mysteries.</p>
+  <div>
+    <div class="grid welcome-container">
+      <div class="col"></div>
+      <div class="col-8_sm-12">
+        <h1>Welcome to What's What!</h1>
+        <p>Here you can read and post questions and answers to life's great mysteries.</p>
 
-    <template v-if="!loggedIn">
-      <p>Register and/or login to post questions and answers of your own.</p>
-
-      <div class="login-container">
-        <div class="login-box">
-          <li>
-            <router-link :to="{name:'login'}" class="btn btn-primary">Login</router-link>
-          </li>
-        </div>
-        <div class="register-box">
-          <li>
-            <router-link :to="{name:'register'}" class="btn btn-success">Register</router-link>
-          </li>
-        </div>
+        <template v-if="!isAuthenticated">
+          <div class="grid">
+            <div class="col register-button-wrapper">
+              <li>
+                <router-link :to="{name:'register'}" class="btn btn-success">Sign up</router-link>
+              </li>
+            </div>
+            <div class="col-2">
+              <p>or</p>
+            </div>
+            <div class="col login-button-wrapper">
+              <li>
+                <router-link :to="{name:'login'}" class="btn btn-primary">Sign in</router-link>
+              </li>
+            </div>
+          </div>
+          <p>to post questions and answers</p>
+        </template>
       </div>
-    </template>
-
+      <div class="col"></div>
+    </div>
+    <!-- welcome-container -->
     <template v-for="question in questions">
-      <div class="row" :key="question.id">
+      <div class="grid-6_sm-12" :key="question.id">
         <question-card :question="question"></question-card>
       </div>
     </template>
@@ -41,8 +49,8 @@ export default {
     questions() {
       return this.$store.getters.questions;
     },
-    loggedIn() {
-      return this.$store.getters.loggedIn;
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
     }
   },
   created() {

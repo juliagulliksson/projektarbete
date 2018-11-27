@@ -1,14 +1,7 @@
 export default {
-  loggedIn(state) {
-    return state.token !== null;
-  },
-  questions(state) {
-    return state.questions;
-  },
-  user(state) {
-    return state.user;
-  },
-  userQuestions(state) {
-    return state.userQuestions;
-  }
+  isAuthenticated: state => state.token !== null,
+  questions: state => state.questions,
+  user: state => state.user,
+  userQuestions: state => state.userQuestions,
+  singleQuestion: state => state.question
 };

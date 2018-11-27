@@ -1,9 +1,9 @@
 <template>
   <div class="row">
     <div class="col-md-6 col-sm-12 col-md-offset-3">
-      <div class="well" v-if="question != undefined">
+      <div class="well">
         <h3>{{question.title}}</h3>
-        <small>Asked on {{slicedDate(question.created_at)}} by</small>
+        <small>Asked on {{slicedDate(question.created_at)}} by {{username(question.user)}}</small>
       </div>
     </div>
   </div>
@@ -11,15 +11,22 @@
 
 <script>
 export default {
-  data() {
-    return {
-      question: {}
-    };
-  },
   computed: {
     slicedDate(date) {
       return date => {
-        return date.slice(0, 16);
+        if (date != undefined) {
+          return date.slice(0, 16);
+        }
+      };
+    },
+    question() {
+      return this.$store.getters.singleQuestion;
+    },
+    username(name) {
+      return user => {
+        if (user != undefined) {
+          return user.name;
+        }
       };
     }
   },
@@ -27,7 +34,7 @@ export default {
     this.$store
       .dispatch("getSingleQuestion", this.$route.params.id)
       .then(response => {
-        this.question = response.data;
+        console.log(response);
       });
   }
 };
