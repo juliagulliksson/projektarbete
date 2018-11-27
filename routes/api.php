@@ -12,16 +12,24 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+/**
+ * All routes passing through middleware is going to require an authorization token in header
+ */
 Route::middleware('auth:api')->group(function () {
   Route::get('/user', function (Request $request) {
     return $request->user();
   });
+  Route::apiResource('/questions', 'API\QuestionsController')->except([
+    'index', 'userQuestions', 'show'
+  ]);
+  
+  Route::post('/logout', 'AuthController@logout');
+}); 
 
-  Route::post('/questions', 'Api\QuestionsController@store');
-});
+Route::get('questions/{question}', 'API\QuestionsController@show');
 
-
-Route::middleware('auth:api')->post('/logout', 'AuthController@logout');
+Route::get('questions/user/{user_id}', 'API\QuestionsController@userQuestions');
 
 Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');

@@ -6,7 +6,8 @@
 export default {
   created() {
     this.$store.dispatch("destroyToken").then(response => {
-      this.$router.push("/");
+      console.log(response);
+      this.$router.push({ name: "home" });
     });
   }
 };

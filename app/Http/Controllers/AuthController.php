@@ -11,9 +11,8 @@ class AuthController extends Controller
 {
   public function login(Request $request)
   {
-
       // Check if a user with the specified email exists
-      $user = User::whereEmail(request('username'))->first();
+      $user = User::where('email', $request->username)->first();
 
       if (!$user) {
           return response()->json([
@@ -67,7 +66,7 @@ class AuthController extends Controller
       // Get the data from the response
       $data = json_decode($response->getContent());
   
-      // Format the final response in a desirable format
+      // Format the final response
       return response()->json([
           'token' => $data->access_token,
           'user' => $user,

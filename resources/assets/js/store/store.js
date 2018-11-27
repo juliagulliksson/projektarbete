@@ -6,11 +6,14 @@ import mutations from "./mutations.js";
 
 Vue.use(Vuex);
 
+const user = localStorage.getItem("user");
+
 export const store = new Vuex.Store({
   state: {
-    loggedIn: false,
-    user: {},
-    token: localStorage.getItem("access_token") || null
+    user: user ? JSON.parse(user) : null,
+    token: localStorage.getItem("access_token") || null,
+    questions: [],
+    userQuestions: []
   },
   getters,
   mutations,

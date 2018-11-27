@@ -3,11 +3,12 @@ import Login from "./components/Login";
 import Dashboard from "./components/Dashboard";
 import Logout from "./components/Logout";
 import Home from "./components/Home";
+import SingleQuestion from "./components/SingleQuestion";
 
 const routes = [
   {
     path: "/",
-    name: "",
+    name: "home",
     component: Home
   },
   {
@@ -38,6 +39,11 @@ const routes = [
     path: "/logout",
     name: "logout",
     component: Logout
+  },
+  {
+    path: "/question/:id",
+    name: "singleQuestion",
+    component: SingleQuestion
   }
 ];
 

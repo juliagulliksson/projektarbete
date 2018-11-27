@@ -15,7 +15,7 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        //
+        return Question::all();
     }
 
     /**
@@ -40,7 +40,7 @@ class QuestionsController extends Controller
         $question->title = $request->title;
         $question->user_id = auth()->user()->id;
         $question->save(); 
-        return "Success";
+        return response($question, 201);
     }
 
     /**
@@ -51,7 +51,7 @@ class QuestionsController extends Controller
      */
     public function show($id)
     {
-        //
+        return Question::where('id', $id)->first();
     }
 
     /**
@@ -86,5 +86,9 @@ class QuestionsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function userQuestions($user_id){
+      return Question::where('user_id', $user_id)->get();
     }
 }

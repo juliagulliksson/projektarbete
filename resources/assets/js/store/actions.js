@@ -1,16 +1,18 @@
 export default {
-  retrieveToken(context, credentials) {
+  retrieveToken(context, data) {
     return new Promise((resolve, reject) => {
       axios
         .post("/api/login", {
-          username: credentials.username,
-          password: credentials.password
+          username: data.username,
+          password: data.password
         })
         .then(response => {
           const token = response.data.token;
+          const user = response.data.user;
           localStorage.setItem("access_token", token);
-          localStorage.setItem("user", JSON.stringify(response.data.user));
+          localStorage.setItem("user", JSON.stringify(user));
           context.commit("retrieveToken", token);
+          context.commit("setUser", user);
           resolve(response);
         })
         .catch(error => {
@@ -27,7 +29,6 @@ export default {
           .post("/api/logout")
           .then(response => {
             localStorage.removeItem("access_token");
-            // localStorage.setItem("user", JSON.stringify(response.data.user));
             context.commit("destroyToken");
             resolve(response);
           })
@@ -56,7 +57,9 @@ export default {
     });
   },
   postQuestion(context, data) {
-    /*   axios.defaults.headers.common["Content-Type"] = "application/json"; */
+    /**
+     * Send through token to authorize request
+     */
     axios.defaults.headers.common["Authorization"] =
       "Bearer " + context.state.token;
     return new Promise((resolve, reject) => {
@@ -74,8 +77,45 @@ export default {
     });
   },
   getQuestions(context, data) {
-    axios.get("api/questions").then(response => {
-      console.log(response);
+    return new Promise((resolve, reject) => {
+      axios
+        .get("api/questions")
+        .then(response => {
+          console.log(response);
+          resolve(response);
+          context.commit("getQuestions", response.data);
+        })
+        .catch(error => {
+          reject(error.data.message);
+        });
+    });
+  },
+  getUserQuestions(context) {
+    const userId = context.state.user.id;
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`api/questions/user/${userId}`)
+        .then(response => {
+          console.log(response);
+          resolve(response);
+          context.commit("setUserQuestions", response.data);
+        })
+        .catch(error => {
+          reject(error.data.message);
+        });
+    });
+  },
+  getSingleQuestion(context, id) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`api/questions/${id}`)
+        .then(response => {
+          console.log(response);
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error.data.message);
+        });
     });
   }
 };
