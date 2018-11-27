@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Sign in {{ user }}</h2>
+    <h2>Sign in</h2>
       <form method="post" @submit.prevent="login">
         <div class="form-group">
           <label for="username">E-mail</label>
@@ -23,11 +23,6 @@ export default {
       username: "",
       password: ""
     };
-  },
-  computed: {
-    user() {
-      return this.$store.getters.userId;
-    }
   },
   methods: {
     login() {

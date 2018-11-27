@@ -1,47 +1,44 @@
 require("./bootstrap");
 
-window.Vue = require("vue");
-
-import VueRouter from "vue-router";
-import App from "./App.vue";
-Vue.use(VueRouter);
-import Example from "./components/ExampleComponent";
-import Register from "./components/Register";
-import Login from "./components/Login";
-import Dashboard from "./components/Dashboard";
+import Vue from "vue";
+import Router from "vue-router";
+Vue.use(Router);
+import routes from "./routes.js";
 import { store } from "./store/store.js";
+Vue.component("App", require("./App.vue"));
 
-const routes = [
-  {
-    path: "/test",
-    name: "test",
-    component: Example
-  },
-  {
-    path: "/register",
-    name: "register",
-    component: Register
-  },
-  {
-    path: "/login",
-    name: "login",
-    component: Login
-  },
-  {
-    path: "/dashboard",
-    name: "dashboard",
-    component: Dashboard
-  }
-];
-
-const router = new VueRouter({
+const router = new Router({
   /*   mode: "history", */
   routes
 });
 
-const app = new Vue({
+/**
+ * Redirects if user is trying to access unauthorized pages
+ */
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters.loggedIn) {
+      next({
+        path: "/login"
+      });
+    } else {
+      next();
+    }
+  } else if (to.matched.some(record => record.meta.requiresGuest)) {
+    if (store.getters.loggedIn) {
+      next({
+        path: "/dashboard"
+      });
+    } else {
+      next();
+    }
+  } else {
+    next(); // make sure to always call next()!
+  }
+});
+
+new Vue({
   el: "#app",
   store,
-  components: { App },
   router
 });
