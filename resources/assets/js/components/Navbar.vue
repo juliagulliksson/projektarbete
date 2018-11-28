@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-default navbar-static-top">
+  <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
       <div class="navbar-header">
         <!-- Collapsed Hamburger -->
@@ -15,7 +15,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <i class="fas fa-search"></i>
+
         <!-- Branding Image -->
         <li class="navbar-brand">
           <router-link to="/" class="nav-link">Home</router-link>
@@ -24,17 +24,45 @@
 
       <div class="collapse navbar-collapse" id="app-navbar-collapse">
         <!-- Left Side Of Navbar -->
-        <ul class="nav navbar-nav">&nbsp;</ul>
+        <ul class="nav navbar-nav">&nbsp;
+          <!--  <i class="fas fa-search"></i> -->
+          <!-- <li>
+            <router-link :to="{name: 'questions'}">Questions</router-link>
+          </li>
+          <li>
+            <router-link :to="{name: 'answers'}">Answers</router-link>
+          </li>-->
+        </ul>
 
         <!-- Right Side Of Navbar -->
         <ul class="nav navbar-nav navbar-right">
+          <!-- <li>
+            <form>
+              <div class="grid">
+                <div class="col-6">
+                  <div class="form-group">
+                    <input type="text" class="form-control">
+                  </div>
+                </div>
+                <div class="col-6">
+                  <button type="submit" class="btn btn-default">Search</button>
+                </div>
+              </div>
+            </form>
+          </li>-->
           <!-- Authentication  -->
           <template v-if="!isAuthenticated">
             <li>
-              <router-link :to="{name:'register'}" class="nav-link">Sign up</router-link>
+              <router-link :to="{name:'register'}" class="nav-link">
+                Sign up
+                <i class="fas fa-user-plus"></i>
+              </router-link>
             </li>
             <li>
-              <router-link :to="{name:'login'}" class="nav-link">Sign in</router-link>
+              <router-link :to="{name:'login'}" class="nav-link">
+                Sign in
+                <i class="fas fa-sign-in-alt"></i>
+              </router-link>
             </li>
           </template>
           <template v-else>
@@ -47,14 +75,21 @@
                 aria-expanded="false"
                 aria-haspopup="true"
               >
+                <i class="fas fa-user-circle"></i>
                 {{ user.name }}
                 <span class="caret"></span>
               </a>
 
               <ul class="dropdown-menu">
                 <li>
-                  <router-link :to="{name:'dashboard'}" class="nav-link">Dashboard</router-link>
-                  <router-link :to="{name:'logout'}" class="nav-link">Logout</router-link>
+                  <router-link :to="{name:'dashboard'}" class="nav-link">
+                    Dashboard
+                    <i class="fas fa-columns"></i>
+                  </router-link>
+                  <router-link :to="{name:'logout'}" class="nav-link">
+                    Sign out
+                    <i class="fas fa-sign-out-alt"></i>
+                  </router-link>
                 </li>
               </ul>
             </li>

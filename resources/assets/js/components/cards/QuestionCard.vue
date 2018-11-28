@@ -1,17 +1,18 @@
 <template>
-  <div class="col-md-6 col-sm-12 col-md-offset-3">
-    <div class="well">
-      <h3>
-        <router-link :to="questionUrl(question.id)">{{question.title}}</router-link>
-      </h3>
-      <small>
-        Asked on {{slicedDate(question.created_at)}}
-        <span
-          v-if="question.user != undefined"
-        >by {{question.user.name}}</span>
-      </small>
-    </div>
+  <!--  <div class="col-6_sm-12"> -->
+  <div class="question">
+    <h3 class="question-title">
+      <router-link :to="questionUrl(question.id)">{{question.title}}</router-link>
+    </h3>
+    <p class="question-details">
+      <span v-if="question.user != undefined">
+        <i class="fas fa-user-circle"></i>
+        {{question.user.name}} |
+      </span>
+      {{formattedDate(question.created_at)}}
+    </p>
   </div>
+  <!--   </div> -->
 </template>
 
 <script>
@@ -20,9 +21,15 @@ export default {
     question: Object
   },
   computed: {
-    slicedDate(date) {
+    formattedDate(date) {
       return date => {
-        return date.slice(0, 16);
+        let d = new Date(date);
+        let options = {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        };
+        return d.toLocaleString("en-us", options);
       };
     },
     questionUrl(id) {

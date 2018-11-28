@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <div class="col-md-6 col-sm-12 col-md-offset-3">
+  <div class="grid-center">
+    <div class="col-8_sm-12">
       <div class="well">
         <h3>{{question.title}}</h3>
         <small>Asked on {{slicedDate(question.created_at)}} by {{username(question.user)}}</small>

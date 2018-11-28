@@ -1,26 +1,79 @@
-a {
-  &.router-link-exact-active {
-    color: red;
-  }
+body {
+  font-family: $main_font;
+  font-size: 1.6em;
+  padding-top: 70px;
+  background-color: $background_color;
+}
+
+main {
+  max-width: 1020px;
+  margin: 0 auto;
+  padding: 20px;
+  /*  background-color: $main_bg_color; */
 }
 
 li {
   list-style-type: none;
 }
 
-body {
-  font-family: $main_font;
-  font-size: 1.8em;
+label {
+  font-size: 1.4rem;
+}
+/* Navbar/Header */
+.navbar {
+  margin-bottom: 0px;
+  li {
+    a {
+      &.router-link-exact-active {
+        color: $accent_color;
+        &:active,
+        &:focus {
+          color: $accent_color;
+        }
+      }
+    }
+    &.navbar-brand {
+      a {
+        color: #777;
+        &:hover,
+        &:active,
+        &:focus {
+          text-decoration: none;
+        }
+        &:hover {
+          color: #333;
+        }
+        &.router-link-exact-active {
+          color: $accent_color;
+          &:active,
+          &:focus {
+            color: $accent_color;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Icons */
+.fas {
+  padding: 0px 10px;
+  &.fa-user-plus,
+  &.fa-sign-in-alt,
+  &.fa-user-circle,
+  &.fa-columns {
+    color: $accent_color;
+  }
+  &.fa-sign-out-alt {
+    color: $red;
+  }
+  &.fa-user-circle {
+    padding: 0px 10px 0px 0px;
+  }
 }
 
 .welcome-container {
   text-align: center;
-}
-
-main {
-  max-width: 80em;
-  margin: 0 auto;
-  padding: 10px;
 }
 
 .login-button-wrapper {
@@ -29,4 +82,90 @@ main {
 
 .register-button-wrapper {
   text-align: right;
+}
+
+.question-title {
+  a {
+    font-family: "Noto Serif", serif;
+    color: $accent_darker;
+    font-size: 1.8rem;
+    &:hover,
+    &:active,
+    &:focus {
+      color: $accent_color;
+    }
+  }
+}
+
+/* Buttons */
+.btn {
+  font-family: $main_font;
+  transition: 300ms all;
+  padding: 9px 30px;
+  border-radius: 5px;
+  outline: none;
+  &.btn-main {
+    background-color: $accent_bright;
+    border: 3px solid $accent_bright;
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: $accent_lighter;
+      border-color: $accent_lighter;
+    }
+  }
+  &.btn-inverted {
+    background-color: #fff;
+    border: 3px solid $accent_color;
+    box-sizing: border-box;
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: #36d1a09e;
+      background-color: #fff;
+    }
+  }
+}
+
+p {
+  &.homepage-or {
+    padding-top: 10px;
+  }
+  &.question-details {
+    font-size: 1.5rem;
+  }
+}
+
+%content-box {
+  border-radius: 3px;
+  border: 0.8px solid hsla(0, 0%, 100%, 0.8);
+  box-shadow: $box_shadow;
+  background-color: #fff;
+}
+
+.questions-homepage {
+  @extend %content-box;
+  padding: 20px;
+}
+
+.user-profile {
+  @extend %content-box;
+  padding: 30px;
+  .fa-user-circle {
+    font-size: 4em;
+  }
+  .user-profile-image {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+}
+.login-box {
+  @extend %content-box;
+  padding: 20px;
+}
+
+.register-box {
+  @extend %content-box;
+  padding: 20px;
 }

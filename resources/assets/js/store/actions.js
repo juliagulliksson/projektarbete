@@ -7,16 +7,24 @@ export default {
           password: data.password
         })
         .then(response => {
-          const token = response.data.token;
+          /* if (response.status === 402) {
+            console.log("RES", response);
+          } */
+
+          /* const token = response.data.token;
           const user = response.data.user;
           localStorage.setItem("access_token", token);
           localStorage.setItem("user", JSON.stringify(user));
           context.commit("retrieveToken", token);
-          context.commit("setUser", user);
+          context.commit("setUser", user); */
           resolve(response);
         })
         .catch(error => {
-          reject(error.data.message);
+          /* console.log("ERROR", error.status);
+          if (error.status === 401) {
+            console.log("RES", error);
+          } */
+          reject(error);
         });
     });
   },

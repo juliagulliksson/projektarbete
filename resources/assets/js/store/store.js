@@ -7,11 +7,14 @@ import mutations from "./mutations.js";
 Vue.use(Vuex);
 
 const user = localStorage.getItem("user");
+const token = localStorage.getItem("access_token");
+const userExists = user !== "undefined";
+const tokenExists = token !== "undefined";
 
 export const store = new Vuex.Store({
   state: {
-    user: user ? JSON.parse(user) : null,
-    token: localStorage.getItem("access_token") || null,
+    user: userExists ? JSON.parse(user) : null,
+    token: tokenExists ? token : null,
     questions: [],
     userQuestions: [],
     question: {}

@@ -45983,6 +45983,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -46016,114 +46029,144 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h1", [_vm._v("Register")]),
-    _vm._v(" "),
-    _c(
-      "form",
-      {
-        attrs: { method: "post" },
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.register($event)
-          }
-        }
-      },
-      [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.name,
-                expression: "name"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "text", name: "name", required: "" },
-            domProps: { value: _vm.name },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.name = $event.target.value
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "email" } }, [_vm._v("E-mail")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.email,
-                expression: "email"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: {
-              type: "email",
-              name: "email",
-              placeholder: "user@example.com",
-              required: ""
-            },
-            domProps: { value: _vm.email },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.email = $event.target.value
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "password" } }, [_vm._v("Password")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.password,
-                expression: "password"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "password", name: "password", required: "" },
-            domProps: { value: _vm.password },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.password = $event.target.value
-              }
-            }
-          })
-        ]),
+  return _c("div", { staticClass: "grid-center" }, [
+    _c("div", { staticClass: "col-7_sm-12" }, [
+      _c("div", { staticClass: "register-box" }, [
+        _c("h3", { staticClass: "text-center" }, [_vm._v("Sign up")]),
         _vm._v(" "),
         _c(
-          "button",
-          { staticClass: "btn btn-default", attrs: { type: "submit" } },
-          [_vm._v("Submit")]
+          "form",
+          {
+            attrs: { method: "post" },
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.register($event)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.name,
+                    expression: "name"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", name: "name", required: "" },
+                domProps: { value: _vm.name },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.name = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "email" } }, [_vm._v("E-mail")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.email,
+                    expression: "email"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "email",
+                  name: "email",
+                  placeholder: "user@example.com",
+                  required: ""
+                },
+                domProps: { value: _vm.email },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.email = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "password" } }, [_vm._v("Password")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.password,
+                    expression: "password"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "password", name: "password", required: "" },
+                domProps: { value: _vm.password },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.password = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._m(1)
+          ]
         )
-      ]
-    )
+      ])
+    ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group" }, [
+      _c("input", {
+        staticClass: "form-check-input",
+        attrs: { type: "checkbox", name: "gdpr", required: "" }
+      }),
+      _vm._v(" "),
+      _c("label", { staticClass: "form-check-label", attrs: { for: "gdpr" } }, [
+        _vm._v(
+          "By signing this form you agree to the storing of your information"
+        )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center" }, [
+      _c("button", { staticClass: "btn btn-main", attrs: { type: "submit" } }, [
+        _vm._v("Sign up")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -46203,13 +46246,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "login",
   data: function data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      error: ""
     };
   },
 
@@ -46225,6 +46283,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         password: this.password
       }).then(function (response) {
         _this.$router.push({ name: "dashboard" });
+      }).catch(function (error) {
+        _this.error = "Wrong username or password. Please try again";
       });
     }
   }
@@ -46238,88 +46298,105 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("h2", [_vm._v("Sign in")]),
-    _vm._v(" "),
-    _c(
-      "form",
-      {
-        attrs: { method: "post" },
-        on: {
-          submit: function($event) {
-            $event.preventDefault()
-            return _vm.login($event)
-          }
-        }
-      },
-      [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "username" } }, [_vm._v("E-mail")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.username,
-                expression: "username"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: {
-              type: "username",
-              id: "username",
-              placeholder: "user@example.com",
-              required: ""
-            },
-            domProps: { value: _vm.username },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.username = $event.target.value
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "password" } }, [_vm._v("Password")]),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.password,
-                expression: "password"
-              }
-            ],
-            staticClass: "form-control",
-            attrs: { type: "password", id: "password", required: "" },
-            domProps: { value: _vm.password },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.password = $event.target.value
-              }
-            }
-          })
-        ]),
+  return _c("div", { staticClass: "grid-center" }, [
+    _c("div", { staticClass: "col-7_sm-12" }, [
+      _c("div", { staticClass: "login-box" }, [
+        _c("h3", { staticClass: "text-center" }, [_vm._v("Sign in")]),
         _vm._v(" "),
         _c(
-          "button",
-          { staticClass: "btn btn-default", attrs: { type: "submit" } },
-          [_vm._v("Sign in")]
+          "form",
+          {
+            attrs: { method: "post" },
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.login($event)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "username" } }, [_vm._v("E-mail")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.username,
+                    expression: "username"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  type: "username",
+                  id: "username",
+                  placeholder: "user@example.com",
+                  required: ""
+                },
+                domProps: { value: _vm.username },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.username = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "password" } }, [_vm._v("Password")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.password,
+                    expression: "password"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "password", id: "password", required: "" },
+                domProps: { value: _vm.password },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.password = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _vm._m(0),
+            _vm._v(" "),
+            _vm.error != ""
+              ? _c("div", { staticClass: "alert alert-danger" }, [
+                  _vm._v(_vm._s(_vm.error))
+                ])
+              : _vm._e()
+          ]
         )
-      ]
-    )
+      ])
+    ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "text-center" }, [
+      _c("button", { staticClass: "btn btn-main", attrs: { type: "submit" } }, [
+        _vm._v("Sign in")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -46406,6 +46483,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -46436,6 +46536,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     questions: function questions() {
       return this.$store.getters.userQuestions;
+    },
+    formattedDate: function formattedDate(date) {
+      return function (date) {
+        var d = new Date(date);
+        var options = {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        };
+        return d.toLocaleString("en-us", options);
+      };
     }
   },
   created: function created() {
@@ -46451,76 +46562,128 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("h1", [_vm._v("Welcome " + _vm._s(_vm.user.name) + "!")]),
-      _vm._v(" "),
-      _c("h2", [_vm._v("Post a new question")]),
-      _vm._v(" "),
-      _c(
-        "form",
-        {
-          attrs: { method: "post" },
-          on: {
-            submit: function($event) {
-              $event.preventDefault()
-              return _vm.postQuestion($event)
-            }
-          }
-        },
-        [
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "username" } }, [_vm._v("Title")]),
+  return _c("div", [
+    _c("div", { staticClass: "grid-center" }, [
+      _c("div", { staticClass: "col-7_sm-12" }, [
+        _c("div", { staticClass: "user-profile" }, [
+          _c("div", { staticClass: "grid-center" }, [
+            _vm._m(0),
             _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.title,
-                  expression: "title"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: { type: "text", placeholder: "Ask away", required: "" },
-              domProps: { value: _vm.title },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.title = $event.target.value
-                }
+            _c("div", { staticClass: "col-6_sm-12" }, [
+              _c("h3", [_vm._v(_vm._s(_vm.user.name))]),
+              _vm._v(" "),
+              _c("h5", [
+                _vm._v(
+                  "Joined " + _vm._s(_vm.formattedDate(_vm.user.created_at))
+                )
+              ])
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-6_sm-12" }, [
+        _c("h4", [_vm._v("Post a new question")]),
+        _vm._v(" "),
+        _c(
+          "form",
+          {
+            attrs: { method: "post" },
+            on: {
+              submit: function($event) {
+                $event.preventDefault()
+                return _vm.postQuestion($event)
               }
-            })
+            }
+          },
+          [
+            _c("div", { staticClass: "form-group" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.title,
+                    expression: "title"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Ask away", required: "" },
+                domProps: { value: _vm.title },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.title = $event.target.value
+                  }
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              { staticClass: "btn btn-main", attrs: { type: "submit" } },
+              [_vm._v("Submit")]
+            )
+          ]
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "grid-center" }, [
+      _c(
+        "div",
+        { staticClass: "col-5_sm-12" },
+        [
+          _c("h4", { staticClass: "text-center" }, [
+            _vm._v("Your questions (" + _vm._s(_vm.questions.length) + ")")
           ]),
           _vm._v(" "),
-          _c(
-            "button",
-            { staticClass: "btn btn-default", attrs: { type: "submit" } },
-            [_vm._v("Submit")]
-          )
-        ]
+          _vm.questions.length <= 0
+            ? [
+                _c("h5", { staticClass: "text-center" }, [
+                  _vm._v("You have no questions yet")
+                ])
+              ]
+            : _vm._l(_vm.questions, function(question) {
+                return [
+                  _c("question-card", {
+                    key: question.id,
+                    attrs: { question: question }
+                  })
+                ]
+              })
+        ],
+        2
       ),
       _vm._v(" "),
-      _c("h4", [_vm._v("Your questions")]),
-      _vm._v(" "),
-      _vm._l(_vm.questions, function(question) {
-        return [
-          _c(
-            "div",
-            { key: question.id, staticClass: "row" },
-            [_c("question-card", { attrs: { question: question } })],
-            1
-          )
-        ]
-      })
-    ],
-    2
-  )
+      _vm._m(1)
+    ])
+  ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-3_sm-12 user-profile-image" }, [
+      _c("i", { staticClass: "fas fa-user-circle" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-5_sm-12" }, [
+      _c("h4", { staticClass: "text-center" }, [_vm._v("Your answers(0)")]),
+      _vm._v(" "),
+      _c("h5", { staticClass: "text-center" }, [
+        _vm._v("You have no answers yet")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -46712,6 +46875,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -46804,15 +46973,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     question: Object
   },
   computed: {
-    slicedDate: function slicedDate(date) {
+    formattedDate: function formattedDate(date) {
       return function (date) {
-        return date.slice(0, 16);
+        var d = new Date(date);
+        var options = {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        };
+        return d.toLocaleString("en-us", options);
       };
     },
     questionUrl: function questionUrl(id) {
@@ -46831,30 +47007,28 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "col-md-6 col-sm-12 col-md-offset-3" }, [
-    _c("div", { staticClass: "well" }, [
-      _c(
-        "h3",
-        [
-          _c(
-            "router-link",
-            { attrs: { to: _vm.questionUrl(_vm.question.id) } },
-            [_vm._v(_vm._s(_vm.question.title))]
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("small", [
-        _vm._v(
-          "\n      Asked on " +
-            _vm._s(_vm.slicedDate(_vm.question.created_at)) +
-            "\n      "
-        ),
-        _vm.question.user != undefined
-          ? _c("span", [_vm._v("by " + _vm._s(_vm.question.user.name))])
-          : _vm._e()
-      ])
+  return _c("div", { staticClass: "question" }, [
+    _c(
+      "h3",
+      { staticClass: "question-title" },
+      [
+        _c("router-link", { attrs: { to: _vm.questionUrl(_vm.question.id) } }, [
+          _vm._v(_vm._s(_vm.question.title))
+        ])
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c("p", { staticClass: "question-details" }, [
+      _vm.question.user != undefined
+        ? _c("span", [
+            _c("i", { staticClass: "fas fa-user-circle" }),
+            _vm._v("\n      " + _vm._s(_vm.question.user.name) + " |\n    ")
+          ])
+        : _vm._e(),
+      _vm._v(
+        "\n    " + _vm._s(_vm.formattedDate(_vm.question.created_at)) + "\n  "
+      )
     ])
   ])
 }
@@ -46876,94 +47050,101 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("div", { staticClass: "grid welcome-container" }, [
-        _c("div", { staticClass: "col" }),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "col-8_sm-12" },
-          [
-            _c("h1", [_vm._v("Welcome to What's What!")]),
-            _vm._v(" "),
-            _c("p", [
-              _vm._v(
-                "Here you can read and post questions and answers to life's great mysteries."
-              )
-            ]),
-            _vm._v(" "),
-            !_vm.isAuthenticated
-              ? [
-                  _c("div", { staticClass: "grid" }, [
-                    _c("div", { staticClass: "col register-button-wrapper" }, [
-                      _c(
-                        "li",
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "btn btn-success",
-                              attrs: { to: { name: "register" } }
-                            },
-                            [_vm._v("Sign up")]
-                          )
-                        ],
-                        1
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col login-button-wrapper" }, [
-                      _c(
-                        "li",
-                        [
-                          _c(
-                            "router-link",
-                            {
-                              staticClass: "btn btn-primary",
-                              attrs: { to: { name: "login" } }
-                            },
-                            [_vm._v("Sign in")]
-                          )
-                        ],
-                        1
-                      )
-                    ])
+  return _c("div", [
+    _c("div", { staticClass: "grid-center welcome-container" }, [
+      _c(
+        "div",
+        { staticClass: "col-8_sm-12" },
+        [
+          !_vm.isAuthenticated
+            ? [
+                _c("div", { staticClass: "grid" }, [
+                  _c("div", { staticClass: "col register-button-wrapper" }, [
+                    _c(
+                      "li",
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "btn btn-default btn-main",
+                            attrs: { to: { name: "register" } }
+                          },
+                          [_vm._v("Sign up")]
+                        )
+                      ],
+                      1
+                    )
                   ]),
                   _vm._v(" "),
-                  _c("p", [_vm._v("to post questions and answers")])
-                ]
-              : _vm._e()
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "col login-button-wrapper" }, [
+                    _c(
+                      "li",
+                      [
+                        _c(
+                          "router-link",
+                          {
+                            staticClass: "btn btn-default btn-inverted",
+                            attrs: { to: { name: "login" } }
+                          },
+                          [_vm._v("Sign in")]
+                        )
+                      ],
+                      1
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("p", [_vm._v("to post questions and answers")])
+              ]
+            : _vm._e()
+        ],
+        2
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "grid" }, [
+      _vm._m(1),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-4_sm-12" }, [
+        _c(
+          "div",
+          { staticClass: "questions-homepage" },
+          [
+            _c("h4", [_vm._v("Latest unanswered questions")]),
+            _vm._v(" "),
+            _vm._l(_vm.questions, function(question) {
+              return [
+                _c("question-card", {
+                  key: question.id,
+                  attrs: { question: question }
+                })
+              ]
+            })
           ],
           2
-        ),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" })
-      ]),
-      _vm._v(" "),
-      _vm._l(_vm.questions, function(question) {
-        return [
-          _c(
-            "div",
-            { key: question.id, staticClass: "grid-6_sm-12" },
-            [_c("question-card", { attrs: { question: question } })],
-            1
-          )
-        ]
-      })
-    ],
-    2
-  )
+        )
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-2" }, [_c("p", [_vm._v("or")])])
+    return _c("div", { staticClass: "col-2" }, [
+      _c("p", { staticClass: "homepage-or" }, [_vm._v("or")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-8_sm-12" }, [
+      _c("h4", [_vm._v("Questions + answers go here")])
+    ])
   }
 ]
 render._withStripped = true
@@ -46996,11 +47177,14 @@ if (false) {
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */]);
 
 var user = localStorage.getItem("user");
+var token = localStorage.getItem("access_token");
+var userExists = user !== "undefined";
+var tokenExists = token !== "undefined";
 
 var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
   state: {
-    user: user ? JSON.parse(user) : null,
-    token: localStorage.getItem("access_token") || null,
+    user: userExists ? JSON.parse(user) : null,
+    token: tokenExists ? token : null,
     questions: [],
     userQuestions: [],
     question: {}
@@ -47990,15 +48174,23 @@ var index_esm = {
         username: data.username,
         password: data.password
       }).then(function (response) {
-        var token = response.data.token;
-        var user = response.data.user;
+        /* if (response.status === 402) {
+          console.log("RES", response);
+        } */
+
+        /* const token = response.data.token;
+        const user = response.data.user;
         localStorage.setItem("access_token", token);
         localStorage.setItem("user", JSON.stringify(user));
         context.commit("retrieveToken", token);
-        context.commit("setUser", user);
+        context.commit("setUser", user); */
         resolve(response);
       }).catch(function (error) {
-        reject(error.data.message);
+        /* console.log("ERROR", error.status);
+        if (error.status === 401) {
+          console.log("RES", error);
+        } */
+        reject(error);
       });
     });
   },
@@ -48111,7 +48303,7 @@ var index_esm = {
     state.question = question;
   },
   updateUserQuestions: function updateUserQuestions(state, question) {
-    state.userQuestions.push(question);
+    state.userQuestions.unshift(question);
   }
 });
 
@@ -48307,6 +48499,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   computed: {
@@ -48327,12 +48554,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("nav", { staticClass: "navbar navbar-default navbar-static-top" }, [
+  return _c("nav", { staticClass: "navbar navbar-default navbar-fixed-top" }, [
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "navbar-header" }, [
         _vm._m(0),
-        _vm._v(" "),
-        _c("i", { staticClass: "fas fa-search" }),
         _vm._v(" "),
         _c(
           "li",
@@ -48353,7 +48578,7 @@ var render = function() {
           attrs: { id: "app-navbar-collapse" }
         },
         [
-          _c("ul", { staticClass: "nav navbar-nav" }, [_vm._v(" ")]),
+          _c("ul", { staticClass: "nav navbar-nav" }, [_vm._v(" \n        ")]),
           _vm._v(" "),
           _c(
             "ul",
@@ -48370,7 +48595,10 @@ var render = function() {
                             staticClass: "nav-link",
                             attrs: { to: { name: "register" } }
                           },
-                          [_vm._v("Sign up")]
+                          [
+                            _vm._v("\n              Sign up\n              "),
+                            _c("i", { staticClass: "fas fa-user-plus" })
+                          ]
                         )
                       ],
                       1
@@ -48385,7 +48613,10 @@ var render = function() {
                             staticClass: "nav-link",
                             attrs: { to: { name: "login" } }
                           },
-                          [_vm._v("Sign in")]
+                          [
+                            _vm._v("\n              Sign in\n              "),
+                            _c("i", { staticClass: "fas fa-sign-in-alt" })
+                          ]
                         )
                       ],
                       1
@@ -48406,6 +48637,7 @@ var render = function() {
                           }
                         },
                         [
+                          _c("i", { staticClass: "fas fa-user-circle" }),
                           _vm._v(
                             "\n              " +
                               _vm._s(_vm.user.name) +
@@ -48425,7 +48657,12 @@ var render = function() {
                                 staticClass: "nav-link",
                                 attrs: { to: { name: "dashboard" } }
                               },
-                              [_vm._v("Dashboard")]
+                              [
+                                _vm._v(
+                                  "\n                  Dashboard\n                  "
+                                ),
+                                _c("i", { staticClass: "fas fa-columns" })
+                              ]
                             ),
                             _vm._v(" "),
                             _c(
@@ -48434,7 +48671,12 @@ var render = function() {
                                 staticClass: "nav-link",
                                 attrs: { to: { name: "logout" } }
                               },
-                              [_vm._v("Logout")]
+                              [
+                                _vm._v(
+                                  "\n                  Sign out\n                  "
+                                ),
+                                _c("i", { staticClass: "fas fa-sign-out-alt" })
+                              ]
                             )
                           ],
                           1
@@ -48637,8 +48879,8 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-md-6 col-sm-12 col-md-offset-3" }, [
+  return _c("div", { staticClass: "grid-center" }, [
+    _c("div", { staticClass: "col-8_sm-12" }, [
       _c("div", { staticClass: "well" }, [
         _c("h3", [_vm._v(_vm._s(_vm.question.title))]),
         _vm._v(" "),

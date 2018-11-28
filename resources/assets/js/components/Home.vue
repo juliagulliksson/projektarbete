@@ -1,38 +1,44 @@
 <template>
   <div>
-    <div class="grid welcome-container">
-      <div class="col"></div>
+    <div class="grid-center welcome-container">
       <div class="col-8_sm-12">
-        <h1>Welcome to What's What!</h1>
+        <!-- <h1>Welcome to What's What!</h1>
         <p>Here you can read and post questions and answers to life's great mysteries.</p>
-
+        -->
         <template v-if="!isAuthenticated">
           <div class="grid">
             <div class="col register-button-wrapper">
               <li>
-                <router-link :to="{name:'register'}" class="btn btn-success">Sign up</router-link>
+                <router-link :to="{name:'register'}" class="btn btn-default btn-main">Sign up</router-link>
               </li>
             </div>
             <div class="col-2">
-              <p>or</p>
+              <p class="homepage-or">or</p>
             </div>
             <div class="col login-button-wrapper">
               <li>
-                <router-link :to="{name:'login'}" class="btn btn-primary">Sign in</router-link>
+                <router-link :to="{name:'login'}" class="btn btn-default btn-inverted">Sign in</router-link>
               </li>
             </div>
           </div>
           <p>to post questions and answers</p>
         </template>
       </div>
-      <div class="col"></div>
     </div>
     <!-- welcome-container -->
-    <template v-for="question in questions">
-      <div class="grid-6_sm-12" :key="question.id">
-        <question-card :question="question"></question-card>
+    <div class="grid">
+      <div class="col-8_sm-12">
+        <h4>Questions + answers go here</h4>
       </div>
-    </template>
+      <div class="col-4_sm-12">
+        <div class="questions-homepage">
+          <h4>Latest unanswered questions</h4>
+          <template v-for="question in questions">
+            <question-card :question="question" :key="question.id"></question-card>
+          </template>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

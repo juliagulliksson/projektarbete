@@ -18,6 +18,6 @@ export default {
     state.question = question;
   },
   updateUserQuestions(state, question) {
-    state.userQuestions.push(question);
+    state.userQuestions.unshift(question);
   }
 };
