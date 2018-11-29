@@ -83,7 +83,7 @@
               <ul class="dropdown-menu">
                 <li>
                   <router-link :to="{name:'dashboard'}" class="nav-link">
-                    Dashboard
+                    Profile
                     <i class="fas fa-columns"></i>
                   </router-link>
                   <router-link :to="{name:'logout'}" class="nav-link">

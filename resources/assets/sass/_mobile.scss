@@ -1,15 +1,17 @@
 body {
   font-family: $main_font;
-  font-size: 1.6em;
-  padding-top: 70px;
+  padding-top: 70px; //Because of sticky navbar
   background-color: $background_color;
+}
+
+html {
+  font-size: 62.5%; // 1.6rem = 16px
 }
 
 main {
   max-width: 1020px;
   margin: 0 auto;
   padding: 20px;
-  /*  background-color: $main_bg_color; */
 }
 
 li {
@@ -18,11 +20,20 @@ li {
 
 label {
   font-size: 1.4rem;
+  margin-bottom: 5px;
+  font-weight: 500;
 }
 /* Navbar/Header */
+
 .navbar {
   margin-bottom: 0px;
+  &.navbar-default {
+    border-color: $accent_lighter;
+  }
   li {
+    &.navbar-brand {
+      font-size: 1.8rem;
+    }
     a {
       &.router-link-exact-active {
         color: $accent_color;
@@ -84,15 +95,18 @@ label {
   text-align: right;
 }
 
-.question-title {
-  a {
-    font-family: "Noto Serif", serif;
-    color: $accent_darker;
-    font-size: 1.8rem;
-    &:hover,
-    &:active,
-    &:focus {
-      color: $accent_color;
+h3 {
+  &.question-title {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    font-family: $second_font;
+    a {
+      color: $accent_darker;
+      &:hover,
+      &:active,
+      &:focus {
+        color: $accent_color;
+      }
     }
   }
 }
@@ -100,18 +114,30 @@ label {
 /* Buttons */
 .btn {
   font-family: $main_font;
-  transition: 300ms all;
-  padding: 9px 30px;
+  transition: all 0.3s ease 0s;
+  padding: 10px 30px;
   border-radius: 5px;
   outline: none;
+  border-radius: 45px;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  font-size: 1.2rem;
+  &:hover,
+  &:focus,
+  &:active {
+    box-shadow: 0px 15px 20px #e000703a;
+  }
   &.btn-main {
-    background-color: $accent_bright;
-    border: 3px solid $accent_bright;
+    background-color: $accent_lighter;
+    border: 3px solid $accent_lighter;
+    color: #fff;
     &:hover,
     &:active,
     &:focus {
-      background-color: $accent_lighter;
-      border-color: $accent_lighter;
+      background-color: $accent_bright;
+      border-color: $accent_bright;
     }
   }
   &.btn-inverted {
@@ -121,7 +147,7 @@ label {
     &:hover,
     &:focus,
     &:active {
-      border-color: #36d1a09e;
+      border-color: $accent_bright;
       background-color: #fff;
     }
   }
@@ -129,7 +155,7 @@ label {
 
 p {
   &.homepage-or {
-    padding-top: 10px;
+    padding-top: 15px;
   }
   &.question-details {
     font-size: 1.5rem;
@@ -138,7 +164,7 @@ p {
 
 %content-box {
   border-radius: 3px;
-  border: 0.8px solid hsla(0, 0%, 100%, 0.8);
+  border: 0.8px solid $light_gray;
   box-shadow: $box_shadow;
   background-color: #fff;
 }
@@ -146,6 +172,21 @@ p {
 .questions-homepage {
   @extend %content-box;
   padding: 20px;
+  h4 {
+    margin-bottom: 0;
+  }
+}
+
+.question:not(:last-child) {
+  border-bottom: 0.8px solid $light_gray;
+}
+
+.question {
+  padding: 20px $standard_padding + 1em;
+  transition: 500ms all;
+  &:hover {
+    background: rgb(241, 240, 240);
+  }
 }
 
 .user-profile {
@@ -160,12 +201,68 @@ p {
     align-items: center;
   }
 }
+
+.answers {
+  @extend %content-box;
+  padding: $standard_padding;
+  border-radius: 0px 0px 3px 3px;
+}
+
+.questions {
+  @extend %content-box;
+  padding: $standard_padding 0em 0em;
+}
+
 .login-box {
   @extend %content-box;
-  padding: 20px;
+  padding: $standard_padding;
 }
 
 .register-box {
   @extend %content-box;
-  padding: 20px;
+  padding: $standard_padding;
+}
+
+.single-question {
+  @extend %content-box;
+  padding: $standard_padding;
+}
+
+.answers-homepage {
+  @extend %content-box;
+  padding: $standard_padding;
+}
+
+.dashboard {
+  h4 {
+    margin-bottom: 10px;
+  }
+  h3 {
+    margin-bottom: 10px;
+  }
+}
+
+.profile-views {
+  padding-top: 10px;
+  border: 0.8px solid $light_gray;
+  background-color: #fff;
+  border-radius: 3px 3px 0px 0px;
+  span {
+    cursor: pointer;
+    display: block;
+    text-align: center;
+    padding: 10px 0px;
+    &.active {
+      background-color: $accent_lighter;
+      font-weight: 500;
+      color: #fff;
+    }
+  }
+  span:not(.last) {
+    border-right: 0.8px solid $light_gray;
+  }
+}
+
+.dashboard-input {
+  padding-top: 5px;
 }

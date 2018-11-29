@@ -14,9 +14,6 @@ export default {
   setUserQuestions(state, questions) {
     state.userQuestions = questions;
   },
-  setQuestion(state, question) {
-    state.question = question;
-  },
   updateUserQuestions(state, question) {
     state.userQuestions.unshift(question);
   }

@@ -7,23 +7,15 @@ export default {
           password: data.password
         })
         .then(response => {
-          /* if (response.status === 402) {
-            console.log("RES", response);
-          } */
-
-          /* const token = response.data.token;
+          const token = response.data.token;
           const user = response.data.user;
           localStorage.setItem("access_token", token);
           localStorage.setItem("user", JSON.stringify(user));
           context.commit("retrieveToken", token);
-          context.commit("setUser", user); */
+          context.commit("setUser", user);
           resolve(response);
         })
         .catch(error => {
-          /* console.log("ERROR", error.status);
-          if (error.status === 401) {
-            console.log("RES", error);
-          } */
           reject(error);
         });
     });
@@ -122,7 +114,6 @@ export default {
         .get(`api/questions/${id}`)
         .then(response => {
           console.log(response);
-          context.commit("setQuestion", response.data);
           resolve(response);
         })
         .catch(error => {

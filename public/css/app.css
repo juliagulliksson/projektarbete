@@ -13686,18 +13686,155 @@ readers do not read off random characters that represent icons */
   font-family: 'Font Awesome 5 Brands';
 }
 
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
 body {
-  font-family: "Open Sans", sans-serif;
-  font-size: 1.6em;
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
   padding-top: 70px;
   background-color: #fafafa;
+}
+
+html {
+  font-size: 62.5%;
 }
 
 main {
   max-width: 1020px;
   margin: 0 auto;
   padding: 20px;
-  /*  background-color: $main_bg_color; */
 }
 
 li {
@@ -13706,6 +13843,8 @@ li {
 
 label {
   font-size: 1.4rem;
+  margin-bottom: 5px;
+  font-weight: 500;
 }
 
 /* Navbar/Header */
@@ -13714,13 +13853,21 @@ label {
   margin-bottom: 0px;
 }
 
+.navbar.navbar-default {
+  border-color: #9b0256;
+}
+
+.navbar li.navbar-brand {
+  font-size: 1.8rem;
+}
+
 .navbar li a.router-link-exact-active {
-  color: #36d1a0;
+  color: #800040;
 }
 
 .navbar li a.router-link-exact-active:active,
 .navbar li a.router-link-exact-active:focus {
-  color: #36d1a0;
+  color: #800040;
 }
 
 .navbar li.navbar-brand a {
@@ -13738,12 +13885,12 @@ label {
 }
 
 .navbar li.navbar-brand a.router-link-exact-active {
-  color: #36d1a0;
+  color: #800040;
 }
 
 .navbar li.navbar-brand a.router-link-exact-active:active,
 .navbar li.navbar-brand a.router-link-exact-active:focus {
-  color: #36d1a0;
+  color: #800040;
 }
 
 /* Icons */
@@ -13756,7 +13903,7 @@ label {
 .fas.fa-sign-in-alt,
 .fas.fa-user-circle,
 .fas.fa-columns {
-  color: #36d1a0;
+  color: #800040;
 }
 
 .fas.fa-sign-out-alt {
@@ -13779,44 +13926,63 @@ label {
   text-align: right;
 }
 
-.question-title a {
-  font-family: "Noto Serif", serif;
-  color: #14bc87;
-  font-size: 1.8rem;
+h3.question-title {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  font-family: "Noto serif", serif;
 }
 
-.question-title a:hover,
-.question-title a:active,
-.question-title a:focus {
-  color: #36d1a0;
+h3.question-title a {
+  color: #57002b;
+}
+
+h3.question-title a:hover,
+h3.question-title a:active,
+h3.question-title a:focus {
+  color: #800040;
 }
 
 /* Buttons */
 
 .btn {
-  font-family: "Open Sans", sans-serif;
-  -webkit-transition: 300ms all;
-  transition: 300ms all;
-  padding: 9px 30px;
+  font-family: "Roboto", sans-serif;
+  -webkit-transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s;
+  padding: 10px 30px;
   border-radius: 5px;
   outline: none;
+  border-radius: 45px;
+  -webkit-box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+.btn:hover,
+.btn:focus,
+.btn:active {
+  -webkit-box-shadow: 0px 15px 20px #e000703a;
+          box-shadow: 0px 15px 20px #e000703a;
 }
 
 .btn.btn-main {
-  background-color: #5eeec0;
-  border: 3px solid #5eeec0;
+  background-color: #9b0256;
+  border: 3px solid #9b0256;
+  color: #fff;
 }
 
 .btn.btn-main:hover,
 .btn.btn-main:active,
 .btn.btn-main:focus {
-  background-color: #3be5af;
-  border-color: #3be5af;
+  background-color: #e00070;
+  border-color: #e00070;
 }
 
 .btn.btn-inverted {
   background-color: #fff;
-  border: 3px solid #36d1a0;
+  border: 3px solid #800040;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
@@ -13824,12 +13990,12 @@ label {
 .btn.btn-inverted:hover,
 .btn.btn-inverted:focus,
 .btn.btn-inverted:active {
-  border-color: #36d1a09e;
+  border-color: #e00070;
   background-color: #fff;
 }
 
 p.homepage-or {
-  padding-top: 10px;
+  padding-top: 15px;
 }
 
 p.question-details {
@@ -13838,10 +14004,14 @@ p.question-details {
 
 .questions-homepage,
 .user-profile,
+.answers,
+.questions,
 .login-box,
-.register-box {
+.register-box,
+.single-question,
+.answers-homepage {
   border-radius: 3px;
-  border: 0.8px solid rgba(255, 255, 255, 0.8);
+  border: 0.8px solid #cfcece;
   -webkit-box-shadow: 0 1px 20px 0 rgba(128, 126, 126, 0.1);
           box-shadow: 0 1px 20px 0 rgba(128, 126, 126, 0.1);
   background-color: #fff;
@@ -13849,6 +14019,24 @@ p.question-details {
 
 .questions-homepage {
   padding: 20px;
+}
+
+.questions-homepage h4 {
+  margin-bottom: 0;
+}
+
+.question:not(:last-child) {
+  border-bottom: 0.8px solid #cfcece;
+}
+
+.question {
+  padding: 20px 3em;
+  -webkit-transition: 500ms all;
+  transition: 500ms all;
+}
+
+.question:hover {
+  background: #f1f0f0;
 }
 
 .user-profile {
@@ -13871,11 +14059,70 @@ p.question-details {
           align-items: center;
 }
 
+.answers {
+  padding: 2em;
+  border-radius: 0px 0px 3px 3px;
+}
+
+.questions {
+  padding: 2em 0em 0em;
+}
+
 .login-box {
-  padding: 20px;
+  padding: 2em;
 }
 
 .register-box {
-  padding: 20px;
+  padding: 2em;
+}
+
+.single-question {
+  padding: 2em;
+}
+
+.answers-homepage {
+  padding: 2em;
+}
+
+.dashboard h4 {
+  margin-bottom: 10px;
+}
+
+.dashboard h3 {
+  margin-bottom: 10px;
+}
+
+.profile-views {
+  padding-top: 10px;
+  border: 0.8px solid #cfcece;
+  background-color: #fff;
+  border-radius: 3px 3px 0px 0px;
+}
+
+.profile-views span {
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  padding: 10px 0px;
+}
+
+.profile-views span.active {
+  background-color: #9b0256;
+  font-weight: 500;
+  color: #fff;
+}
+
+.profile-views span:not(.last) {
+  border-right: 0.8px solid #cfcece;
+}
+
+.dashboard-input {
+  padding-top: 5px;
+}
+
+@media screen and (min-width: 1002px) {
+  .container {
+    width: 1002px;
+  }
 }
 

@@ -28,9 +28,11 @@
     <!-- welcome-container -->
     <div class="grid">
       <div class="col-8_sm-12">
-        <h4>Questions + answers go here</h4>
+        <div class="answers-homepage">
+          <h4>Questions + answers go here</h4>
+        </div>
       </div>
-      <div class="col-4_sm-12">
+      <div v-if="loaded" class="col-4_sm-12">
         <div class="questions-homepage">
           <h4>Latest unanswered questions</h4>
           <template v-for="question in questions">
@@ -46,7 +48,9 @@
 import QuestionCard from "./cards/QuestionCard";
 export default {
   data() {
-    return {};
+    return {
+      loaded: false
+    };
   },
   components: {
     "question-card": QuestionCard
@@ -60,7 +64,9 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("getQuestions");
+    this.$store.dispatch("getQuestions").then(response => {
+      this.loaded = true;
+    });
   }
 };
 </script>

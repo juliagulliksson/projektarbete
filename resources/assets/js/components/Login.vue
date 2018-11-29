@@ -22,7 +22,7 @@
           <div class="text-center">
             <button type="submit" class="btn btn-main">Sign in</button>
           </div>
-          <div class="alert alert-danger" v-if="error != ''">{{error}}</div>
+          <div v-if="error != ''" class="alert alert-danger" role="alert">{{error}}</div>
         </form>
       </div>
     </div>

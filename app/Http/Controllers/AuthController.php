@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -10,80 +11,98 @@ class AuthController extends Controller
 {
   public function login(Request $request)
   {
+      // Check if a user with the specified email exists
+      $user = User::where('email', $request->username)->first();
+
+      if (!$user) {
+        return $user;
+          return response()->json([
+              'message' => 'Wrong email or password',
+              'status' => 422
+          ], 422);
+      }
   
-      // // Send an internal API request to get an access token
-      // $client = DB::table('oauth_clients')
-      //     ->where('password_client', true)
-      //     ->first();
+      // If a user with the email was found - check if the specified password
+      // belongs to this user
+      if (!Hash::check(request('password'), $user->password)) {
+          return response()->json([
+              'message' => 'Wrong email or password',
+              'status' => 422
+          ], 422);
+      }
   
-      // // Make sure a Password Client exists in the DB
-      // if (!$client) {
-      //     return response()->json([
-      //         'message' => 'Laravel Passport is not setup properly.',
-      //         'status' => 500
-      //     ], 500);
-      // }
+      // Send an internal API request to get an access token
+      $client = DB::table('oauth_clients')
+          ->where('password_client', true)
+          ->first();
   
-      // $data = [
-      //     'grant_type' => 'password',
-      //     'client_id' => $client->id,
-      //     'client_secret' => $client->secret,
-      //     'username' => request('username'),
-      //     'password' => request('password'),
-      // ];
+      // Make sure a Password Client exists in the DB
+      if (!$client) {
+          return response()->json([
+              'message' => 'Laravel Passport is not setup properly.',
+              'status' => 500
+          ], 500);
+      }
   
-      // $request = Request::create('/oauth/token', 'POST', $data);
+      $data = [
+          'grant_type' => 'password',
+          'client_id' => $client->id,
+          'client_secret' => $client->secret,
+          'username' => request('username'),
+          'password' => request('password'),
+      ];
   
-      // $response = app()->handle($request);
+      $request = Request::create('/oauth/token', 'POST', $data);
   
-      // // Check if the request was successful
-      // if ($response->getStatusCode() != 200) {
-      //   return $response;
-      //     return response()->json([
-      //         'message' => 'Wrong email or password',
-      //         'status' => 422
-      //     ], 422);
-      // }
+      $response = app()->handle($request);
   
-      // // Get the data from the response
-      // $data = json_decode($response->getContent());
+      // Check if the request was successful
+      if ($response->getStatusCode() != 200) {
+          return response()->json([
+              'message' => 'Wrong email or password',
+              'status' => 422
+          ], 422);
+      }
   
-      // // Format the final response
-      // return response()->json([
-      //     'token' => $data->access_token,
-      //     'user' => $user,
-      //     'status' => 200
-      // ]);
+      // Get the data from the response
+      $data = json_decode($response->getContent());
+  
+      // Format the final response
+      return response()->json([
+          'token' => $data->access_token,
+          'user' => $user,
+          'status' => 200
+      ]);
        
-      try { 
+      // try { 
 
-        /**
-       * Make a request to the database/API and return the token if login is correct
-       */
+      //   /**
+      //  * Make a request to the database/API and return the token if login is correct
+      //  */
 
-        $client = DB::table('oauth_clients')
-        ->where('password_client', true)
-        ->first();
+      //   $client = DB::table('oauth_clients')
+      //   ->where('password_client', true)
+      //   ->first();
   
-        $data = [
-            'grant_type' => 'password',
-            'client_id' => $client->id,
-            'client_secret' => $client->secret,
-            'username' => request('username'),
-            'password' => request('password'),
-        ];
+      //   $data = [
+      //       'grant_type' => 'password',
+      //       'client_id' => $client->id,
+      //       'client_secret' => $client->secret,
+      //       'username' => request('username'),
+      //       'password' => request('password'),
+      //   ];
   
-        $request = Request::create('/oauth/token', 'POST', $data);
-        return app()->handle($request);
+      //   $request = Request::create('/oauth/token', 'POST', $data);
+      //   return app()->handle($request);
       
-      } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-          if ($e->getCode() === 400) {
-              return response()->json('Invalid Request. Please enter a username or a password.', $e->getCode());
-          } else if ($e->getCode() === 401) {
-              return response()->json('Your credentials are incorrect. Please try again', $e->getCode());
-          }
-          return response()->json('Something went wrong on the server.', $e->getCode());
-      } 
+      // } catch (\GuzzleHttp\Exception\BadResponseException $e) {
+      //     if ($e->getCode() === 400) {
+      //         return response()->json('Invalid Request. Please enter a username or a password.', $e->getCode());
+      //     } else if ($e->getCode() === 401) {
+      //         return response()->json('Your credentials are incorrect. Please try again', $e->getCode());
+      //     }
+      //     return response()->json('Something went wrong on the server.', $e->getCode());
+      // } 
      
   }
 
