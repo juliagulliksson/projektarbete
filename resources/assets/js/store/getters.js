@@ -1,5 +1,7 @@
 export default {
-  isAuthenticated: state => state.token !== null,
+  isAuthenticated: state =>
+    state.user.name !== undefined && state.user != null && state.user != {},
+  // isAuthenticated: state => false,
   questions: state => state.questions,
   user: state => state.user,
   userQuestions: state => state.userQuestions,

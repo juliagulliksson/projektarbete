@@ -1,14 +1,33 @@
-<template>
-  
-</template>
+<template></template>
 
 <script>
 export default {
   created() {
-    this.$store.dispatch("destroyToken").then(response => {
-      console.log(response);
-      this.$router.push({ name: "home" });
-    });
+    this.$store
+      .dispatch("destroyToken")
+      .then(response => {
+        /**
+         * User is successfully logged out
+         */
+        if (response === 200) {
+          this.$router.push({ name: "home" });
+        } else {
+          /**
+           * Stored cookie token has expired or user is not authenticated
+           */
+          this.$router.push({
+            name: "login",
+            params: { sessionError: "Session expired" }
+          });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        this.$router.push({
+          name: "login",
+          params: { sessionError: "Session expired" }
+        });
+      });
   }
 };
 </script>

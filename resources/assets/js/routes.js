@@ -25,7 +25,8 @@ const routes = [
     component: Login,
     meta: {
       requiresGuest: true
-    }
+    },
+    props: true
   },
   {
     path: "/dashboard",

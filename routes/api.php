@@ -25,7 +25,11 @@ Route::middleware('auth:api')->group(function () {
   ]);
   
   Route::post('/logout', 'AuthController@logout');
+  Route::post('/userdescription', 'UsersController@addDescription');
 }); 
+
+Route::post('setcookie', 'CookieController@setcookie');
+Route::get('returncookie', 'CookieController@returncookie');
 
 Route::get('questions/{question}', 'API\QuestionsController@show');
 

@@ -13857,8 +13857,20 @@ label {
   border-color: #9b0256;
 }
 
-.navbar li.navbar-brand {
-  font-size: 1.8rem;
+.navbar.navbar-default .navbar-collapse {
+  text-align: right;
+}
+
+.navbar.navbar-default .navbar-collapse ul li:active {
+  background-color: #cfcece;
+}
+
+.navbar.navbar-default .navbar-toggle {
+  border-color: transparent;
+}
+
+.navbar.navbar-default .navbar-toggle .icon-bar {
+  background-color: #424242;
 }
 
 .navbar li a.router-link-exact-active {
@@ -13868,6 +13880,10 @@ label {
 .navbar li a.router-link-exact-active:active,
 .navbar li a.router-link-exact-active:focus {
   color: #800040;
+}
+
+.navbar li.navbar-brand {
+  font-size: 1.8rem;
 }
 
 .navbar li.navbar-brand a {
@@ -13976,8 +13992,8 @@ h3.question-title a:focus {
 .btn.btn-main:hover,
 .btn.btn-main:active,
 .btn.btn-main:focus {
-  background-color: #e00070;
-  border-color: #e00070;
+  background-color: #b6045d;
+  border-color: #b6045d;
 }
 
 .btn.btn-inverted {
@@ -13990,7 +14006,7 @@ h3.question-title a:focus {
 .btn.btn-inverted:hover,
 .btn.btn-inverted:focus,
 .btn.btn-inverted:active {
-  border-color: #e00070;
+  border-color: #b6045d;
   background-color: #fff;
 }
 
@@ -14018,11 +14034,12 @@ p.question-details {
 }
 
 .questions-homepage {
-  padding: 20px;
+  padding: 2em 0em;
 }
 
 .questions-homepage h4 {
   margin-bottom: 0;
+  padding-left: 1em;
 }
 
 .question:not(:last-child) {
@@ -14030,7 +14047,7 @@ p.question-details {
 }
 
 .question {
-  padding: 20px 3em;
+  padding: 2em;
   -webkit-transition: 500ms all;
   transition: 500ms all;
 }
@@ -14065,7 +14082,7 @@ p.question-details {
 }
 
 .questions {
-  padding: 2em 0em 0em;
+  padding: 0em;
 }
 
 .login-box {

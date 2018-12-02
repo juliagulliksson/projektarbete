@@ -8,6 +8,7 @@
 </template>
 
 <script>
+const moment = require("moment");
 import Navbar from "./components/Navbar";
 export default {
   components: {

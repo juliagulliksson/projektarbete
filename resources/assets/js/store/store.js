@@ -8,12 +8,11 @@ Vue.use(Vuex);
 
 const user = localStorage.getItem("user");
 const token = localStorage.getItem("access_token");
-const userExists = user !== "undefined";
+const userExists = user !== null;
 const tokenExists = token !== "undefined";
-
 export const store = new Vuex.Store({
   state: {
-    user: userExists ? JSON.parse(user) : null,
+    user: userExists ? JSON.parse(user) : {},
     token: tokenExists ? token : null,
     questions: [],
     userQuestions: [],

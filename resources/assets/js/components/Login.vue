@@ -19,10 +19,14 @@
             <label for="password">Password</label>
             <input type="password" id="password" class="form-control" v-model="password" required>
           </div>
+          <div
+            v-if="error != '' || sessionError != ''"
+            class="alert alert-danger"
+            role="alert"
+          >{{error || sessionError}}</div>
           <div class="text-center">
             <button type="submit" class="btn btn-main">Sign in</button>
           </div>
-          <div v-if="error != ''" class="alert alert-danger" role="alert">{{error}}</div>
         </form>
       </div>
     </div>
@@ -39,6 +43,13 @@ export default {
       error: ""
     };
   },
+  props: {
+    sessionError: {
+      type: String,
+      required: false,
+      default: ""
+    }
+  },
   methods: {
     login() {
       /**
@@ -50,9 +61,11 @@ export default {
           password: this.password
         })
         .then(response => {
+          console.log(response);
           this.$router.push({ name: "dashboard" });
         })
         .catch(error => {
+          console.log(error);
           this.error = "Wrong username or password. Please try again";
         });
     }

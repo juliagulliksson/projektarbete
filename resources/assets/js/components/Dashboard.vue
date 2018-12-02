@@ -4,12 +4,32 @@
       <div class="col-8_sm-12">
         <div class="user-profile">
           <div class="grid-center">
-            <div class="col-3_sm-12 user-profile-image">
+            <div class="col-3 user-profile-image">
               <i class="fas fa-user-circle"></i>
             </div>
-            <div class="col-6_sm-12">
+            <div class="col-6">
               <h3>{{ user.name }}</h3>
               <h5>Joined {{ formattedDate(user.created_at) }}</h5>
+            </div>
+          </div>
+          <div class="grid">
+            <div v-if="user.description.length > 0" class="col-6">
+              <p>{{user.description}}</p>
+            </div>
+            <div v-else class="col-6">
+              <form @submit.prevent="addDescription">
+                <div class="form-group">
+                  <label for="description">Add a description</label>
+                  <textarea
+                    v-model="description"
+                    class="form-control"
+                    name="description"
+                    cols="40"
+                    rows="5"
+                  ></textarea>
+                </div>
+                <button class="btn btn-default btn-main">Submit</button>
+              </form>
             </div>
           </div>
         </div>
@@ -85,7 +105,8 @@ export default {
   data() {
     return {
       title: "",
-      view: "questions"
+      view: "questions",
+      description: ""
     };
   },
   components: {
@@ -100,6 +121,15 @@ export default {
         .then(response => {
           console.log(response);
           this.title = "";
+        });
+    },
+    addDescription() {
+      this.$store
+        .dispatch("postUserDescription", {
+          description: this.description
+        })
+        .then(response => {
+          console.log(response);
         });
     },
     showQuestions() {

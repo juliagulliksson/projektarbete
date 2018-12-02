@@ -1,9 +1,9 @@
 export default {
-  retrieveToken(state, token) {
-    state.token = token;
-  },
+  // retrieveToken(state, token) {
+  //   state.token = token;
+  // },
   destroyToken(state) {
-    state.token = null;
+    state.user = {};
   },
   setQuestions(state, questions) {
     state.questions = questions;
@@ -16,5 +16,8 @@ export default {
   },
   updateUserQuestions(state, question) {
     state.userQuestions.unshift(question);
+  },
+  updateUser(state, user) {
+    state.user = user;
   }
 };

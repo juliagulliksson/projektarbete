@@ -9,11 +9,24 @@ export default {
         .then(response => {
           const token = response.data.token;
           const user = response.data.user;
-          localStorage.setItem("access_token", token);
+          // Prevent email from being shown in the client
+          delete user.email;
+          // localStorage.setItem("access_token", token);
           localStorage.setItem("user", JSON.stringify(user));
-          context.commit("retrieveToken", token);
-          context.commit("setUser", user);
+
           resolve(response);
+          axios
+            .post("api/setcookie", {
+              token: token
+            })
+            .then(response => {
+              // context.commit("retrieveToken", token);
+              context.commit("setUser", user);
+              console.log(response);
+            })
+            .catch(error => {
+              console.log("COOKIE-ERROR", error);
+            });
         })
         .catch(error => {
           reject(error);
@@ -21,23 +34,37 @@ export default {
     });
   },
   destroyToken(context) {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + context.state.token;
     if (context.getters.isAuthenticated) {
       return new Promise((resolve, reject) => {
+        /**
+         * Retrive token in the httponly cookie set in api/setcookie when the user
+         * was logged in
+         */
         axios
-          .post("/api/logout")
+          .get("api/returncookie")
           .then(response => {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("user");
-            context.commit("destroyToken");
-            resolve(response);
+            if (response.data.status === 200) {
+              const token = response.data.token;
+              axios.defaults.headers.common["Authorization"] =
+                "Bearer " + token;
+              axios
+                .post("/api/logout")
+                .then(response => {
+                  localStorage.removeItem("user");
+                  context.commit("destroyToken");
+                  resolve(response.data.status);
+                })
+                .catch(error => {
+                  localStorage.removeItem("user");
+                  context.commit("destroyToken");
+                  reject(error);
+                });
+            } else {
+              resolve(response.data.status);
+            }
           })
           .catch(error => {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("user");
-            context.commit("destroyToken");
-            reject(error.data.message);
+            console.log("COOKIE-ERROR", error);
           });
       });
     }
@@ -54,7 +81,7 @@ export default {
           resolve(response);
         })
         .catch(error => {
-          reject(error.data.message);
+          reject(error);
         });
     });
   },
@@ -117,7 +144,27 @@ export default {
           resolve(response);
         })
         .catch(error => {
-          reject(error.data.message);
+          reject(error);
+        });
+    });
+  },
+  postUserDescription(context, data) {
+    axios.defaults.headers.common["Authorization"] =
+      "Bearer " + context.state.token;
+    return new Promise((resolve, reject) => {
+      axios
+        .post("api/userdescription", {
+          description: data.description
+        })
+        .then(response => {
+          console.log(response);
+          const user = response.data.user;
+          localStorage.setItem("user", JSON.stringify(user));
+          context.commit("updateUser", user);
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
         });
     });
   }
