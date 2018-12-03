@@ -42,12 +42,17 @@ export default {
       password: "",
       error: ""
     };
-  },
+  } /* ,
   props: {
     sessionError: {
       type: String,
       required: false,
       default: ""
+    }
+  } */,
+  computed: {
+    sessionError() {
+      return this.$route.query.sessionError || "";
     }
   },
   methods: {

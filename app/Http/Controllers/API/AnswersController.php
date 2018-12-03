@@ -2,21 +2,20 @@
 
 namespace App\Http\Controllers\API;
 
-use App\User;
-use App\Question;
+use App\Answer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class QuestionsController extends Controller
+class AnswersController extends Controller
 {
-    /**
+      /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return Question::with('user')->with('answers')->orderBy('created_at', 'desc')->get();
+      return Answer::orderBy('created_at', 'desc')->get();
     }
 
     /**
@@ -27,11 +26,6 @@ class QuestionsController extends Controller
      */
     public function store(Request $request)
     {
-        $question = new Question;
-        $question->title = $request->title;
-        $question->user_id = auth()->user()->id;
-        $question->save(); 
-        return response($question, 201);
     }
 
     /**
@@ -42,7 +36,6 @@ class QuestionsController extends Controller
      */
     public function show($id)
     {
-        return Question::with('user')->where('id', $id)->first();
     }
 
     /**
@@ -68,7 +61,7 @@ class QuestionsController extends Controller
         //
     }
 
-    public function userQuestions($user_id){
-      return Question::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+    public function userAnswers($user_id){
+      return Answer::where('user_id', $user_id)->with('question', 'question.user')->orderBy('created_at', 'desc')->get();
     }
 }

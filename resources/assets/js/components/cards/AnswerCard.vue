@@ -4,6 +4,10 @@
       <router-link :to="questionUrl(question.id)">{{question.title}}</router-link>
     </h3>
     <question-details :question="question"></question-details>
+    <div class="answer">
+      <p>{{answer.body}}</p>
+      <question-details :question="answer"></question-details>
+    </div>
   </div>
 </template>
 
@@ -11,7 +15,8 @@
 import QuestionDetails from "./QuestionDetails";
 export default {
   props: {
-    question: Object
+    question: Object,
+    answer: Object
   },
   components: {
     QuestionDetails

@@ -28,6 +28,10 @@ Route::middleware('auth:api')->group(function () {
   Route::post('/userdescription', 'UsersController@addDescription');
 }); 
 
+Route::apiResource('/answers', 'API\AnswersController');
+
+Route::get('answers/user/{userId}', 'API\AnswersController@userAnswers');
+
 Route::post('setcookie', 'CookieController@setcookie');
 Route::get('returncookie', 'CookieController@returncookie');
 

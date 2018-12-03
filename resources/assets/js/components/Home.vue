@@ -35,7 +35,7 @@
       <div v-if="loaded" class="col-4_sm-12">
         <div class="questions-homepage">
           <h4>Latest unanswered questions</h4>
-          <template v-for="question in questions">
+          <template v-for="question in questionsWithoutAnswers">
             <question-card :question="question" :key="question.id"></question-card>
           </template>
         </div>
@@ -56,8 +56,8 @@ export default {
     "question-card": QuestionCard
   },
   computed: {
-    questions() {
-      return this.$store.getters.questions;
+    questionsWithoutAnswers() {
+      return this.$store.getters.questionsWithoutAnswers;
     },
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;

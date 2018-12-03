@@ -28,7 +28,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function todos(){
+    public function questions(){
       return $this->hasMany('App\Question');
+    }
+
+    public function answers(){
+      return $this->hasMany('App\Answer');
     }
 }

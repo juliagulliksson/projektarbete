@@ -85,6 +85,9 @@
       <div v-if="view === 'answers'" class="col-8_sm-12">
         <div class="answers">
           <h5 class="text-center">You have no answers yet</h5>
+          <template v-for="answer in answers">
+            <answer-card :question="answer.question" :key="answer.id" :answer="answer"></answer-card>
+          </template>
         </div>
       </div>
       <div v-if="view === 'settings'" class="col-8_sm-12">
@@ -100,6 +103,7 @@
 
 <script>
 import QuestionCard from "./cards/QuestionCard";
+import AnswerCard from "./cards/AnswerCard";
 
 export default {
   data() {
@@ -110,7 +114,8 @@ export default {
     };
   },
   components: {
-    QuestionCard
+    QuestionCard,
+    AnswerCard
   },
   methods: {
     postQuestion() {
@@ -149,6 +154,9 @@ export default {
     questions() {
       return this.$store.getters.userQuestions;
     },
+    answers() {
+      return this.$store.getters.userAnswers;
+    },
     formattedDate(date) {
       return date => {
         let d = new Date(date);
@@ -163,6 +171,7 @@ export default {
   },
   created() {
     this.$store.dispatch("getUserQuestions");
+    this.$store.dispatch("getUserAnswers");
   }
 };
 </script>

@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Question extends Model
+class Answer extends Model
 {
-     /**
+  /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'questions';
+    protected $table = 'answers';
     protected $fillable = ['title', 'user_id'];
 
     public function user()
@@ -19,8 +19,8 @@ class Question extends Model
       return $this->belongsTo('App\User');
     }
 
-    public function answers()
+    public function question()
     {
-        return $this->hasMany('App\Answer');
+        return $this->belongsTo('App\Question');
     }
 }

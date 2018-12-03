@@ -28546,32 +28546,97 @@ var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
   routes: __WEBPACK_IMPORTED_MODULE_2__routes_js__["a" /* default */]
 });
 
-/**
- * Redirects if user is trying to access unauthorized pages
- */
 router.beforeEach(function (to, from, next) {
   if (to.matched.some(function (record) {
     return record.meta.requiresAuth;
   })) {
-    if (!__WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].getters.isAuthenticated) {
+    if (__WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].getters.isAuthenticated) {
+      /**
+       * Even if the getter is returning true, run the check to see if cookie is stored
+       * and thereby hasn't expired
+       */
+      __WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].dispatch("checkIfCookie").then(function (response) {
+        if (response) {
+          //Cookie exists and the user is still authenticated
+          next();
+        } else {
+          router.push({
+            path: "/login",
+            query: { sessionError: "Session expired" }
+          });
+        }
+      }).catch(function (error) {
+        router.push({
+          path: "/login",
+          query: { sessionError: "Session expired" }
+        });
+      });
+    } else {
+      // User is guest and are not authenticated to visit page
+
+      console.log("ROUTE KÖRS");
       next({
         path: "/login"
       });
-    } else {
-      next();
     }
   } else if (to.matched.some(function (record) {
     return record.meta.requiresGuest;
   })) {
+    console.log("requeres guest");
     if (__WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].getters.isAuthenticated) {
-      next({
-        path: "/dashboard"
+      console.log("AUTHENTICATED");
+      __WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].dispatch("checkIfCookie").then(function (response) {
+        console.log("COOKIE RESPONSE", response);
+        if (response === true) {
+          next({
+            path: "/dashboard"
+          });
+        } else {
+          router.push({
+            path: "/login",
+            query: { sessionError: "Session expired" }
+          });
+        }
+      }).catch(function (error) {
+        console.log("COOKIE ERROR", error);
+        router.push({
+          path: "/login",
+          query: { sessionError: "Session expired" }
+        });
       });
     } else {
+      console.log("IS GUEST");
       next();
     }
   } else {
-    next(); // make sure to always call next()!
+    console.log("NEITHER GUEST OR AUTH");
+    /**
+     * Neither guest or auth is required to access page
+     */
+
+    if (__WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].getters.isAuthenticated) {
+      console.log("IS AUTH");
+      next();
+      __WEBPACK_IMPORTED_MODULE_3__store_store_js__["a" /* store */].dispatch("checkIfCookie").then(function (response) {
+        console.log("COOKIE RESPONSE", response);
+        if (response) {
+          next();
+        } else {
+          router.push({
+            path: "/login",
+            query: { sessionError: "Session expired" }
+          });
+        }
+      }).catch(function (error) {
+        router.push({
+          path: "/login",
+          query: { sessionError: "Session expired" }
+        });
+      });
+    } else {
+      console.log("IS GUEST");
+      next();
+    }
   }
 });
 
@@ -62726,13 +62791,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       password: "",
       error: ""
     };
-  },
-
-  props: {
+  } /* ,
+    props: {
     sessionError: {
       type: String,
       required: false,
       default: ""
+    }
+    } */
+  ,
+  computed: {
+    sessionError: function sessionError() {
+      return this.$route.query.sessionError || "";
     }
   },
   methods: {
@@ -62932,6 +63002,8 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cards_QuestionCard__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cards_QuestionCard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__cards_QuestionCard__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__cards_AnswerCard__ = __webpack_require__(222);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__cards_AnswerCard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__cards_AnswerCard__);
 //
 //
 //
@@ -63032,6 +63104,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+
 
 
 
@@ -63045,7 +63121,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   components: {
-    QuestionCard: __WEBPACK_IMPORTED_MODULE_0__cards_QuestionCard___default.a
+    QuestionCard: __WEBPACK_IMPORTED_MODULE_0__cards_QuestionCard___default.a,
+    AnswerCard: __WEBPACK_IMPORTED_MODULE_1__cards_AnswerCard___default.a
   },
   methods: {
     postQuestion: function postQuestion() {
@@ -63082,6 +63159,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     questions: function questions() {
       return this.$store.getters.userQuestions;
     },
+    answers: function answers() {
+      return this.$store.getters.userAnswers;
+    },
     formattedDate: function formattedDate(date) {
       return function (date) {
         var d = new Date(date);
@@ -63096,6 +63176,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   created: function created() {
     this.$store.dispatch("getUserQuestions");
+    this.$store.dispatch("getUserAnswers");
   }
 });
 
@@ -63107,8 +63188,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__QuestionDetails__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__QuestionDetails___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__QuestionDetails__);
-//
-//
 //
 //
 //
@@ -63439,11 +63518,31 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _vm.view === "answers"
-        ? _c("div", { staticClass: "col-8_sm-12" }, [_vm._m(2)])
+        ? _c("div", { staticClass: "col-8_sm-12" }, [
+            _c(
+              "div",
+              { staticClass: "answers" },
+              [
+                _c("h5", { staticClass: "text-center" }, [
+                  _vm._v("You have no answers yet")
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.answers, function(answer) {
+                  return [
+                    _c("answer-card", {
+                      key: answer.id,
+                      attrs: { question: answer.question, answer: answer }
+                    })
+                  ]
+                })
+              ],
+              2
+            )
+          ])
         : _vm._e(),
       _vm._v(" "),
       _vm.view === "settings"
-        ? _c("div", { staticClass: "col-8_sm-12" }, [_vm._m(3)])
+        ? _c("div", { staticClass: "col-8_sm-12" }, [_vm._m(2)])
         : _vm._e()
     ])
   ])
@@ -63464,16 +63563,6 @@ var staticRenderFns = [
     return _c("div", { staticClass: "text-center col-4" }, [
       _c("button", { staticClass: "btn btn-main", attrs: { type: "submit" } }, [
         _vm._v("Submit")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "answers" }, [
-      _c("h5", { staticClass: "text-center" }, [
-        _vm._v("You have no answers yet")
       ])
     ])
   },
@@ -63720,8 +63809,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     "question-card": __WEBPACK_IMPORTED_MODULE_0__cards_QuestionCard___default.a
   },
   computed: {
-    questions: function questions() {
-      return this.$store.getters.questions;
+    questionsWithoutAnswers: function questionsWithoutAnswers() {
+      return this.$store.getters.questionsWithoutAnswers;
     },
     isAuthenticated: function isAuthenticated() {
       return this.$store.getters.isAuthenticated;
@@ -63809,7 +63898,7 @@ var render = function() {
               [
                 _c("h4", [_vm._v("Latest unanswered questions")]),
                 _vm._v(" "),
-                _vm._l(_vm.questions, function(question) {
+                _vm._l(_vm.questionsWithoutAnswers, function(question) {
                   return [
                     _c("question-card", {
                       key: question.id,
@@ -64025,6 +64114,7 @@ var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     token: tokenExists ? token : null,
     questions: [],
     userQuestions: [],
+    userAnswers: [],
     question: {}
   },
   getters: __WEBPACK_IMPORTED_MODULE_2__getters_js__["a" /* default */],
@@ -64986,15 +65076,27 @@ var index_esm = {
   isAuthenticated: function isAuthenticated(state) {
     return state.user.name !== undefined && state.user != null && state.user != {};
   },
-  // isAuthenticated: state => false,
   questions: function questions(state) {
     return state.questions;
+  },
+  questionsWithoutAnswers: function questionsWithoutAnswers(state) {
+    return state.questions.filter(function (question) {
+      return question.answers.length <= 0;
+    });
+  },
+  questionsWithAnswers: function questionsWithAnswers(state) {
+    return state.questions.filter(function (question) {
+      return question.answers.length > 0;
+    });
   },
   user: function user(state) {
     return state.user;
   },
   userQuestions: function userQuestions(state) {
     return state.userQuestions;
+  },
+  userAnswers: function userAnswers(state) {
+    return state.userAnswers;
   },
   singleQuestion: function singleQuestion(state) {
     return state.question;
@@ -65006,6 +65108,9 @@ var index_esm = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(189);
+
+
 /* harmony default export */ __webpack_exports__["a"] = ({
   retrieveToken: function retrieveToken(context, data) {
     return new Promise(function (resolve, reject) {
@@ -65017,17 +65122,20 @@ var index_esm = {
         var user = response.data.user;
         // Prevent email from being shown in the client
         delete user.email;
-        // localStorage.setItem("access_token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-
-        resolve(response);
+        /**
+         * Save token in an httponly cookie on the server side
+         */
         axios.post("api/setcookie", {
           token: token
         }).then(function (response) {
-          // context.commit("retrieveToken", token);
+          /**
+           * Finally log the user in
+           */
+          localStorage.setItem("user", JSON.stringify(user));
           context.commit("setUser", user);
-          console.log(response);
+          resolve(response);
         }).catch(function (error) {
+          reject(error);
           console.log("COOKIE-ERROR", error);
         });
       }).catch(function (error) {
@@ -65056,6 +65164,9 @@ var index_esm = {
               reject(error);
             });
           } else {
+            console.log("LOGOUT", response);
+            localStorage.removeItem("user");
+            context.commit("destroyToken");
             resolve(response.data.status);
           }
         }).catch(function (error) {
@@ -65117,6 +65228,18 @@ var index_esm = {
       });
     });
   },
+  getUserAnswers: function getUserAnswers(context) {
+    var userId = context.state.user.id;
+    return new Promise(function (resolve, reject) {
+      axios.get("api/answers/user/" + userId).then(function (response) {
+        console.log(response);
+        resolve(response);
+        context.commit("setUserAnswers", response.data);
+      }).catch(function (error) {
+        reject(error);
+      });
+    });
+  },
   getSingleQuestion: function getSingleQuestion(context, id) {
     return new Promise(function (resolve, reject) {
       axios.get("api/questions/" + id).then(function (response) {
@@ -65128,18 +65251,58 @@ var index_esm = {
     });
   },
   postUserDescription: function postUserDescription(context, data) {
-    axios.defaults.headers.common["Authorization"] = "Bearer " + context.state.token;
+    /**
+     * NEED TO CHECK FOR COOKIE FIRST, IF PAGE HAS BEEN IDLE
+     */
+    /* axios.defaults.headers.common["Authorization"] =
+      "Bearer " + context.state.token; */
+
     return new Promise(function (resolve, reject) {
-      axios.post("api/userdescription", {
-        description: data.description
-      }).then(function (response) {
-        console.log(response);
-        var user = response.data.user;
-        localStorage.setItem("user", JSON.stringify(user));
-        context.commit("updateUser", user);
-        resolve(response);
+      axios.get("api/returncookie").then(function (response) {
+        if (response.data.status === 200) {
+          var token = response.data.token;
+          axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+          axios.post("api/userdescription", {
+            description: data.description
+          }).then(function (response) {
+            console.log(response);
+            var user = response.data.user;
+            localStorage.setItem("user", JSON.stringify(user));
+            context.commit("updateUser", user);
+            resolve(response);
+          }).catch(function (error) {
+            reject(error);
+          });
+        } else {
+          reject(error);
+        }
       }).catch(function (error) {
         reject(error);
+      });
+    });
+  },
+  checkIfCookie: function checkIfCookie(context, data) {
+    return new Promise(function (resolve, reject) {
+      /**
+       * Retrive token in the httponly cookie set in api/setcookie when the user
+       * was logged in, to check if it still exists and hasn't expired
+       * This code will run every time an authenticated user tries to navigates a route (app.js)
+       */
+      axios.get("api/returncookie").then(function (response) {
+        if (response.data.status === 200) {
+          resolve(true);
+          console.log("IS COOKIE", response);
+        } else {
+          console.log("NO COOKIE", response);
+          localStorage.removeItem("user");
+          context.commit("destroyToken");
+          resolve(false);
+        }
+      }).catch(function (error) {
+        console.log("ERROR", error);
+        localStorage.removeItem("user");
+        context.commit("destroyToken");
+        reject(false);
       });
     });
   }
@@ -65165,6 +65328,9 @@ var index_esm = {
   },
   setUserQuestions: function setUserQuestions(state, questions) {
     state.userQuestions = questions;
+  },
+  setUserAnswers: function setUserAnswers(state, answers) {
+    state.userAnswers = answers;
   },
   updateUserQuestions: function updateUserQuestions(state, question) {
     state.userQuestions.unshift(question);
@@ -65229,6 +65395,8 @@ module.exports = Component.exports
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navbar__ = __webpack_require__(197);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Navbar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__components_Navbar__);
+//
+//
 //
 //
 //
@@ -65875,7 +66043,13 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    [_c("Navbar"), _vm._v(" "), _c("main", [_c("router-view")], 1)],
+    [
+      _c("Navbar"),
+      _vm._v(" "),
+      _c("main", [
+        _c("div", { staticClass: "container" }, [_c("router-view")], 1)
+      ])
+    ],
     1
   )
 }
@@ -65894,6 +66068,164 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */,
+/* 217 */,
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(223)
+/* template */
+var __vue_template__ = __webpack_require__(224)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/cards/AnswerCard.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6e2df95e", Component.options)
+  } else {
+    hotAPI.reload("data-v-6e2df95e", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 223 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__QuestionDetails__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__QuestionDetails___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__QuestionDetails__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    question: Object,
+    answer: Object
+  },
+  components: {
+    QuestionDetails: __WEBPACK_IMPORTED_MODULE_0__QuestionDetails___default.a
+  },
+  computed: {
+    questionUrl: function questionUrl(id) {
+      return function (id) {
+        return "/question/" + id;
+      };
+    }
+  }
+});
+
+/***/ }),
+/* 224 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "question" },
+    [
+      _c(
+        "h3",
+        { staticClass: "question-title" },
+        [
+          _c(
+            "router-link",
+            { attrs: { to: _vm.questionUrl(_vm.question.id) } },
+            [_vm._v(_vm._s(_vm.question.title))]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("question-details", { attrs: { question: _vm.question } }),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "answer" },
+        [
+          _c("p", [_vm._v(_vm._s(_vm.answer.body))]),
+          _vm._v(" "),
+          _c("question-details", { attrs: { question: _vm.answer } })
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6e2df95e", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

@@ -1,3 +1,5 @@
+import { store } from "./store";
+
 export default {
   retrieveToken(context, data) {
     return new Promise((resolve, reject) => {
@@ -11,20 +13,23 @@ export default {
           const user = response.data.user;
           // Prevent email from being shown in the client
           delete user.email;
-          // localStorage.setItem("access_token", token);
-          localStorage.setItem("user", JSON.stringify(user));
-
-          resolve(response);
+          /**
+           * Save token in an httponly cookie on the server side
+           */
           axios
             .post("api/setcookie", {
               token: token
             })
             .then(response => {
-              // context.commit("retrieveToken", token);
+              /**
+               * Finally log the user in
+               */
+              localStorage.setItem("user", JSON.stringify(user));
               context.commit("setUser", user);
-              console.log(response);
+              resolve(response);
             })
             .catch(error => {
+              reject(error);
               console.log("COOKIE-ERROR", error);
             });
         })
@@ -60,6 +65,9 @@ export default {
                   reject(error);
                 });
             } else {
+              console.log("LOGOUT", response);
+              localStorage.removeItem("user");
+              context.commit("destroyToken");
               resolve(response.data.status);
             }
           })
@@ -135,6 +143,21 @@ export default {
         });
     });
   },
+  getUserAnswers(context) {
+    const userId = context.state.user.id;
+    return new Promise((resolve, reject) => {
+      axios
+        .get(`api/answers/user/${userId}`)
+        .then(response => {
+          console.log(response);
+          resolve(response);
+          context.commit("setUserAnswers", response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
   getSingleQuestion(context, id) {
     return new Promise((resolve, reject) => {
       axios
@@ -149,22 +172,67 @@ export default {
     });
   },
   postUserDescription(context, data) {
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + context.state.token;
+    /**
+     * NEED TO CHECK FOR COOKIE FIRST, IF PAGE HAS BEEN IDLE
+     */
+    /* axios.defaults.headers.common["Authorization"] =
+      "Bearer " + context.state.token; */
+
     return new Promise((resolve, reject) => {
       axios
-        .post("api/userdescription", {
-          description: data.description
-        })
+        .get("api/returncookie")
         .then(response => {
-          console.log(response);
-          const user = response.data.user;
-          localStorage.setItem("user", JSON.stringify(user));
-          context.commit("updateUser", user);
-          resolve(response);
+          if (response.data.status === 200) {
+            const token = response.data.token;
+            axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+            axios
+              .post("api/userdescription", {
+                description: data.description
+              })
+              .then(response => {
+                console.log(response);
+                const user = response.data.user;
+                localStorage.setItem("user", JSON.stringify(user));
+                context.commit("updateUser", user);
+                resolve(response);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          } else {
+            reject(error);
+          }
         })
         .catch(error => {
           reject(error);
+        });
+    });
+  },
+  checkIfCookie(context, data) {
+    return new Promise((resolve, reject) => {
+      /**
+       * Retrive token in the httponly cookie set in api/setcookie when the user
+       * was logged in, to check if it still exists and hasn't expired
+       * This code will run every time an authenticated user tries to navigates a route (app.js)
+       */
+      axios
+        .get("api/returncookie")
+        .then(response => {
+          if (response.data.status === 200) {
+            resolve(true);
+            console.log("IS COOKIE", response);
+          } else {
+            console.log("NO COOKIE", response);
+            localStorage.removeItem("user");
+            context.commit("destroyToken");
+            resolve(false);
+          }
+        })
+        .catch(error => {
+          console.log("ERROR", error);
+          localStorage.removeItem("user");
+          context.commit("destroyToken");
+          reject(false);
         });
     });
   }
