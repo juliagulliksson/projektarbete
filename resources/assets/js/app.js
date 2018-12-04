@@ -8,7 +8,10 @@ import { store } from "./store/store.js";
 Vue.component("App", require("./App.vue"));
 
 const router = new Router({
-  /* mode: "history", */
+  base: "/",
+  mode: "history",
+  history: true,
+  relative: true,
   routes
 });
 
@@ -84,7 +87,6 @@ router.beforeEach((to, from, next) => {
 
     if (store.getters.isAuthenticated) {
       console.log("IS AUTH");
-      next();
       store
         .dispatch("checkIfCookie")
         .then(response => {

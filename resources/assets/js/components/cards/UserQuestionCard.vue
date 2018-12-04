@@ -19,7 +19,7 @@ export default {
   computed: {
     questionUrl(id) {
       return id => {
-        return "/question/" + id;
+        return "/question-" + id;
       };
     }
   }

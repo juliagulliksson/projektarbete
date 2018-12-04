@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('{catchall?}', function () {
     return view('vueapp');
-});
+})->where('catchall', '^(?!api).*$');
+
+Route::get('/{vue_capture?}', function () {
+  return view('vueapp');
+})->where('vue_capture', '^(?!storage).*$'); 
+// Route::get('/{catchall?}', 'AppController@show')->where('catchall', '^(?!api).*$')->name('administration');

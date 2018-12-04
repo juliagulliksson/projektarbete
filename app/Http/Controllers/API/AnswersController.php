@@ -31,7 +31,7 @@ class AnswersController extends Controller
       $answer->user_id = auth()->user()->id;
       $answer->question_id = $request->question_id;
       $answer->save();
-      return response($answer, 201);
+      return response()->json(['answer' => $answer, 'status' => 201]);
     }
 
     /**

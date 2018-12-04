@@ -67,10 +67,11 @@ export default {
           body: this.answer
         })
         .then(response => {
-          console.log(response);
+          const answer = response.data.answer;
+          answer.user = this.user;
+          this.question.answers.push(answer);
           this.answer = "";
           this.$store.commit("changeLoading");
-          this.question.answers.push(response.data);
         });
     }
   },
@@ -84,6 +85,7 @@ export default {
     /* .catch(error => {
          this.$router.push({ name: "dashboard" });
       }) */
+    console.log(this.$route.params.id);
   }
 };
 </script>

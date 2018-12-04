@@ -42,7 +42,7 @@ const routes = [
     component: Logout
   },
   {
-    path: "/question/:id",
+    path: "/question-:id",
     name: "singleQuestion",
     component: SingleQuestion
   }
