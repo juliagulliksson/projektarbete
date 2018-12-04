@@ -8,7 +8,7 @@ import { store } from "./store/store.js";
 Vue.component("App", require("./App.vue"));
 
 const router = new Router({
-  /*   mode: "history", */
+  /* mode: "history", */
   routes
 });
 
@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
           });
         });
     } else {
-      // User is guest and are not authenticated to visit page
+      // User is guest and not authenticated to visit page
 
       console.log("ROUTE KÖRS");
       next({

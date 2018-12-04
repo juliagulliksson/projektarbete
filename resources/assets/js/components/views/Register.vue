@@ -31,7 +31,10 @@
             >By signing this form you agree to the storing of your information</label>
           </div>
           <div class="text-center">
-            <button type="submit" class="btn btn-main">Sign up</button>
+            <button type="submit" class="btn btn-main">
+              Sign up
+              <i v-if="loading" class="fas fa-spinner fa-spin"></i>
+            </button>
           </div>
         </form>
       </div>
@@ -48,8 +51,15 @@ export default {
       password: ""
     };
   },
+  computed: {
+    loading() {
+      return this.$store.getters.loading;
+    }
+  },
   methods: {
     register() {
+      this.$store.commit("changeLoading");
+
       this.$store
         .dispatch("register", {
           name: this.name,
@@ -58,6 +68,10 @@ export default {
         })
         .then(response => {
           this.$router.push({ name: "login" });
+          this.$store.commit("changeLoading");
+        })
+        .catch(error => {
+          this.$store.commit("changeLoading");
         });
     }
   }

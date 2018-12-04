@@ -22,5 +22,8 @@ export default {
   },
   updateUser(state, user) {
     state.user = user;
+  },
+  changeLoading(state) {
+    state.loading = !state.loading;
   }
 };

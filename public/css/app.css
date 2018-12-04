@@ -13865,6 +13865,11 @@ p.question-details {
   font-size: 1.5rem;
 }
 
+.italic {
+  font-style: italic;
+  font-weight: 300;
+}
+
 @media screen and (min-width: 1002px) {
   .container {
     width: 1002px;
@@ -14150,6 +14155,15 @@ p.question-details {
 }
 
 .answers-homepage {
+  border-radius: 3px;
+  border: 0.8px solid #cfcece;
+  -webkit-box-shadow: 0 1px 20px 0 rgba(128, 126, 126, 0.1);
+          box-shadow: 0 1px 20px 0 rgba(128, 126, 126, 0.1);
+  background-color: #fff;
+  padding: 2em;
+}
+
+.settings {
   border-radius: 3px;
   border: 0.8px solid #cfcece;
   -webkit-box-shadow: 0 1px 20px 0 rgba(128, 126, 126, 0.1);

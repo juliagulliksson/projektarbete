@@ -26,6 +26,12 @@ class AnswersController extends Controller
      */
     public function store(Request $request)
     {
+      $answer = new Answer;
+      $answer->body = $request->body;
+      $answer->user_id = auth()->user()->id;
+      $answer->question_id = $request->question_id;
+      $answer->save();
+      return response($answer, 201);
     }
 
     /**

@@ -11,5 +11,6 @@ export default {
   user: state => state.user,
   userQuestions: state => state.userQuestions,
   userAnswers: state => state.userAnswers,
-  singleQuestion: state => state.question
+  singleQuestion: state => state.question,
+  loading: state => state.loading
 };

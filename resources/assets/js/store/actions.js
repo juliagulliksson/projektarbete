@@ -1,5 +1,3 @@
-import { store } from "./store";
-
 export default {
   retrieveToken(context, data) {
     return new Promise((resolve, reject) => {
@@ -11,7 +9,10 @@ export default {
         .then(response => {
           const token = response.data.token;
           const user = response.data.user;
-          // Prevent email from being shown in the client
+          /**
+           * Prevent email from being shown in the client
+           */
+
           delete user.email;
           /**
            * Save token in an httponly cookie on the server side
@@ -55,24 +56,24 @@ export default {
               axios
                 .post("/api/logout")
                 .then(response => {
-                  localStorage.removeItem("user");
-                  context.commit("destroyToken");
+                  console.log("EXPECTED");
+                  context.dispatch("logOut");
                   resolve(response.data.status);
                 })
                 .catch(error => {
-                  localStorage.removeItem("user");
-                  context.commit("destroyToken");
+                  context.dispatch("logOut");
                   reject(error);
                 });
             } else {
               console.log("LOGOUT", response);
-              localStorage.removeItem("user");
-              context.commit("destroyToken");
+              context.dispatch("logOut");
               resolve(response.data.status);
             }
           })
           .catch(error => {
             console.log("COOKIE-ERROR", error);
+            context.dispatch("logOut");
+            reject(error);
           });
       });
     }
@@ -94,23 +95,61 @@ export default {
     });
   },
   postQuestion(context, data) {
-    /**
-     * Send through token to authorize request
-     */
-    axios.defaults.headers.common["Authorization"] =
-      "Bearer " + context.state.token;
     return new Promise((resolve, reject) => {
       axios
-        .post("api/questions", {
-          title: data.title
-        })
+        .get("api/returncookie")
         .then(response => {
-          console.log(response);
-          resolve(response);
-          context.commit("updateUserQuestions", response.data);
+          if (response.status === 200) {
+            axios.defaults.headers.common["Authorization"] =
+              "Bearer " + response.data.token;
+            axios
+              .post("api/questions", {
+                title: data.title
+              })
+              .then(response => {
+                console.log(response);
+                resolve(response);
+                context.commit("updateUserQuestions", response.data);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          } else {
+            reject(response.status);
+          }
         })
         .catch(error => {
-          reject(error.data.message);
+          reject(error);
+        });
+    });
+  },
+  postAnswer(context, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("api/returncookie")
+        .then(response => {
+          if (response.status === 200) {
+            axios.defaults.headers.common["Authorization"] =
+              "Bearer " + response.data.token;
+            axios
+              .post("api/answers", {
+                question_id: data.question_id,
+                body: data.body
+              })
+              .then(response => {
+                console.log(response);
+                resolve(response);
+                // context.commit("updateUserQuestions", response.data);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          } else {
+            reject(response.status);
+          }
+        })
+        .catch(error => {
+          reject(error);
         });
     });
   },
@@ -172,12 +211,6 @@ export default {
     });
   },
   postUserDescription(context, data) {
-    /**
-     * NEED TO CHECK FOR COOKIE FIRST, IF PAGE HAS BEEN IDLE
-     */
-    /* axios.defaults.headers.common["Authorization"] =
-      "Bearer " + context.state.token; */
-
     return new Promise((resolve, reject) => {
       axios
         .get("api/returncookie")
@@ -219,21 +252,45 @@ export default {
         .get("api/returncookie")
         .then(response => {
           if (response.data.status === 200) {
-            resolve(true);
+            const token = response.data.token;
             console.log("IS COOKIE", response);
+            /**
+             * User is still authenticated and active, so renew session by setting the cookie again
+             */
+            axios
+              .post("api/setcookie", {
+                token: token
+              })
+              .then(response => {
+                if (response.status === 200) {
+                  console.log("YEAH");
+                  resolve(true);
+                } else {
+                  context.dispatch("logOut");
+                  /* localStorage.removeItem("user");
+                  context.commit("destroyToken"); */
+                  resolve(false);
+                }
+              });
           } else {
             console.log("NO COOKIE", response);
-            localStorage.removeItem("user");
-            context.commit("destroyToken");
+            /*  localStorage.removeItem("user");
+            context.commit("destroyToken"); */
+            context.dispatch("logOut");
             resolve(false);
           }
         })
         .catch(error => {
           console.log("ERROR", error);
-          localStorage.removeItem("user");
-          context.commit("destroyToken");
+          /* localStorage.removeItem("user");
+          context.commit("destroyToken"); */
+          context.dispatch("logOut");
           reject(false);
         });
     });
+  },
+  logOut(context) {
+    localStorage.removeItem("user");
+    context.commit("destroyToken");
   }
 };

@@ -2,7 +2,7 @@
 
 **A social media web app where users can ask questions and answer other user's questions**
 
-_Used technologies_
+_Uses:_
 
 - Lavarel 5.5
 - Laravel Passport

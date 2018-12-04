@@ -17,7 +17,8 @@ export const store = new Vuex.Store({
     questions: [],
     userQuestions: [],
     userAnswers: [],
-    question: {}
+    question: {},
+    loading: false
   },
   getters,
   mutations,

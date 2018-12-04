@@ -7,51 +7,22 @@
             <div class="col-3 user-profile-image">
               <i class="fas fa-user-circle"></i>
             </div>
-            <div class="col-6">
+            <div class="col-4">
               <h3>{{ user.name }}</h3>
               <h5>Joined {{ formattedDate(user.created_at) }}</h5>
             </div>
-          </div>
-          <div class="grid">
-            <div v-if="user.description.length > 0" class="col-6">
-              <p>{{user.description}}</p>
-            </div>
-            <div v-else class="col-6">
-              <form @submit.prevent="addDescription">
-                <div class="form-group">
-                  <label for="description">Add a description</label>
-                  <textarea
-                    v-model="description"
-                    class="form-control"
-                    name="description"
-                    cols="40"
-                    rows="5"
-                  ></textarea>
-                </div>
-                <button class="btn btn-default btn-main">Submit</button>
-              </form>
+
+            <!-- <div class="grid"> -->
+            <div class="col-5_sm-12">
+              <p v-if="user.description != null">{{user.description}}</p>
+              <p v-else class="italic">No description yet...</p>
             </div>
           </div>
+          <!--   </div> -->
         </div>
       </div>
       <div class="col-6_sm-12">
-        <h4>Post a new question</h4>
-        <form method="post" @submit.prevent="postQuestion">
-          <div class="grid">
-            <div class="form-group col-8 dashboard-input">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Ask away"
-                v-model="title"
-                required
-              >
-            </div>
-            <div class="text-center col-4">
-              <button type="submit" class="btn btn-main">Submit</button>
-            </div>
-          </div>
-        </form>
+        <new-question-form></new-question-form>
       </div>
     </div>
 
@@ -62,39 +33,59 @@
             <span
               :class="{ active: view == 'questions' }"
               @click="showQuestions"
-            >Your questions ({{questions.length}})</span>
+            >Questions ({{questions.length}})</span>
           </div>
           <div class="col-4">
-            <span :class="{ active: view == 'answers' }" @click="showAnswers">Your answers (0)</span>
+            <span
+              :class="{ active: view == 'answers' }"
+              @click="showAnswers"
+            >Answers ({{answers.length}})</span>
           </div>
           <div class="col-4">
             <span :class="[view == 'settings' ? 'active' : 'last']" @click="showSettings">Settings</span>
           </div>
         </div>
       </div>
+
       <div v-if="view === 'questions'" class="col-8_sm-12">
         <div class="questions">
-          <template v-if="questions.length <= 0">
-            <h5 class="text-center">You have no questions yet</h5>
-          </template>
+          <h5 v-if="questions.length <= 0" class="text-center">You have no questions yet</h5>
           <template v-else v-for="question in questions">
-            <question-card :question="question" :key="question.id"></question-card>
+            <user-question-card :question="question" :key="question.id"></user-question-card>
           </template>
         </div>
       </div>
+
       <div v-if="view === 'answers'" class="col-8_sm-12">
         <div class="answers">
-          <h5 class="text-center">You have no answers yet</h5>
-          <template v-for="answer in answers">
+          <h5 v-if="answers.length <= 0" class="text-center">You have no answers yet</h5>
+          <template v-else v-for="answer in answers">
             <answer-card :question="answer.question" :key="answer.id" :answer="answer"></answer-card>
           </template>
         </div>
       </div>
+
       <div v-if="view === 'settings'" class="col-8_sm-12">
         <div class="settings">
           <h4 class="text-center">Change username</h4>
           <h5 class="text-center">Change password</h5>
           <h5 class="text-center">Upload profile picture</h5>
+          <!-- <div class="col-5_sm-12"> -->
+          <form @submit.prevent="addDescription">
+            <div class="form-group">
+              <label for="description">Add a description</label>
+              <textarea
+                v-model="description"
+                class="form-control"
+                name="description"
+                cols="40"
+                rows="5"
+                placeholder="Write something about yourself..."
+              ></textarea>
+            </div>
+            <button class="btn btn-default btn-main">Submit</button>
+          </form>
+          <!--  </div> -->
         </div>
       </div>
     </div>
@@ -102,8 +93,9 @@
 </template>
 
 <script>
-import QuestionCard from "./cards/QuestionCard";
-import AnswerCard from "./cards/AnswerCard";
+import UserQuestionCard from "./../cards/UserQuestionCard";
+import AnswerCard from "./../cards/AnswerCard";
+import NewQuestionForm from "./../cards/NewQuestionForm";
 
 export default {
   data() {
@@ -114,20 +106,21 @@ export default {
     };
   },
   components: {
-    QuestionCard,
-    AnswerCard
+    UserQuestionCard,
+    AnswerCard,
+    NewQuestionForm
   },
   methods: {
-    postQuestion() {
-      this.$store
-        .dispatch("postQuestion", {
-          title: this.title
-        })
-        .then(response => {
-          console.log(response);
-          this.title = "";
-        });
-    },
+    // postQuestion() {
+    //   this.$store
+    //     .dispatch("postQuestion", {
+    //       title: this.title
+    //     })
+    //     .then(response => {
+    //       console.log(response);
+    //       this.title = "";
+    //     });
+    // },
     addDescription() {
       this.$store
         .dispatch("postUserDescription", {

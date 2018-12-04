@@ -42,7 +42,7 @@ class QuestionsController extends Controller
      */
     public function show($id)
     {
-        return Question::with('user')->where('id', $id)->first();
+        return Question::with('user', 'answers', 'answers.user')->where('id', $id)->first();
     }
 
     /**

@@ -25,7 +25,10 @@
             role="alert"
           >{{error || sessionError}}</div>
           <div class="text-center">
-            <button type="submit" class="btn btn-main">Sign in</button>
+            <button type="submit" class="btn btn-main">
+              Sign in
+              <i v-if="loading" class="fas fa-spinner fa-spin"></i>
+            </button>
           </div>
         </form>
       </div>
@@ -53,10 +56,14 @@ export default {
   computed: {
     sessionError() {
       return this.$route.query.sessionError || "";
+    },
+    loading() {
+      return this.$store.getters.loading;
     }
   },
   methods: {
     login() {
+      this.$store.commit("changeLoading");
       /**
        * Retrieve the token from the API endpoint
        */
@@ -67,10 +74,13 @@ export default {
         })
         .then(response => {
           console.log(response);
+
           this.$router.push({ name: "dashboard" });
+          this.$store.commit("changeLoading");
         })
         .catch(error => {
           console.log(error);
+          this.$store.commit("changeLoading");
           this.error = "Wrong username or password. Please try again";
         });
     }

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import QuestionCard from "./cards/QuestionCard";
+import QuestionCard from "./../cards/QuestionCard";
 export default {
   data() {
     return {

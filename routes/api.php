@@ -20,15 +20,19 @@ Route::middleware('auth:api')->group(function () {
   Route::get('/user', function (Request $request) {
     return $request->user();
   });
+  
   Route::apiResource('/questions', 'API\QuestionsController')->except([
     'index', 'userQuestions', 'show'
+  ]);
+
+  Route::apiResource('/answers', 'API\AnswersController')->except([
+    'index', 'userAnswers', 'show'
   ]);
   
   Route::post('/logout', 'AuthController@logout');
   Route::post('/userdescription', 'UsersController@addDescription');
 }); 
 
-Route::apiResource('/answers', 'API\AnswersController');
 
 Route::get('answers/user/{userId}', 'API\AnswersController@userAnswers');
 

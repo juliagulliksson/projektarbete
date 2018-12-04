@@ -1,9 +1,9 @@
-import Register from "./components/Register";
-import Login from "./components/Login";
-import Dashboard from "./components/Dashboard";
-import Logout from "./components/Logout";
-import Home from "./components/Home";
-import SingleQuestion from "./components/SingleQuestion";
+import Register from "./components/views/Register";
+import Login from "./components/views/Login";
+import Dashboard from "./components/views/Dashboard";
+import Logout from "./components/views/Logout";
+import Home from "./components/views/Home";
+import SingleQuestion from "./components/views/SingleQuestion";
 
 const routes = [
   {
