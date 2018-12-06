@@ -54,7 +54,15 @@ class QuestionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $question = Question::find($id);
+      if($question){
+        $question->title = $request->title;
+        $question->save();
+        return response()->json(['status' => 200, 'question' => $question]);
+      } else {
+        return response()->json(['status' => 500]);
+
+      }
     }
 
     /**
@@ -65,7 +73,7 @@ class QuestionsController extends Controller
      */
     public function destroy($id)
     {
-        //
+     
     }
 
     public function userQuestions($user_id){

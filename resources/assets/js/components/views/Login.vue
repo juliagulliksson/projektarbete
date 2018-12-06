@@ -2,6 +2,9 @@
   <div class="grid-center">
     <div class="col-7_sm-12">
       <div class="login-box">
+        <div v-if="sessionError != ''" class="alert alert-danger" role="alert">
+          <p class="text-center">{{ sessionError}}</p>
+        </div>
         <h3 class="text-center">Sign in</h3>
         <form method="post" @submit.prevent="login">
           <div class="form-group">
@@ -19,11 +22,9 @@
             <label for="password">Password</label>
             <input type="password" id="password" class="form-control" v-model="password" required>
           </div>
-          <div
-            v-if="error != '' || sessionError != ''"
-            class="alert alert-danger"
-            role="alert"
-          >{{error || sessionError}}</div>
+          <div v-if="error != ''" class="alert alert-danger" role="alert">
+            <p class="text-center">{{error }}</p>
+          </div>
           <div class="text-center">
             <button type="submit" class="btn btn-main">
               Sign in

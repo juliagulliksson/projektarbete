@@ -53,7 +53,15 @@ class AnswersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $answer = Answer::find($id);
+      if($answer){
+        $answer->body = $request->body;
+        $answer->save();
+        return response()->json(['status' => 200, 'answer' => $answer]);
+      } else {
+        return response()->json(['status' => 500]);
+
+      }
     }
 
     /**
@@ -64,7 +72,13 @@ class AnswersController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $answer = Answer::find($id);
+      if($answer){
+        $answer->delete();
+        return response()->json(['status' => 200]);
+      } else {
+        return response()->json(['status' => 500]);
+      }
     }
 
     public function userAnswers($user_id){

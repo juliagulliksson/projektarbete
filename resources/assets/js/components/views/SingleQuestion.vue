@@ -1,26 +1,28 @@
 <template>
-  <div class="grid-center">
-    <div class="col-8_sm-12">
-      <div v-if="loaded" class="single-question">
+  <div v-if="loaded" class="grid-center">
+    <div class="col-10_sm-12">
+      <div class="single-question">
         <h3 class="question-title">{{question.title}}</h3>
         <question-details :question="question"></question-details>
       </div>
     </div>
-    <div v-if="question.user_id != user.id" class="col-8_sm-12">
-      <h4>Post an answer to this question</h4>
+    <div
+      v-if="question.user_id != user.id && isAuthenticated && !userHasAlreadyAnswered"
+      class="col-10_sm-12"
+    >
       <form method="post" @submit.prevent="postAnswer">
         <div class="form-group">
-          <textarea class="form-control" placeholder="Offer your insights..." v-model="answer"></textarea>
+          <vue-editor v-model="answer"></vue-editor>
         </div>
-        <div class="text-center col-4">
+        <div class="text-center">
           <button type="submit" class="btn btn-main">
-            Submit
+            Post answer
             <i v-if="loading" class="fas fa-spinner fa-spin"></i>
           </button>
         </div>
       </form>
     </div>
-    <div class="col-8_sm-12">
+    <div v-if="question.answers.length > 0" class="col-10_sm-12 single-question-answers">
       <div class="answers">
         <template v-for="answer in question.answers">
           <div class="answer" :key="answer.id">
@@ -29,7 +31,7 @@
               {{answer.user.name}} |
               Answered {{answer.created_at}}
             </p>
-            <p>{{answer.body}}</p>
+            <p v-html="answer.body" class="answer-body"></p>
           </div>
         </template>
       </div>
@@ -38,7 +40,9 @@
 </template>
 
 <script>
+import { VueEditor } from "vue2-editor";
 import QuestionDetails from "./../cards/QuestionDetails";
+
 export default {
   data() {
     return {
@@ -48,7 +52,8 @@ export default {
     };
   },
   components: {
-    QuestionDetails
+    QuestionDetails,
+    VueEditor
   },
   computed: {
     loading() {
@@ -56,6 +61,15 @@ export default {
     },
     user() {
       return this.$store.getters.user;
+    },
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    },
+    userHasAlreadyAnswered() {
+      let userAnswer = this.question.answers.filter(
+        answer => answer.user_id === this.user.id
+      );
+      return userAnswer.length > 0;
     }
   },
   methods: {

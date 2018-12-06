@@ -16,99 +16,108 @@ const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isAuthenticated) {
-      /**
-       * Even if the getter is returning true, run the check to see if cookie is stored
-       * and thereby hasn't expired
-       */
-      store
-        .dispatch("checkIfCookie")
-        .then(response => {
-          if (response) {
-            //Cookie exists and the user is still authenticated
-            next();
-          } else {
-            router.push({
-              path: "/login",
-              query: { sessionError: "Session expired" }
-            });
-          }
-        })
-        .catch(error => {
-          router.push({
-            path: "/login",
-            query: { sessionError: "Session expired" }
-          });
-        });
-    } else {
-      // User is guest and not authenticated to visit page
-
-      console.log("ROUTE KÖRS");
-      next({
-        path: "/login"
-      });
-    }
-  } else if (to.matched.some(record => record.meta.requiresGuest)) {
-    console.log("requeres guest");
-    if (store.getters.isAuthenticated) {
-      console.log("AUTHENTICATED");
-      store
-        .dispatch("checkIfCookie")
-        .then(response => {
-          console.log("COOKIE RESPONSE", response);
-          if (response === true) {
-            next({
-              path: "/dashboard"
-            });
-          } else {
-            router.push({
-              path: "/login",
-              query: { sessionError: "Session expired" }
-            });
-          }
-        })
-        .catch(error => {
-          console.log("COOKIE ERROR", error);
-          router.push({
-            path: "/login",
-            query: { sessionError: "Session expired" }
-          });
-        });
-    } else {
-      console.log("IS GUEST");
-      next();
-    }
-  } else {
-    console.log("NEITHER GUEST OR AUTH");
+  if (!to.matched.length) {
     /**
-     * Neither guest or auth is required to access page
+     * The url is invalid
      */
-
-    if (store.getters.isAuthenticated) {
-      console.log("IS AUTH");
-      store
-        .dispatch("checkIfCookie")
-        .then(response => {
-          console.log("COOKIE RESPONSE", response);
-          if (response) {
-            next();
-          } else {
+    next({ path: "/404" });
+  } else {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (store.getters.isAuthenticated) {
+        /**
+         * Even if user is authenticated, run the check to see if cookie is stored
+         * and thereby hasn't expired, and if it isn't, renew the cookie to extend session
+         */
+        store
+          .dispatch("checkIfCookie")
+          .then(response => {
+            if (response) {
+              /**
+               * User still authenticated and session has been renewed
+               */
+              next();
+            } else {
+              router.push({
+                path: "/login",
+                query: { sessionError: "Session expired" }
+              });
+            }
+          })
+          .catch(error => {
             router.push({
               path: "/login",
               query: { sessionError: "Session expired" }
             });
-          }
-        })
-        .catch(error => {
-          router.push({
-            path: "/login",
-            query: { sessionError: "Session expired" }
           });
+      } else {
+        // User is guest and not authenticated to visit page
+
+        console.log("ROUTE KÖRS");
+        next({
+          path: "/login"
         });
+      }
+    } else if (to.matched.some(record => record.meta.requiresGuest)) {
+      console.log("requeres guest");
+      if (store.getters.isAuthenticated) {
+        console.log("AUTHENTICATED");
+        store
+          .dispatch("checkIfCookie")
+          .then(response => {
+            console.log("COOKIE RESPONSE", response);
+            if (response === true) {
+              next({
+                path: "/dashboard"
+              });
+            } else {
+              router.push({
+                path: "/login",
+                query: { sessionError: "Session expired" }
+              });
+            }
+          })
+          .catch(error => {
+            console.log("COOKIE ERROR", error);
+            router.push({
+              path: "/login",
+              query: { sessionError: "Session expired" }
+            });
+          });
+      } else {
+        console.log("IS GUEST");
+        next();
+      }
     } else {
-      console.log("IS GUEST");
-      next();
+      console.log("NEITHER GUEST OR AUTH");
+      /**
+       * Both guests and logged in users can access page
+       */
+
+      if (store.getters.isAuthenticated) {
+        console.log("IS AUTH");
+        store
+          .dispatch("checkIfCookie")
+          .then(response => {
+            console.log("COOKIE RESPONSE", response);
+            if (response) {
+              next();
+            } else {
+              router.push({
+                path: "/login",
+                query: { sessionError: "Session expired" }
+              });
+            }
+          })
+          .catch(error => {
+            router.push({
+              path: "/login",
+              query: { sessionError: "Session expired" }
+            });
+          });
+      } else {
+        console.log("IS GUEST");
+        next();
+      }
     }
   }
 });

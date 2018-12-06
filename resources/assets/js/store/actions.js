@@ -292,5 +292,90 @@ export default {
   logOut(context) {
     localStorage.removeItem("user");
     context.commit("destroyToken");
+  },
+  deleteAnswer(context, data) {
+    const answerID = data.id;
+    return new Promise((resolve, reject) => {
+      axios.get("api/returncookie").then(response => {
+        if (response.data.status === 200) {
+          const token = response.data.token;
+          axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+
+          axios
+            .delete("api/answers/" + answerID)
+            .then(response => {
+              if (response.data.status === 200) {
+                context.commit("deleteUserAnswer", answerID);
+                resolve(response);
+              } else {
+                reject(response);
+              }
+            })
+            .catch(error => {
+              reject(error);
+            });
+        } else {
+          reject(error);
+        }
+      });
+    });
+  },
+  editAnswer(context, data) {
+    const answerID = data.id;
+    return new Promise((resolve, reject) => {
+      axios.get("api/returncookie").then(response => {
+        if (response.data.status === 200) {
+          const token = response.data.token;
+          axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+          axios
+            .patch("api/answers/" + answerID, {
+              body: data.body
+            })
+            .then(response => {
+              if (response.data.status === 200) {
+                console.log(response);
+                context.commit("editAnswer", response.data.answer);
+                resolve(response.data.answer);
+              } else {
+                reject(response);
+              }
+            })
+            .catch(error => {
+              reject(error);
+            });
+        } else {
+          reject(error);
+        }
+      });
+    });
+  },
+  editQuestion(context, data) {
+    const questionID = data.id;
+    return new Promise((resolve, reject) => {
+      axios.get("api/returncookie").then(response => {
+        if (response.data.status === 200) {
+          const token = response.data.token;
+          axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+          axios
+            .patch("api/questions/" + questionID, {
+              title: data.title
+            })
+            .then(response => {
+              if (response.data.status === 200) {
+                console.log(response);
+                context.commit("editQuestion", response.data.question);
+                resolve(response.data.question);
+              } else {
+                reject(response);
+              }
+            })
+            .catch(error => {
+              reject(error);
+            });
+        } else {
+          reject(401);
+        }
+      });
+    });
   }
 };

@@ -13827,6 +13827,10 @@ body {
   background-color: #fafafa;
 }
 
+body.modal-open {
+  padding-right: 0px !important;
+}
+
 html {
   font-size: 62.5%;
 }
@@ -13842,7 +13846,6 @@ li {
 }
 
 h3.question-title {
-  font-size: 2rem;
   margin-bottom: 15px;
   font-family: "Noto serif", serif;
 }
@@ -13857,6 +13860,15 @@ h3.question-title a:focus {
   color: #800040;
 }
 
+.questions-homepage .question-title,
+.dashboard .question-title {
+  font-size: 2rem;
+}
+
+.user-answer .question-title {
+  font-size: 1.7rem;
+}
+
 p.homepage-or {
   padding-top: 15px;
 }
@@ -13868,6 +13880,40 @@ p.question-details {
 .italic {
   font-style: italic;
   font-weight: 300;
+}
+
+.not-found h1 {
+  color: #616161;
+  padding: 20px 0px;
+}
+
+.quillWrapper {
+  background-color: #fff;
+}
+
+.quillWrapper .ql-toolbar.ql-snow {
+  border-radius: 3px 3px 0px 0px;
+  background-color: #fff;
+  border: 0.8px solid #cfcece;
+}
+
+.quillWrapper .ql-container {
+  font-family: "Noto serif", serif;
+}
+
+.quillWrapper .ql-container.ql-snow {
+  border: 0.8px solid #cfcece;
+  background-color: #fff;
+  border-radius: 0px 0px 3px 3px;
+}
+
+.alert-danger p {
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+input[type="text"] {
+  font-family: "Noto serif", serif;
 }
 
 @media screen and (min-width: 1002px) {
@@ -13926,6 +13972,10 @@ p.question-details {
   background-color: #fff;
 }
 
+.btn.btn-edit {
+  padding: 9px 24px;
+}
+
 .fas {
   padding: 0px 10px;
 }
@@ -13943,6 +13993,16 @@ p.question-details {
 
 .fas.fa-user-circle {
   padding: 0px 10px 0px 0px;
+}
+
+.fas.fa-exclamation-triangle {
+  color: #616161;
+  font-size: 4em;
+}
+
+.fas.fa-edit,
+.fas.fa-trash-alt {
+  padding-right: 0rem;
 }
 
 .navbar {
@@ -14032,6 +14092,15 @@ p.question-details {
           align-items: center;
 }
 
+.user-profile .user-description {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .dashboard h4 {
   margin-bottom: 10px;
 }
@@ -14066,6 +14135,26 @@ p.question-details {
 
 .dashboard-input {
   padding-top: 5px;
+}
+
+.edit-buttons {
+  padding: 2rem 0rem 0rem;
+}
+
+.modal-header {
+  padding-bottom: 0em;
+}
+
+.modal-header .close {
+  padding: 0rem 1rem 1rem 1rem;
+}
+
+.modal-title h5 {
+  font-size: 1.7rem;
+}
+
+.modal-open {
+  overflow-y: auto;
 }
 
 .questions-homepage {
@@ -14108,14 +14197,29 @@ p.question-details {
   background: #f1f0f0;
 }
 
+.question .answer {
+  padding: 0rem;
+}
+
+.single-question-answers .answer {
+  padding: 2em;
+}
+
 .answers {
   border-radius: 3px;
   border: 0.8px solid #cfcece;
   -webkit-box-shadow: 0 1px 20px 0 rgba(128, 126, 126, 0.1);
           box-shadow: 0 1px 20px 0 rgba(128, 126, 126, 0.1);
   background-color: #fff;
-  padding: 2em;
+  padding: 0em;
   border-radius: 0px 0px 3px 3px;
+}
+
+.answers .answer .answer-body {
+  padding: 10px 0px;
+  font-family: "Noto serif", serif;
+  font-size: 1.2em;
+  line-height: 140%;
 }
 
 .questions {

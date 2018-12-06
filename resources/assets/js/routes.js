@@ -4,6 +4,7 @@ import Dashboard from "./components/views/Dashboard";
 import Logout from "./components/views/Logout";
 import Home from "./components/views/Home";
 import SingleQuestion from "./components/views/SingleQuestion";
+import NotFound from "./components/views/NotFound";
 
 const routes = [
   {
@@ -45,6 +46,11 @@ const routes = [
     path: "/question-:id",
     name: "singleQuestion",
     component: SingleQuestion
+  },
+  {
+    path: "/404",
+    name: "404",
+    component: NotFound
   }
 ];
 
