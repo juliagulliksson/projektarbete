@@ -16,7 +16,9 @@ class QuestionsController extends Controller
      */
     public function index()
     {
-        return Question::with('user')->with('answers')->orderBy('created_at', 'desc')->get();
+        return Question::with('user', 'answers', 'answers.user', 'answers.votes','answers.votes.user')
+        ->orderBy('answered_at', 'desc')
+        ->orderBy('created_at', 'desc')->get();
     }
 
     /**

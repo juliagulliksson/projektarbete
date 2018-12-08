@@ -153,7 +153,7 @@ export default {
         });
     });
   },
-  getQuestions(context, data) {
+  getQuestions(context) {
     return new Promise((resolve, reject) => {
       axios
         .get("api/questions")
@@ -163,7 +163,21 @@ export default {
           context.commit("setQuestions", response.data);
         })
         .catch(error => {
-          reject(error.data.message);
+          reject(error);
+        });
+    });
+  },
+  getAnswers(context) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("api/answers")
+        .then(response => {
+          console.log(response);
+          resolve(response);
+          context.commit("setAnswers", response.data);
+        })
+        .catch(error => {
+          reject(error);
         });
     });
   },

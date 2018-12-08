@@ -15,6 +15,7 @@ export const store = new Vuex.Store({
     user: userExists ? JSON.parse(user) : {},
     token: tokenExists ? token : null,
     questions: [],
+    answers: [],
     userQuestions: [],
     userAnswers: [],
     question: {},

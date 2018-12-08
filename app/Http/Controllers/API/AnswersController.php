@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Answer;
+use App\Question;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,7 +16,8 @@ class AnswersController extends Controller
      */
     public function index()
     {
-      return Answer::orderBy('created_at', 'desc')->get();
+      //Not used
+      return Answer::with('votes', 'votes.user')->get();
     }
 
     /**
@@ -26,12 +28,32 @@ class AnswersController extends Controller
      */
     public function store(Request $request)
     {
-      $answer = new Answer;
-      $answer->body = $request->body;
-      $answer->user_id = auth()->user()->id;
-      $answer->question_id = $request->question_id;
-      $answer->save();
-      return response()->json(['answer' => $answer, 'status' => 201]);
+     
+   
+      $question = Question::find($request->question_id);
+      if ($question) {
+         /**
+         * Update the question if it has not been answered before
+         */
+        if ($question->answered_at === null) {
+          $timestamp = date('Y-m-d G:i:s');
+          $question->answered_at = $timestamp;
+          $question->save();
+        }
+        
+        /** 
+         * Create new answer
+         */
+  
+        $answer = new Answer;
+        $answer->body = $request->body;
+        $answer->user_id = auth()->user()->id;
+        $answer->question_id = $request->question_id;
+        $answer->save();
+        return response()->json(['answer' => $answer, 'status' => 201]);
+      } else {
+        return response()->json(['status' => 500]);
+      }
     }
 
     /**
@@ -54,13 +76,12 @@ class AnswersController extends Controller
     public function update(Request $request, $id)
     {
       $answer = Answer::find($id);
-      if($answer){
+      if ($answer) {
         $answer->body = $request->body;
         $answer->save();
         return response()->json(['status' => 200, 'answer' => $answer]);
       } else {
         return response()->json(['status' => 500]);
-
       }
     }
 
@@ -73,7 +94,7 @@ class AnswersController extends Controller
     public function destroy($id)
     {
       $answer = Answer::find($id);
-      if($answer){
+      if ($answer) {
         $answer->delete();
         return response()->json(['status' => 200]);
       } else {

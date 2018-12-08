@@ -1,12 +1,12 @@
 export default {
-  // retrieveToken(state, token) {
-  //   state.token = token;
-  // },
   destroyToken(state) {
     state.user = {};
   },
   setQuestions(state, questions) {
     state.questions = questions;
+  },
+  setAnswers(state, answers) {
+    state.answers = answers;
   },
   setUser(state, user) {
     state.user = user;

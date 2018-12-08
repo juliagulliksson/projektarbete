@@ -9,20 +9,16 @@
 </template>
 
 <script>
+import formatDate from "./../mixins/formatDate.js";
 export default {
   props: {
     question: Object
   },
+  mixins: [formatDate],
   computed: {
     formattedDate(date) {
       return date => {
-        let d = new Date(date);
-        let options = {
-          month: "short",
-          day: "numeric",
-          year: "numeric"
-        };
-        return d.toLocaleString("en-us", options);
+        return this.formatDate(date);
       };
     }
   }

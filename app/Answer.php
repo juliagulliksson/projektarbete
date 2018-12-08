@@ -23,4 +23,9 @@ class Answer extends Model
     {
         return $this->belongsTo('App\Question');
     }
+
+    public function votes()
+    {
+      return $this->morphMany('App\Vote', 'voteables')->where('deleted_at', NULL);
+    }
 }

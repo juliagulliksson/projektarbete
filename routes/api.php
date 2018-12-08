@@ -33,6 +33,7 @@ Route::middleware('auth:api')->group(function () {
   Route::post('/userdescription', 'UsersController@addDescription');
 }); 
 
+Route::get('answers', 'API\AnswersController@index');
 
 Route::get('answers/user/{userId}', 'API\AnswersController@userAnswers');
 

@@ -27,13 +27,13 @@
           <p class="text-center">This can not be undone.</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-main" data-dismiss="modal">No</button>
+          <button type="button" class="btn btn-main" data-dismiss="modal">Cancel</button>
           <button
             type="button"
             class="btn btn-inverted"
             data-dismiss="modal"
             @click="$emit('clicked')"
-          >Yes, delete</button>
+          >Yes</button>
         </div>
       </div>
     </div>

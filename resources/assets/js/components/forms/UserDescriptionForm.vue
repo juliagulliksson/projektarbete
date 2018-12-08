@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="$emit('clicked', content)">
+  <form @submit.prevent="$emit('clicked', content, type)">
     <div class="form-group">
       <label for="description">{{label}}</label>
       <textarea

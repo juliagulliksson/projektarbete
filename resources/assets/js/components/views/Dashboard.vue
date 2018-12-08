@@ -30,24 +30,27 @@
           <div class="col-4">
             <span
               :class="{ active: view == 'questions' }"
-              @click="showQuestions"
+              @click="switchView('questions')"
             >Questions ({{questions.length}})</span>
           </div>
           <div class="col-4">
             <span
               :class="{ active: view == 'answers' }"
-              @click="showAnswers"
+              @click="switchView('answers')"
             >Answers ({{answers.length}})</span>
           </div>
           <div class="col-4">
-            <span :class="[view == 'settings' ? 'active' : 'last']" @click="showSettings">Settings</span>
+            <span
+              :class="[view == 'settings' ? 'active' : 'last']"
+              @click="switchView('settings')"
+            >Settings</span>
           </div>
         </div>
       </div>
 
       <div v-if="view === 'questions'" class="col-10_md-12_sm-12">
         <div class="questions">
-          <h5 v-if="questions.length <= 0" class="text-center">You have no questions yet</h5>
+          <h4 v-if="questions.length <= 0" class="text-center none-yet">You have no questions yet</h4>
           <template v-else v-for="question in questions">
             <user-question-card :question="question" :key="question.id"></user-question-card>
           </template>
@@ -56,9 +59,9 @@
 
       <div v-if="view === 'answers'" class="col-10_md-12_sm-12">
         <div class="answers">
-          <h5 v-if="answers.length <= 0" class="text-center">You have no answers yet</h5>
+          <h4 v-if="answers.length <= 0" class="text-center none-yet">You have no answers yet</h4>
           <template v-else v-for="answer in answers">
-            <answer-card :question="answer.question" :key="answer.id" :answer="answer"></answer-card>
+            <user-answer-card :question="answer.question" :key="answer.id" :answer="answer"></user-answer-card>
           </template>
         </div>
       </div>
@@ -69,36 +72,22 @@
           <h5 class="text-center">Change password</h5>
           <h5 class="text-center">Upload profile picture</h5>
           <h5 class="text-center">Delete account</h5>
-          <!-- <div class="col-5_sm-12"> -->
-          <user-description-form
-            v-if="user.description === null"
-            @clicked="addDescription"
-            :initialValue="user.description"
-            :type="'add'"
-          ></user-description-form>
 
-          <!-- <form @submit.prevent="addDescription" >
-            <div class="form-group">
-              <label for="description">Add a description</label>
-              <textarea
-                v-model="description"
-                class="form-control"
-                name="description"
-                cols="40"
-                rows="5"
-                
-              ></textarea>
-            </div>
-            <button class="btn btn-default btn-main">Submit</button>
-          </form>-->
-          <user-description-form
-            v-else
-            @clicked="editDescription"
-            :type="'edit'"
-            :initialValue="user.description"
-          ></user-description-form>
-
-          <!--  </div> -->
+          <div class="user-description-form">
+            <user-description-form
+              v-if="user.description === null"
+              @clicked="addDescription"
+              :initialValue="''"
+              :type="'add'"
+            ></user-description-form>
+            <user-description-form
+              v-else
+              @clicked="addDescription"
+              :type="'edit'"
+              :initialValue="user.description"
+            ></user-description-form>
+            <div v-if="message != ''" class="alert alert-light" role="alert">{{message}}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -107,44 +96,47 @@
 
 <script>
 import UserQuestionCard from "./../cards/UserQuestionCard";
-import AnswerCard from "./../cards/AnswerCard";
-import NewQuestionForm from "./../cards/NewQuestionForm";
-import UserDescriptionForm from "./../cards/UserDescriptionForm";
+import UserAnswerCard from "./../cards/UserAnswerCard";
+import NewQuestionForm from "./../forms/NewQuestionForm";
+import UserDescriptionForm from "./../forms/UserDescriptionForm";
 
 export default {
   data() {
     return {
       title: "",
-      view: "questions"
+      view: "questions",
+      message: ""
     };
   },
   components: {
     UserQuestionCard,
-    AnswerCard,
+    UserAnswerCard,
     NewQuestionForm,
     UserDescriptionForm
   },
   methods: {
-    addDescription(content) {
+    addDescription(content, type) {
+      this.$store.commit("changeLoading");
+
       this.$store
         .dispatch("postUserDescription", {
           description: content
         })
         .then(response => {
+          this.$store.commit("changeLoading");
+          this.message = "Description " + type + "ed";
           console.log(response);
+        })
+        .catch(error => {
+          this.$store.commit("changeLoading");
+          this.message = "Something went wrong on the server";
         });
     },
     editDescription(content) {
       console.log(content);
     },
-    showQuestions() {
-      this.view = "questions";
-    },
-    showAnswers() {
-      this.view = "answers";
-    },
-    showSettings() {
-      this.view = "settings";
+    switchView(view) {
+      this.view = view;
     }
   },
   computed: {
