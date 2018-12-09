@@ -19,8 +19,13 @@ class Question extends Model
       return $this->belongsTo('App\User');
     }
 
+    /**
+     * Return the answers belonging to the question, and order them by most recently created 
+     * and the highest amount of upvotes
+     */
     public function answers()
     {
-        return $this->hasMany('App\Answer')->orderBy('created_at', 'desc');
+        return $this->hasMany('App\Answer')->withCount('votes')->orderBy('votes_count', 'desc')
+        ->orderBy('created_at', 'desc');
     }
 }

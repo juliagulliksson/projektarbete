@@ -32,7 +32,7 @@
             type="button"
             class="btn btn-inverted"
             data-dismiss="modal"
-            @click="$emit('clicked')"
+            @click="deleteAnswer"
           >Yes</button>
         </div>
       </div>
@@ -45,6 +45,21 @@
 export default {
   props: {
     id: Number
+  },
+  methods: {
+    deleteAnswer() {
+      // this.deleteLoading = true;
+
+      this.$store
+        .dispatch("deleteAnswer", { id: this.id })
+        .then(response => {
+          // this.deleteLoading = false;
+        })
+        .catch(error => {
+          // this.deleteLoading = false;
+          this.error = "Something went wrong on the server.";
+        });
+    }
   }
 };
 </script>

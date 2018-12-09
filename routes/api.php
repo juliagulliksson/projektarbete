@@ -31,6 +31,7 @@ Route::middleware('auth:api')->group(function () {
   
   Route::post('/logout', 'AuthController@logout');
   Route::post('/userdescription', 'UsersController@addDescription');
+  Route::post('answers/votes', 'VotesController@upvoteAnswer');
 }); 
 
 Route::get('answers', 'API\AnswersController@index');
@@ -48,3 +49,4 @@ Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');
 
 Route::get('/questions', 'API\QuestionsController@index');
+

@@ -17,7 +17,7 @@ class AnswersController extends Controller
     public function index()
     {
       //Not used
-      return Answer::with('votes', 'votes.user')->get();
+      return Answer::with('votes', 'votes.user')->withCount('votes')->orderBy('votes_count', 'desc')->get();
     }
 
     /**

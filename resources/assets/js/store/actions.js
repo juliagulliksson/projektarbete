@@ -153,6 +153,29 @@ export default {
         });
     });
   },
+  upvoteAnswer(context, data) {
+    return new Promise((resolve, reject) => {
+      axios.get("api/returncookie").then(response => {
+        if (response.status === 200) {
+          axios.defaults.headers.common["Authorization"] =
+            "Bearer " + response.data.token;
+          axios
+            .post("api/answers/votes", {
+              type: "App\\Answer",
+              id: data.answerID
+            })
+            .then(response => {
+              console.log(response);
+              resolve(response);
+              context.commit("updateAnswerVotes", response.data.vote);
+            })
+            .catch(error => {
+              reject(error);
+            });
+        }
+      });
+    });
+  },
   getQuestions(context) {
     return new Promise((resolve, reject) => {
       axios
@@ -217,6 +240,7 @@ export default {
         .get(`api/questions/${id}`)
         .then(response => {
           console.log(response);
+          context.commit("setSingleQuestion", response.data);
           resolve(response);
         })
         .catch(error => {

@@ -8,7 +8,9 @@
         <p class="answer-details">
           <i class="fas fa-user-circle"></i>
           {{answer.user.name}} |
-          Answered {{formattedDate(answer.created_at)}}
+          <span
+            class="date"
+          >Answered {{formattedDate(answer.created_at)}}</span>
         </p>
         <p class="answer-body" v-html="answer.body"></p>
       </div>

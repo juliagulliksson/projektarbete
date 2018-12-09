@@ -34,12 +34,7 @@
       </div>
     </div>
     <delete-modal @clicked="deleteQuestion" :id="question.id"></delete-modal>
-    <edit-modal
-      :initialContent="question.title"
-      @clicked="editQuestion"
-      :type="'question'"
-      :id="question.id"
-    ></edit-modal>
+    <edit-modal :initialContent="question.title" :type="'question'" :id="question.id"></edit-modal>
   </div>
 </template>
 
@@ -71,8 +66,8 @@ export default {
   methods: {
     deleteQuestion() {
       // IF the queston has no answers yet
-    },
-    editQuestion(content) {
+    }
+    /*  editQuestion(content) {
       console.log(content);
       this.$store
         .dispatch("editQuestion", {
@@ -87,7 +82,7 @@ export default {
             });
           }
         });
-    }
+    } */
   }
 };
 </script>

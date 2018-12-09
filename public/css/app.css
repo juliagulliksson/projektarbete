@@ -13848,6 +13848,7 @@ li {
 h3.question-title {
   margin-bottom: 15px;
   font-family: "Noto serif", serif;
+  line-height: 130%;
 }
 
 h3.question-title a {
@@ -13871,10 +13872,6 @@ h3.question-title a:focus {
 
 p.homepage-or {
   padding-top: 15px;
-}
-
-p.question-details {
-  font-size: 1.5rem;
 }
 
 .italic {
@@ -13923,6 +13920,47 @@ input[type="text"] {
   padding-bottom: 2rem;
 }
 
+.date {
+  color: #6b6969;
+}
+
+.upvote {
+  margin: 1.5rem;
+}
+
+.upvote .nr-of-votes {
+  color: #57002b;
+  padding-right: 1rem;
+}
+
+.upvote .upvote-text {
+  padding-right: 1rem;
+}
+
+.upvote .vote-button {
+  background-color: #fff;
+  padding: 0.7rem;
+  border: 0.8px solid #cfcece;
+  cursor: pointer;
+  border-radius: 45px;
+  -webkit-transition: 500ms all;
+  transition: 500ms all;
+}
+
+.upvote .vote-button:hover,
+.upvote .vote-button:focus,
+.upvote .vote-button:active {
+  background-color: #e4e1e1;
+}
+
+.upvote.voted .vote-button {
+  opacity: 0.7;
+}
+
+.upvote.voted .nr-of-votes {
+  color: #b6045d;
+}
+
 @media screen and (min-width: 1002px) {
   .container {
     width: 1002px;
@@ -13934,7 +13972,6 @@ input[type="text"] {
   -webkit-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
   padding: 10px 30px;
-  border-radius: 5px;
   outline: none;
   border-radius: 45px;
   -webkit-box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
@@ -14010,6 +14047,10 @@ input[type="text"] {
 .fas.fa-edit,
 .fas.fa-trash-alt {
   padding-right: 0rem;
+}
+
+.fas.fa-arrow-up {
+  color: #800040;
 }
 
 .navbar {
@@ -14203,6 +14244,10 @@ h4.none-yet {
           box-shadow: 0 1px 20px 0 rgba(128, 126, 126, 0.1);
   background-color: #fff;
   padding: 3rem;
+}
+
+.single-question {
+  margin-bottom: 1rem;
 }
 
 .login-button-wrapper {

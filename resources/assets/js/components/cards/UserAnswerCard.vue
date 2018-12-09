@@ -8,7 +8,9 @@
       <div class="answer">
         <p class="answer-body" v-html="answer.body"></p>
 
-        <p class="answer-details">Answered {{formattedDate(answer.created_at)}}</p>
+        <p class="answer-details">
+          <span class="date">Answered {{formattedDate(answer.created_at)}}</span>
+        </p>
 
         <div class="grid edit-buttons">
           <div class="col-3_md-6_sm-6">
@@ -40,13 +42,8 @@
           </div>
         </div>
 
-        <delete-modal @clicked="deleteAnswer" :id="answer.id"></delete-modal>
-        <edit-modal
-          :initialContent="answer.body"
-          @clicked="editAnswer"
-          :type="'answer'"
-          :id="answer.id"
-        ></edit-modal>
+        <delete-modal :id="answer.id"></delete-modal>
+        <edit-modal :initialContent="answer.body" :type="'answer'" :id="answer.id"></edit-modal>
       </div>
     </div>
   </div>
@@ -59,9 +56,9 @@ import EditModal from "./../modals/EditModal";
 export default {
   data() {
     return {
-      error: "",
-      editLoading: false,
-      deleteLoading: false
+      error: ""
+      /* editLoading: false,
+      deleteLoading: false */
     };
   },
   props: {
@@ -95,7 +92,7 @@ export default {
     }
   },
   methods: {
-    deleteAnswer() {
+    /*  deleteAnswer() {
       this.deleteLoading = true;
 
       this.$store
@@ -107,8 +104,8 @@ export default {
           this.deleteLoading = false;
           this.error = "Something went wrong on the server.";
         });
-    },
-    editAnswer(content) {
+    } */
+    /*  editAnswer(content) {
       this.$store.commit("changeLoading");
 
       this.$store
@@ -117,7 +114,7 @@ export default {
           console.log(response);
           this.$store.commit("changeLoading");
         });
-    }
+    } */
   }
 };
 </script>

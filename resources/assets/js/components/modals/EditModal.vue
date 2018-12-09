@@ -36,7 +36,7 @@
             type="button"
             class="btn btn-inverted"
             data-dismiss="modal"
-            @click="$emit('clicked', content)"
+            @click="functionCall"
           >Submit</button>
         </div>
       </div>
@@ -47,7 +47,7 @@
 
 <script>
 import { VueEditor } from "vue2-editor";
-
+// @click="$emit('clicked', content)"
 export default {
   props: {
     id: Number,
@@ -61,6 +61,38 @@ export default {
   },
   components: {
     VueEditor
+  },
+  methods: {
+    functionCall() {
+      if (this.type === "answer") {
+        this.editAnswer();
+      } else {
+        this.editQuestion();
+      }
+    },
+    editAnswer() {
+      console.log("answer");
+      this.$store
+        .dispatch("editAnswer", { body: this.content, id: this.id })
+        .then(response => {
+          console.log(response);
+        });
+    },
+    editQuestion() {
+      this.$store
+        .dispatch("editQuestion", {
+          title: this.content,
+          id: this.id
+        })
+        .catch(error => {
+          if (error === 401) {
+            this.$router.push({
+              name: "login",
+              query: { sessionError: "Session expired" }
+            });
+          }
+        });
+    }
   }
 };
 </script>

@@ -4,7 +4,7 @@
       <i class="fas fa-user-circle"></i>
       {{question.user.name}} |
     </span>
-    Asked {{formattedDate(question.created_at)}}
+    <span class="date">Asked {{formattedDate(question.created_at)}}</span>
   </p>
 </template>
 

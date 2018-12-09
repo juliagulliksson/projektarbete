@@ -44,5 +44,16 @@ export default {
   },
   changeLoading(state) {
     state.loading = !state.loading;
+  },
+  updateAnswerVotes(state, vote) {
+    const index = state.question.answers.findIndex(
+      answer => answer.id === vote.voteables_id
+    );
+    state.question.answers[index].votes_count++;
+    state.question.answers[index].votes.push(vote);
+    return state.question;
+  },
+  setSingleQuestion(state, question) {
+    state.question = question;
   }
 };

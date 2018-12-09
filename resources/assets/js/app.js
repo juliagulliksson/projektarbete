@@ -65,7 +65,7 @@ router.beforeEach((to, from, next) => {
           .dispatch("checkIfCookie")
           .then(response => {
             console.log("COOKIE RESPONSE", response);
-            if (response === true) {
+            if (response) {
               next({
                 path: "/dashboard"
               });
