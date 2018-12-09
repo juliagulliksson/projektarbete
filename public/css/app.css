@@ -13925,7 +13925,7 @@ input[type="text"] {
 }
 
 .upvote {
-  margin: 1.5rem;
+  margin: 1.5rem 0rem 1.5rem -1.5rem;
 }
 
 .upvote .nr-of-votes {
@@ -13933,14 +13933,13 @@ input[type="text"] {
   padding-right: 1rem;
 }
 
-.upvote .upvote-text {
-  padding-right: 1rem;
+.upvote .bullet {
+  padding: 0rem 0.7rem 1rem 0.7rem;
 }
 
 .upvote .vote-button {
   background-color: #fff;
-  padding: 0.7rem;
-  border: 0.8px solid #cfcece;
+  padding: 0.9rem 0.7rem;
   cursor: pointer;
   border-radius: 45px;
   -webkit-transition: 500ms all;
@@ -13950,7 +13949,7 @@ input[type="text"] {
 .upvote .vote-button:hover,
 .upvote .vote-button:focus,
 .upvote .vote-button:active {
-  background-color: #e4e1e1;
+  background-color: #f1f0f0;
 }
 
 .upvote.voted .vote-button {
@@ -14051,6 +14050,11 @@ input[type="text"] {
 
 .fas.fa-arrow-up {
   color: #800040;
+}
+
+.fas.fa-circle {
+  font-size: 0.4rem;
+  opacity: 0.7;
 }
 
 .navbar {
@@ -14259,6 +14263,18 @@ h4.none-yet {
 }
 
 .question:not(:last-child) {
+  position: relative;
+}
+
+.question:not(:last-child):after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  bottom: 0;
+  height: 1px;
+  margin: 0px auto;
+  width: 80%;
   border-bottom: 0.8px solid #cfcece;
 }
 

@@ -46,12 +46,29 @@ export default {
     state.loading = !state.loading;
   },
   updateAnswerVotes(state, vote) {
+    /**
+     * Find the associated answer
+     */
     const index = state.question.answers.findIndex(
       answer => answer.id === vote.voteables_id
     );
-    state.question.answers[index].votes_count++;
-    state.question.answers[index].votes.push(vote);
-    return state.question;
+    if (vote.deleted_at === null) {
+      /**
+       * Add to the vote count of the answer and add the vote into the votes array
+       */
+      state.question.answers[index].votes_count++;
+      state.question.answers[index].votes.push(vote);
+      return state.question;
+    } else {
+      /**
+       * The vote has been deleted, so remove from vote count and filter out the vote from array
+       */
+      state.question.answers[index].votes_count--;
+      state.question.answers[index].votes = state.question.answers[
+        index
+      ].votes.filter(initialVote => initialVote.id !== vote.id);
+      return state.question;
+    }
   },
   setSingleQuestion(state, question) {
     state.question = question;

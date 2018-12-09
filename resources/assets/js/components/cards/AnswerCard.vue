@@ -10,10 +10,11 @@
       <p>BUTTONS</p>
     </div>
     <div class="upvote" :class="{voted: userHasVoted}">
-      <span class="nr-of-votes">{{answer.votes_count}}</span>
       <span class="vote-button" @click="upvote">
         <i class="fas fa-arrow-up"></i>
         <span class="upvote-text">Upvote</span>
+        <i class="fas fa-circle"></i>
+        <span class="nr-of-votes">{{answer.votes_count}}</span>
       </span>
     </div>
   </div>

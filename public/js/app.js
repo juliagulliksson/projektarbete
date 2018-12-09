@@ -64108,6 +64108,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -64176,14 +64177,16 @@ var render = function() {
       : _vm._e(),
     _vm._v(" "),
     _c("div", { staticClass: "upvote", class: { voted: _vm.userHasVoted } }, [
-      _c("span", { staticClass: "nr-of-votes" }, [
-        _vm._v(_vm._s(_vm.answer.votes_count))
-      ]),
-      _vm._v(" "),
       _c("span", { staticClass: "vote-button", on: { click: _vm.upvote } }, [
         _c("i", { staticClass: "fas fa-arrow-up" }),
         _vm._v(" "),
-        _c("span", { staticClass: "upvote-text" }, [_vm._v("Upvote")])
+        _c("span", { staticClass: "upvote-text" }, [_vm._v("Upvote")]),
+        _vm._v(" "),
+        _c("i", { staticClass: "fas fa-circle" }),
+        _vm._v(" "),
+        _c("span", { staticClass: "nr-of-votes" }, [
+          _vm._v(_vm._s(_vm.answer.votes_count))
+        ])
       ])
     ])
   ])
@@ -66669,12 +66672,29 @@ var index_esm = {
     state.loading = !state.loading;
   },
   updateAnswerVotes: function updateAnswerVotes(state, vote) {
+    /**
+     * Find the associated answer
+     */
     var index = state.question.answers.findIndex(function (answer) {
       return answer.id === vote.voteables_id;
     });
-    state.question.answers[index].votes_count++;
-    state.question.answers[index].votes.push(vote);
-    return state.question;
+    if (vote.deleted_at === null) {
+      /**
+       * Add to the vote count of the answer and add the vote into the votes array
+       */
+      state.question.answers[index].votes_count++;
+      state.question.answers[index].votes.push(vote);
+      return state.question;
+    } else {
+      /**
+       * The vote has been deleted, so remove from vote count and filter out the vote from array
+       */
+      state.question.answers[index].votes_count--;
+      state.question.answers[index].votes = state.question.answers[index].votes.filter(function (initialVote) {
+        return initialVote.id !== vote.id;
+      });
+      return state.question;
+    }
   },
   setSingleQuestion: function setSingleQuestion(state, question) {
     state.question = question;
