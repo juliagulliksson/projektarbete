@@ -139,7 +139,6 @@ export default {
               .then(response => {
                 console.log(response);
                 resolve(response);
-                // context.commit("updateUserQuestions", response.data);
               })
               .catch(error => {
                 reject(error);
@@ -240,8 +239,13 @@ export default {
         .get(`api/questions/${id}`)
         .then(response => {
           console.log(response);
-          context.commit("setSingleQuestion", response.data);
-          resolve(response);
+          if (response.data.status === 200) {
+            console.log(response);
+            context.commit("setSingleQuestion", response.data.question);
+            resolve(response);
+          } else {
+            reject(response);
+          }
         })
         .catch(error => {
           reject(error);
@@ -266,6 +270,35 @@ export default {
                 localStorage.setItem("user", JSON.stringify(user));
                 context.commit("updateUser", user);
                 resolve(response);
+              })
+              .catch(error => {
+                reject(error);
+              });
+          } else {
+            reject(error);
+          }
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  changeUsername(context, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("api/returncookie")
+        .then(response => {
+          if (response.data.status === 200) {
+            const token = response.data.token;
+            axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+            axios
+              .put("api/user/" + data.id, {
+                name: data.name
+              })
+              .then(response => {
+                context.commit("updateUser", response.data.user);
+                resolve(response);
+                console.log(response);
               })
               .catch(error => {
                 reject(error);
@@ -329,7 +362,7 @@ export default {
   },
   logOut(context) {
     localStorage.removeItem("user");
-    context.commit("destroyToken");
+    context.commit("resetUser");
   },
   deleteAnswer(context, data) {
     const answerID = data.id;
@@ -403,6 +436,33 @@ export default {
                 console.log(response);
                 context.commit("editQuestion", response.data.question);
                 resolve(response.data.question);
+              } else {
+                reject(response);
+              }
+            })
+            .catch(error => {
+              reject(error);
+            });
+        } else {
+          reject(401);
+        }
+      });
+    });
+  },
+  deleteQuestion(context, data) {
+    const questionID = data.id;
+    return new Promise((resolve, reject) => {
+      axios.get("api/returncookie").then(response => {
+        if (response.data.status === 200) {
+          const token = response.data.token;
+          axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+          axios
+            .delete("api/questions/" + questionID)
+            .then(response => {
+              if (response.data.status === 200) {
+                console.log(response);
+                context.commit("deleteUserQuestion", questionID);
+                resolve(response);
               } else {
                 reject(response);
               }

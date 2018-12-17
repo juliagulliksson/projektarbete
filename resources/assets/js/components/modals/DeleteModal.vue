@@ -1,5 +1,4 @@
 <template>
-  <!-- Modal -->
   <div
     class="modal fade"
     :id="'deleteModal' + id"
@@ -32,21 +31,28 @@
             type="button"
             class="btn btn-inverted"
             data-dismiss="modal"
-            @click="deleteAnswer"
+            @click="functionCall"
           >Yes</button>
         </div>
       </div>
     </div>
   </div>
-  <!-- Modal  -->
 </template>
 
 <script>
 export default {
   props: {
-    id: Number
+    id: Number,
+    type: String
   },
   methods: {
+    functionCall() {
+      if (this.type === "answer") {
+        this.deleteAnswer();
+      } else {
+        this.deleteQuestion();
+      }
+    },
     deleteAnswer() {
       // this.deleteLoading = true;
 
@@ -57,7 +63,18 @@ export default {
         })
         .catch(error => {
           // this.deleteLoading = false;
-          this.error = "Something went wrong on the server.";
+        });
+    },
+    deleteQuestion() {
+      console.log("ye");
+      this.$store
+        .dispatch("deleteQuestion", { id: this.id })
+        .then(response => {
+          // this.deleteLoading = false;
+        })
+        .catch(error => {
+          // this.deleteLoading = false;
+          // EMIT SOMETHING INSTEAD
         });
     }
   }

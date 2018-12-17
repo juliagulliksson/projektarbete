@@ -1,5 +1,5 @@
 export default {
-  destroyToken(state) {
+  resetUser(state) {
     state.user = {};
   },
   setQuestions(state, questions) {
@@ -25,6 +25,11 @@ export default {
       answer => answer.id != answerID
     );
   },
+  deleteUserQuestion(state, questionID) {
+    state.userQuestions = state.userQuestions.filter(
+      question => question.id != questionID
+    );
+  },
   editAnswer(state, answer) {
     const index = state.userAnswers.findIndex(
       userAnswer => userAnswer.id === answer.id
@@ -41,6 +46,8 @@ export default {
   },
   updateUser(state, user) {
     state.user = user;
+    delete user.email;
+    localStorage.setItem("user", JSON.stringify(user));
   },
   changeLoading(state) {
     state.loading = !state.loading;

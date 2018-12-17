@@ -1,10 +1,12 @@
 require("./bootstrap");
+import "@babel/polyfill";
 
 import Vue from "vue";
 import Router from "vue-router";
 Vue.use(Router);
 import routes from "./routes.js";
 import { store } from "./store/store.js";
+
 Vue.component("App", require("./App.vue"));
 
 const router = new Router({

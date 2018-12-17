@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <delete-modal :id="answer.id"></delete-modal>
+        <delete-modal :id="answer.id" :type="'answer'"></delete-modal>
         <edit-modal :initialContent="answer.body" :type="'answer'" :id="answer.id"></edit-modal>
       </div>
     </div>

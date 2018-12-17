@@ -18,7 +18,7 @@
         </p>
       </div>
       <div class="col-3_md-6_sm-6">
-        <p>
+        <p v-if="question.answered_at === null">
           <button
             class="btn btn-inverted btn-edit"
             data-toggle="modal"
@@ -33,7 +33,7 @@
         <p>{{error}}</p>
       </div>
     </div>
-    <delete-modal @clicked="deleteQuestion" :id="question.id"></delete-modal>
+    <delete-modal :type="'question'" :id="question.id"></delete-modal>
     <edit-modal :initialContent="question.title" :type="'question'" :id="question.id"></edit-modal>
   </div>
 </template>
@@ -62,27 +62,6 @@ export default {
         return "/question-" + id;
       };
     }
-  },
-  methods: {
-    deleteQuestion() {
-      // IF the queston has no answers yet
-    }
-    /*  editQuestion(content) {
-      console.log(content);
-      this.$store
-        .dispatch("editQuestion", {
-          title: content,
-          id: this.question.id
-        })
-        .catch(error => {
-          if (error === 401) {
-            this.$router.push({
-              name: "login",
-              query: { sessionError: "Session expired" }
-            });
-          }
-        });
-    } */
   }
 };
 </script>

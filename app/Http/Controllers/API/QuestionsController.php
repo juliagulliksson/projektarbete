@@ -44,7 +44,13 @@ class QuestionsController extends Controller
      */
     public function show($id)
     {
-        return Question::with('user', 'answers', 'answers.user',  'answers.votes')->where('id', $id)->first();
+      $question = Question::with('user', 'answers', 'answers.user',  'answers.votes')->where('id', $id)->first();
+      if($question) {
+
+        return response()->json(['status' => 200, 'question' => $question]);
+      } else {
+        return response()->json(['status' => 500]);
+      }
     }
 
     /**
@@ -57,7 +63,7 @@ class QuestionsController extends Controller
     public function update(Request $request, $id)
     {
       $question = Question::find($id);
-      if($question){
+      if ($question) {
         $question->title = $request->title;
         $question->save();
         return response()->json(['status' => 200, 'question' => $question]);
@@ -75,7 +81,13 @@ class QuestionsController extends Controller
      */
     public function destroy($id)
     {
-     
+      $question = Question::find($id);
+      if ($question) {
+        $question->delete();
+        return response()->json(['status' => 200]);
+      } else {
+        return response()->json(['status' => 500]);
+      }
     }
 
     public function userQuestions($user_id){

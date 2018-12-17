@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div class="new-question-form">
     <h4>Post a new question</h4>
     <form method="post" @submit.prevent="postQuestion">
       <div class="grid">
-        <div class="form-group col-8 dashboard-input">
+        <div class="form-group col-9 dashboard-input">
           <input type="text" class="form-control" placeholder="Ask away" v-model="title" required>
         </div>
-        <div class="text-center col-4">
+        <div class="text-center col-3">
           <button type="submit" class="btn btn-main">
             Submit
             <i v-if="loading" class="fas fa-spinner fa-spin"></i>

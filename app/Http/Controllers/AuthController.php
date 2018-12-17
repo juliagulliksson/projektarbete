@@ -136,6 +136,12 @@ class AuthController extends Controller
 
     $accessToken->revoke();
 
+    /**
+     * Delete the cookie
+     */
+    $cookie = setcookie('token', '', time()-3600, '/', 'www.projektarbete.com', false , true);
+
+
     return response()->json(['status' => 200]);
   }
 }

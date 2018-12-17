@@ -2,14 +2,13 @@
   <form @submit.prevent="$emit('clicked', content, type)">
     <div class="form-group">
       <label for="description">{{label}}</label>
-      <textarea
+      <input
+        type="text"
         v-model="content"
         :placeholder="placeholder"
         class="form-control"
         name="description"
-        cols="40"
-        rows="5"
-      ></textarea>
+      >
     </div>
     <button class="btn btn-default btn-main">Submit</button>
   </form>

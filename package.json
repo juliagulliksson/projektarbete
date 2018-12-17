@@ -20,6 +20,8 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
+        "@babel/polyfill": "^7.0.0",
+        "es6-promise": "^4.2.5",
         "moment": "^2.22.2",
         "vue-router": "^3.0.1",
         "vue2-editor": "^2.6.6",

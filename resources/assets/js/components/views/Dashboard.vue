@@ -19,9 +19,6 @@
           </div>
         </div>
       </div>
-      <div class="col-10_md-12_sm-12">
-        <new-question-form></new-question-form>
-      </div>
     </div>
 
     <div class="grid-center-noGutter">
@@ -50,6 +47,7 @@
 
       <div v-if="view === 'questions'" class="col-10_md-12_sm-12">
         <div class="questions">
+          <new-question-form></new-question-form>
           <h4 v-if="questions.length <= 0" class="text-center none-yet">You have no questions yet</h4>
           <template v-else v-for="question in questions">
             <user-question-card :question="question" :key="question.id"></user-question-card>
@@ -68,25 +66,27 @@
 
       <div v-if="view === 'settings'" class="col-10_md-12_sm-12">
         <div class="settings">
-          <h4 class="text-center">Change username</h4>
-          <h5 class="text-center">Change password</h5>
-          <h5 class="text-center">Upload profile picture</h5>
-          <h5 class="text-center">Delete account</h5>
+          <div class="grid-center">
+            <div class="col-10_md-12_sm-12">
+              <change-username-form :username="user.name"></change-username-form>
+              <h5 class="text-center">Upload profile picture</h5>
 
-          <div class="user-description-form">
-            <user-description-form
-              v-if="user.description === null"
-              @clicked="addDescription"
-              :initialValue="''"
-              :type="'add'"
-            ></user-description-form>
-            <user-description-form
-              v-else
-              @clicked="addDescription"
-              :type="'edit'"
-              :initialValue="user.description"
-            ></user-description-form>
-            <div v-if="message != ''" class="alert alert-light" role="alert">{{message}}</div>
+              <div class="user-description-form">
+                <user-description-form
+                  v-if="user.description === null"
+                  @clicked="addDescription"
+                  :initialValue="''"
+                  :type="'add'"
+                ></user-description-form>
+                <user-description-form
+                  v-else
+                  @clicked="addDescription"
+                  :type="'edit'"
+                  :initialValue="user.description"
+                ></user-description-form>
+                <div v-if="message != ''" class="alert alert-light" role="alert">{{message}}</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -99,12 +99,13 @@ import UserQuestionCard from "./../cards/UserQuestionCard";
 import UserAnswerCard from "./../cards/UserAnswerCard";
 import NewQuestionForm from "./../forms/NewQuestionForm";
 import UserDescriptionForm from "./../forms/UserDescriptionForm";
+import ChangeUsernameForm from "./../forms/ChangeUsernameForm";
 
 export default {
   data() {
     return {
       title: "",
-      view: "questions",
+      view: "settings",
       message: ""
     };
   },
@@ -112,7 +113,8 @@ export default {
     UserQuestionCard,
     UserAnswerCard,
     NewQuestionForm,
-    UserDescriptionForm
+    UserDescriptionForm,
+    ChangeUsernameForm
   },
   methods: {
     addDescription(content, type) {

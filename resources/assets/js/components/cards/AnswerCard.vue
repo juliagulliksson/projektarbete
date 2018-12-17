@@ -3,18 +3,17 @@
     <p class="answer-details">
       <i class="fas fa-user-circle"></i>
       {{answer.user.name}} |
-      <span class="date">Answered {{formattedDate(answer.created_at)}}</span>
+      {{answer.user.description}}
     </p>
+    <p class="date">Answered {{formattedDate(answer.created_at)}}</p>
     <p v-html="answer.body" class="answer-body"></p>
-    <div v-if="user.id === answer.user_id">
-      <p>BUTTONS</p>
-    </div>
     <div class="upvote" :class="{voted: userHasVoted}">
       <span class="vote-button" @click="upvote">
         <i class="fas fa-arrow-up"></i>
         <span class="upvote-text">Upvote</span>
-        <i class="fas fa-circle"></i>
-        <span class="nr-of-votes">{{answer.votes_count}}</span>
+        <span class="bullet">|</span>
+        <span class="nr-of-votes" v-if="!loading">{{answer.votes_count}}</span>
+        <i v-else class="fas fa-spinner fa-spin"></i>
       </span>
     </div>
   </div>
@@ -25,6 +24,11 @@ import formatDate from "./../mixins/formatDate.js";
 export default {
   props: {
     answer: Object
+  },
+  data() {
+    return {
+      loading: false
+    };
   },
   mixins: [formatDate],
   computed: {
@@ -48,10 +52,17 @@ export default {
   },
   methods: {
     upvote() {
+      this.loading = true;
       if (!this.isAuthenticated) {
+        this.loading = false;
+
         this.$router.push({ name: "login" });
       } else {
-        this.$store.dispatch("upvoteAnswer", { answerID: this.answer.id });
+        this.$store
+          .dispatch("upvoteAnswer", { answerID: this.answer.id })
+          .then(response => {
+            this.loading = false;
+          });
       }
     }
   }

@@ -32,7 +32,9 @@ Route::middleware('auth:api')->group(function () {
   Route::post('/logout', 'AuthController@logout');
   Route::post('/userdescription', 'UsersController@addDescription');
   Route::post('answers/votes', 'VotesController@upvoteAnswer');
+  Route::put('/user/{id}', 'UsersController@changeUsername');
 }); 
+
 
 Route::get('answers', 'API\AnswersController@index');
 

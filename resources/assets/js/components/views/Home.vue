@@ -70,7 +70,6 @@ export default {
     this.$store.dispatch("getQuestions").then(response => {
       this.loaded = true;
     });
-    // this.$store.dispatch("getAnswers");
   }
 };
 </script>

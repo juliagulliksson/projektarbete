@@ -11,11 +11,13 @@
 |
 */
 
+/**
+ * To make history mode work, the urls must be replaced and also not include the api keyword
+ */
 Route::get('{catchall?}', function () {
-    return view('vueapp');
+    return view('index');
 })->where('catchall', '^(?!api).*$');
 
 Route::get('/{vue_capture?}', function () {
-  return view('vueapp');
+  return view('index');
 })->where('vue_capture', '^(?!storage).*$'); 
-// Route::get('/{catchall?}', 'AppController@show')->where('catchall', '^(?!api).*$')->name('administration');
