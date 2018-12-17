@@ -49,6 +49,7 @@
         <div class="questions">
           <new-question-form></new-question-form>
           <h4 v-if="questions.length <= 0" class="text-center none-yet">You have no questions yet</h4>
+
           <template v-else v-for="question in questions">
             <user-question-card :question="question" :key="question.id"></user-question-card>
           </template>
@@ -69,7 +70,6 @@
           <div class="grid-center">
             <div class="col-10_md-12_sm-12">
               <change-username-form :username="user.name"></change-username-form>
-              <h5 class="text-center">Upload profile picture</h5>
 
               <div class="user-description-form">
                 <user-description-form
@@ -84,7 +84,9 @@
                   :type="'edit'"
                   :initialValue="user.description"
                 ></user-description-form>
-                <div v-if="message != ''" class="alert alert-light" role="alert">{{message}}</div>
+                <transition name="message">
+                  <div v-if="message != ''" class="alert alert-light" role="alert">{{message}}</div>
+                </transition>
               </div>
             </div>
           </div>
@@ -133,9 +135,6 @@ export default {
           this.$store.commit("changeLoading");
           this.message = "Something went wrong on the server";
         });
-    },
-    editDescription(content) {
-      console.log(content);
     },
     switchView(view) {
       this.view = view;

@@ -109,7 +109,7 @@ export default {
               .then(response => {
                 console.log(response);
                 resolve(response);
-                context.commit("updateUserQuestions", response.data);
+                context.commit("updateUserQuestions", response.data.question);
               })
               .catch(error => {
                 reject(error);

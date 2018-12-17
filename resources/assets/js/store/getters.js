@@ -3,7 +3,9 @@ export default {
     state.user.name !== undefined && state.user !== null && state.user !== {},
   questions: state => state.questions,
   questionsWithoutAnswers: state => {
-    return state.questions.filter(question => question.answers.length <= 0);
+    return state.questions.filter(
+      question => question.answers.length <= 0 && question.answered_at === null
+    );
   },
   questionsWithAnswers: state => {
     let questions = state.questions.filter(

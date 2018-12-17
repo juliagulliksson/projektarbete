@@ -71084,6 +71084,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 
 
@@ -71123,9 +71125,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         _this.$store.commit("changeLoading");
         _this.message = "Something went wrong on the server";
       });
-    },
-    editDescription: function editDescription(content) {
-      console.log(content);
     },
     switchView: function switchView(view) {
       this.view = view;
@@ -72318,7 +72317,7 @@ var render = function() {
       },
       [
         _c("div", { staticClass: "grid" }, [
-          _c("div", { staticClass: "form-group col-9 dashboard-input" }, [
+          _c("div", { staticClass: "form-group col-9_sm-12 dashboard-input" }, [
             _c("input", {
               directives: [
                 {
@@ -72342,7 +72341,7 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "text-center col-3" }, [
+          _c("div", { staticClass: "text-center col-3_sm-12" }, [
             _c(
               "button",
               { staticClass: "btn btn-main", attrs: { type: "submit" } },
@@ -72438,6 +72437,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -72468,22 +72473,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "form",
-    {
-      on: {
-        submit: function($event) {
-          $event.preventDefault()
-          _vm.$emit("clicked", _vm.content, _vm.type)
-        }
-      }
-    },
-    [
-      _c("div", { staticClass: "form-group" }, [
-        _c("label", { attrs: { for: "description" } }, [
-          _vm._v(_vm._s(_vm.label))
-        ]),
-        _vm._v(" "),
+  return _c("div", [
+    _c("label", { attrs: { for: "description" } }, [_vm._v(_vm._s(_vm.label))]),
+    _vm._v(" "),
+    _c("div", { staticClass: "grid" }, [
+      _c("div", { staticClass: "form-group col-8_sm-12 dashboard-input" }, [
         _c("input", {
           directives: [
             {
@@ -72511,11 +72505,22 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _c("button", { staticClass: "btn btn-default btn-main" }, [
-        _vm._v("Submit")
+      _c("div", { staticClass: "text-center col-4_sm-12" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-default btn-main",
+            on: {
+              click: function($event) {
+                _vm.$emit("clicked", _vm.content, _vm.type)
+              }
+            }
+          },
+          [_vm._v("Submit")]
+        )
       ])
-    ]
-  )
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -72632,7 +72637,7 @@ var render = function() {
     _c("label", { attrs: { for: "username" } }, [_vm._v("Change username")]),
     _vm._v(" "),
     _c("div", { staticClass: "grid" }, [
-      _c("div", { staticClass: "form-group col-8 dashboard-input" }, [
+      _c("div", { staticClass: "form-group col-8_sm-12 dashboard-input" }, [
         _c("input", {
           directives: [
             {
@@ -72656,7 +72661,7 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _c("div", { staticClass: "text-center col-4" }, [
+      _c("div", { staticClass: "text-center col-4_sm-12" }, [
         _c(
           "button",
           { staticClass: "btn btn-main", on: { click: _vm.postNewUsername } },
@@ -72825,10 +72830,6 @@ var render = function() {
                       attrs: { username: _vm.user.name }
                     }),
                     _vm._v(" "),
-                    _c("h5", { staticClass: "text-center" }, [
-                      _vm._v("Upload profile picture")
-                    ]),
-                    _vm._v(" "),
                     _c(
                       "div",
                       { staticClass: "user-description-form" },
@@ -72846,16 +72847,18 @@ var render = function() {
                               on: { clicked: _vm.addDescription }
                             }),
                         _vm._v(" "),
-                        _vm.message != ""
-                          ? _c(
-                              "div",
-                              {
-                                staticClass: "alert alert-light",
-                                attrs: { role: "alert" }
-                              },
-                              [_vm._v(_vm._s(_vm.message))]
-                            )
-                          : _vm._e()
+                        _c("transition", { attrs: { name: "message" } }, [
+                          _vm.message != ""
+                            ? _c(
+                                "div",
+                                {
+                                  staticClass: "alert alert-light",
+                                  attrs: { role: "alert" }
+                                },
+                                [_vm._v(_vm._s(_vm.message))]
+                              )
+                            : _vm._e()
+                        ])
                       ],
                       1
                     )
@@ -73496,6 +73499,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       count: 10
     };
+  },
+
+  computed: {
+    questionLength: function questionLength() {
+      return this.$store.getters.questionsWithoutAnswers.length;
+    }
   }
 });
 
@@ -73510,7 +73519,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _vm._l(_vm.count, function(c, index) {
+      _vm._l(_vm.questionLength, function(c, index) {
         return [
           _c("div", { key: "c" + index, staticClass: "question skeleton" }, [
             _c("h3", { staticClass: "question-title title-skeleton-1" }),
@@ -73802,9 +73811,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 
 
@@ -73842,6 +73848,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return answer.user_id === _this.user.id;
       });
       return userAnswer.length > 0;
+    },
+    answersLength: function answersLength() {
+      if (this.question.answers.length > 1) {
+        return this.question.answers.length + " answers";
+      } else {
+        return this.question.answers.length + " answer";
+      }
     }
   },
   methods: {
@@ -74193,7 +74206,7 @@ var render = function() {
         1
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "text-center" }, [
+      _c("div", { staticClass: "text-center form-group" }, [
         _c(
           "button",
           { staticClass: "btn btn-main", attrs: { type: "submit" } },
@@ -74258,16 +74271,7 @@ var render = function() {
                   "div",
                   { staticClass: "answers" },
                   [
-                    _c("h4", [
-                      _vm._v(
-                        "\n          " +
-                          _vm._s(_vm.question.answers.length) +
-                          " answer\n          "
-                      ),
-                      _vm.question.answers.length > 1
-                        ? _c("span", [_vm._v("s")])
-                        : _vm._e()
-                    ]),
+                    _c("h4", [_vm._v(_vm._s(_vm.answersLength))]),
                     _vm._v(" "),
                     _vm._l(_vm.question.answers, function(answer) {
                       return [
@@ -74281,7 +74285,7 @@ var render = function() {
                   2
                 )
               ])
-            : _c("div", [
+            : _c("div", { staticClass: "no-answers" }, [
                 _vm._v("\n      No answers yet.\n      "),
                 !_vm.isAuthenticated
                   ? _c(
@@ -74293,8 +74297,9 @@ var render = function() {
                         _c(
                           "router-link",
                           { attrs: { to: { name: "register" } } },
-                          [_vm._v("signing up.")]
-                        )
+                          [_vm._v("signing up")]
+                        ),
+                        _vm._v(".\n      ")
                       ],
                       1
                     )
@@ -76588,7 +76593,7 @@ var index_esm = {
   },
   questionsWithoutAnswers: function questionsWithoutAnswers(state) {
     return state.questions.filter(function (question) {
-      return question.answers.length <= 0;
+      return question.answers.length <= 0 && question.answered_at === null;
     });
   },
   questionsWithAnswers: function questionsWithAnswers(state) {
@@ -76735,7 +76740,7 @@ var index_esm = {
           }).then(function (response) {
             console.log(response);
             resolve(response);
-            context.commit("updateUserQuestions", response.data);
+            context.commit("updateUserQuestions", response.data.question);
           }).catch(function (error) {
             reject(error);
           });

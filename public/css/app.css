@@ -13924,43 +13924,6 @@ input[type="text"] {
   color: #6b6969;
 }
 
-.upvote {
-  margin: 1.5rem 0rem 1.5rem -1.5rem;
-}
-
-.upvote .nr-of-votes {
-  color: #57002b;
-  padding-right: 1rem;
-}
-
-.upvote .bullet {
-  opacity: 0.5;
-  padding: 7px;
-}
-
-.upvote .vote-button {
-  background-color: #fff;
-  padding: 0.9rem 0.7rem;
-  cursor: pointer;
-  border-radius: 45px;
-  -webkit-transition: 500ms all;
-  transition: 500ms all;
-}
-
-.upvote .vote-button:hover,
-.upvote .vote-button:focus,
-.upvote .vote-button:active {
-  background-color: #f1f0f0;
-}
-
-.upvote.voted .vote-button {
-  opacity: 0.7;
-}
-
-.upvote.voted .nr-of-votes {
-  color: #b6045d;
-}
-
 .cookie-consent {
   padding: 10px;
   width: 100%;
@@ -13976,36 +13939,6 @@ input[type="text"] {
   padding-right: 1rem;
 }
 
-.cookie-enter-active,
-.cookie-leave-active {
-  -webkit-transition: opacity 0.5s;
-  transition: opacity 0.5s;
-}
-
-.cookie-enter,
-.cookie-leave-to {
-  opacity: 0;
-}
-
-.skeleton .user-skeleton {
-  width: 50%;
-  padding: 10px;
-  background-color: #cfcece;
-  display: inline-block;
-}
-
-.skeleton .title-skeleton-1 {
-  width: 100%;
-  background-color: #cfcece;
-  padding: 10px;
-}
-
-.skeleton .title-skeleton-2 {
-  width: 50%;
-  background-color: #cfcece;
-  padding: 10px;
-}
-
 .answers-homepage .question .question-title {
   font-size: 2rem;
 }
@@ -14013,6 +13946,12 @@ input[type="text"] {
 @media screen and (min-width: 1002px) {
   .container {
     width: 1002px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .dropdown-menu {
+    text-align: right;
   }
 }
 
@@ -14275,7 +14214,13 @@ h4.none-yet {
 }
 
 .new-question-form {
-  padding: 3rem;
+  padding: 2rem 3rem 0rem;
+}
+
+.alert-light {
+  color: #800040;
+  padding-left: 0;
+  padding-top: 0;
 }
 
 .questions-homepage,
@@ -14352,10 +14297,17 @@ h4.none-yet {
 
 .single-question-answers .answer {
   padding: 2rem 3rem 1rem;
+}
+
+.single-question-answers .answer .answer-details {
+  padding: 1rem 0rem;
+}
+
+.single-question-answers .answer:not(:last-child) {
   position: relative;
 }
 
-.single-question-answers .answer:after {
+.single-question-answers .answer:not(:last-child):after {
   content: "";
   position: absolute;
   left: 0;
@@ -14363,10 +14315,6 @@ h4.none-yet {
   height: 1px;
   width: 50%;
   border-bottom: 0.8px solid #cfcece;
-}
-
-.single-question-answers .answer .answer-details {
-  padding: 1rem 0rem;
 }
 
 .answers {
@@ -14382,9 +14330,12 @@ h4.none-yet {
 .answers h4 {
   padding: 2rem 0rem;
   font-weight: 400;
-  border-bottom: 0.8px solid #cfcece;
   width: 95%;
   margin: 0px auto;
+}
+
+.answers h4:not(.modal-title) {
+  border-bottom: 0.8px solid #cfcece;
 }
 
 .answer .answer-body {
@@ -14415,15 +14366,90 @@ h4.none-yet {
   padding: 3rem;
 }
 
-/* .register-box {
-  @include content-box($standard_padding);
+.no-answers {
+  border-radius: 3px;
+  border: 0.8px solid #cfcece;
+  -webkit-box-shadow: 0 1px 20px 0 rgba(128, 126, 126, 0.1);
+          box-shadow: 0 1px 20px 0 rgba(128, 126, 126, 0.1);
+  background-color: #fff;
+  padding: 2rem 3rem;
 }
 
-.single-question {
-  @include content-box($standard_padding);
+.cookie-enter-active,
+.cookie-leave-active {
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
 }
 
-.settings {
-  @include content-box($standard_padding);
-} */
+.cookie-enter,
+.cookie-leave-to {
+  opacity: 0;
+}
+
+.message-enter-active,
+.message-leave-active {
+  -webkit-transition: opacity 0.4s;
+  transition: opacity 0.4s;
+}
+
+.message-enter,
+.message-leave-to {
+  opacity: 0;
+}
+
+.skeleton .user-skeleton {
+  width: 50%;
+  padding: 10px;
+  background-color: #cfcece;
+  display: inline-block;
+}
+
+.skeleton .title-skeleton-1 {
+  width: 100%;
+  background-color: #cfcece;
+  padding: 10px;
+}
+
+.skeleton .title-skeleton-2 {
+  width: 50%;
+  background-color: #cfcece;
+  padding: 10px;
+}
+
+.upvote {
+  margin: 1.5rem 0rem 1.5rem -1.5rem;
+}
+
+.upvote .nr-of-votes {
+  color: #57002b;
+  padding-right: 1rem;
+}
+
+.upvote .bullet {
+  opacity: 0.5;
+  padding: 7px;
+}
+
+.upvote .vote-button {
+  background-color: #fff;
+  padding: 0.9rem 0.7rem;
+  cursor: pointer;
+  border-radius: 45px;
+  -webkit-transition: 500ms all;
+  transition: 500ms all;
+}
+
+.upvote .vote-button:hover,
+.upvote .vote-button:focus,
+.upvote .vote-button:active {
+  background-color: #f1f0f0;
+}
+
+.upvote.voted .vote-button {
+  opacity: 0.7;
+}
+
+.upvote.voted .nr-of-votes {
+  color: #b6045d;
+}
 

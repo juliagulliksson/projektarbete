@@ -3,7 +3,7 @@
     <div class="form-group">
       <vue-editor v-model="answer"></vue-editor>
     </div>
-    <div class="text-center">
+    <div class="text-center form-group">
       <button type="submit" class="btn btn-main">
         Post answer
         <i v-if="loading" class="fas fa-spinner fa-spin"></i>

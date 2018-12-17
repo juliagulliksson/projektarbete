@@ -10,21 +10,18 @@
       </div>
       <div v-if="question.answers.length > 0" class="single-question-answers">
         <div class="answers">
-          <h4>
-            {{question.answers.length}} answer
-            <span v-if="question.answers.length > 1">s</span>
-          </h4>
+          <h4>{{answersLength}}</h4>
           <template v-for="answer in question.answers">
             <answer-card :key="'a' + answer.id" :answer="answer"></answer-card>
           </template>
         </div>
       </div>
-      <div v-else>
+      <div v-else class="no-answers">
         No answers yet.
         <span
           v-if="!isAuthenticated"
         >Be first to offer your insights on this subject by
-          <router-link :to="{name: 'register'}">signing up.</router-link>
+          <router-link :to="{name: 'register'}">signing up</router-link>.
         </span>
       </div>
     </div>
@@ -69,6 +66,13 @@ export default {
         answer => answer.user_id === this.user.id
       );
       return userAnswer.length > 0;
+    },
+    answersLength() {
+      if (this.question.answers.length > 1) {
+        return this.question.answers.length + " answers";
+      } else {
+        return this.question.answers.length + " answer";
+      }
     }
   },
   methods: {

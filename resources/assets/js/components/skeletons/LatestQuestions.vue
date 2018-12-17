@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-for="(c, index) in count">
+    <template v-for="(c, index) in questionLength">
       <div class="question skeleton" :key="'c' + index">
         <h3 class="question-title title-skeleton-1"></h3>
         <h3 class="question-title title-skeleton-2"></h3>
@@ -24,6 +24,11 @@ export default {
     return {
       count: 10
     };
+  },
+  computed: {
+    questionLength() {
+      return this.$store.getters.questionsWithoutAnswers.length;
+    }
   }
 };
 </script>

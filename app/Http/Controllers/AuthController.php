@@ -73,36 +73,6 @@ class AuthController extends Controller
           'user' => $user,
           'status' => 200
       ]);
-       
-      // try { 
-
-      //   /**
-      //  * Make a request to the database/API and return the token if login is correct
-      //  */
-
-      //   $client = DB::table('oauth_clients')
-      //   ->where('password_client', true)
-      //   ->first();
-  
-      //   $data = [
-      //       'grant_type' => 'password',
-      //       'client_id' => $client->id,
-      //       'client_secret' => $client->secret,
-      //       'username' => request('username'),
-      //       'password' => request('password'),
-      //   ];
-  
-      //   $request = Request::create('/oauth/token', 'POST', $data);
-      //   return app()->handle($request);
-      
-      // } catch (\GuzzleHttp\Exception\BadResponseException $e) {
-      //     if ($e->getCode() === 400) {
-      //         return response()->json('Invalid Request. Please enter a username or a password.', $e->getCode());
-      //     } else if ($e->getCode() === 401) {
-      //         return response()->json('Your credentials are incorrect. Please try again', $e->getCode());
-      //     }
-      //     return response()->json('Something went wrong on the server.', $e->getCode());
-      // } 
      
   }
 

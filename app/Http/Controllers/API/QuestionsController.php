@@ -32,8 +32,9 @@ class QuestionsController extends Controller
         $question = new Question;
         $question->title = $request->title;
         $question->user_id = auth()->user()->id;
+        $question->answered_at = null;
         $question->save(); 
-        return response($question, 201);
+        return response()->json(['question' => $question,'status' =>  201]);
     }
 
     /**
