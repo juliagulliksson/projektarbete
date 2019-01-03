@@ -36,6 +36,7 @@ Route::middleware('auth:api')->group(function () {
 }); 
 
 
+
 Route::get('answers', 'API\AnswersController@index');
 
 Route::get('answers/user/{userId}', 'API\AnswersController@userAnswers');
@@ -50,5 +51,4 @@ Route::get('questions/user/{user_id}', 'API\QuestionsController@userQuestions');
 Route::post('/login', 'AuthController@login');
 Route::post('/register', 'AuthController@register');
 
-Route::get('/questions', 'API\QuestionsController@index');
-
+Route::get('/questions/answered/{boolean}', 'API\QuestionsController@index');

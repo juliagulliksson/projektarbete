@@ -94,12 +94,20 @@ class AnswersController extends Controller
     public function destroy($id)
     {
       $answer = Answer::find($id);
+      
       if ($answer) {
         $answer->delete();
+        $answers = Answer::where('question_id', $answer->question_id)->count();
+        if($answers < 1){
+          $question = Question::find($answer->question_id);
+          $question->answered_at = NULL;
+          $question->save();
+        }
         return response()->json(['status' => 200]);
       } else {
         return response()->json(['status' => 500]);
       }
+      
     }
 
     public function userAnswers($user_id){

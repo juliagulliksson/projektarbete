@@ -4,10 +4,10 @@
       <div class="col-10_md-12_sm-12">
         <div class="user-profile">
           <div class="grid-center">
-            <div class="col-3 user-profile-image">
+            <div class="col-3_sm-5 user-profile-image">
               <i class="fas fa-user-circle"></i>
             </div>
-            <div class="col-4">
+            <div class="col-4_sm-7">
               <h3>{{ user.name }}</h3>
               <h5>Joined {{ formattedDate(user.created_at) }}</h5>
             </div>
@@ -107,7 +107,7 @@ export default {
   data() {
     return {
       title: "",
-      view: "settings",
+      view: "questions",
       message: ""
     };
   },

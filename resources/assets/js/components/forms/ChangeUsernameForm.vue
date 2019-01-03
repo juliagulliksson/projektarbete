@@ -6,7 +6,7 @@
         <input type="text" class="form-control" name="username" v-model="newUsername">
       </div>
       <div class="text-center col-4_sm-12">
-        <button class="btn btn-main" @click="postNewUsername">Change</button>
+        <button class="btn btn-main" @click="postNewUsername">Submit</button>
       </div>
     </div>
   </div>

@@ -14,11 +14,19 @@ class QuestionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($answered)
     {
-        return Question::with('user', 'answers', 'answers.user', 'answers.votes','answers.votes.user')
-        ->orderBy('answered_at', 'desc')
-        ->orderBy('created_at', 'desc')->get();
+        if ($answered === 'true') {
+
+          return Question::whereNotNull('answered_at')->with('user', 'answers', 'answers.user', 'answers.votes','answers.votes.user')
+          ->orderBy('answered_at', 'desc')
+          ->orderBy('created_at', 'desc')->simplePaginate(3);
+        } else {
+
+          return Question::whereNull('answered_at')->with('user', 'answers', 'answers.user', 'answers.votes','answers.votes.user')
+            ->orderBy('answered_at', 'desc')
+            ->orderBy('created_at', 'desc')->simplePaginate(3);
+        }
     }
 
     /**
@@ -70,7 +78,6 @@ class QuestionsController extends Controller
         return response()->json(['status' => 200, 'question' => $question]);
       } else {
         return response()->json(['status' => 500]);
-
       }
     }
 

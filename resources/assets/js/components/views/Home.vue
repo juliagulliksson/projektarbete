@@ -10,7 +10,7 @@
                 <p
                   class="text-center"
                 >Here you can read and post questions and get them answered by someone who 'knows what's what'.</p>
-                <div class="grid">
+                <div class="grid home-buttons">
                   <div class="col register-button-wrapper">
                     <li>
                       <router-link :to="{name:'register'}" class="btn btn-default btn-main">Sign up</router-link>
@@ -31,9 +31,10 @@
             <div class="answers-homepage">
               <h4>Latest answers</h4>
 
-              <template v-for="question in questionsWithAnswers">
-                <questions-with-answers-card :key="'q' + question.id" :question="question"></questions-with-answers-card>
-              </template>
+              <!-- <template v-for="question in questionsWithAnswers"> -->
+              <!-- <questions-with-answers-card :key="'q' + question.id" :question="question"></questions-with-answers-card> -->
+              <!-- </template> -->
+              <questions-with-answers-card></questions-with-answers-card>
             </div>
           </div>
         </div>
@@ -46,7 +47,7 @@
 </template>
 
 <script>
-import QuestionsWithAnswersCard from "./../cards/QuestionsWithAnswersCard";
+import QuestionsWithAnswersCard from "./../cards/QuestionsWithAnswers";
 import LatestQuestions from "./../cards/LatestQuestions";
 export default {
   data() {
@@ -61,15 +62,12 @@ export default {
   computed: {
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;
-    },
-    questionsWithAnswers() {
-      return this.$store.getters.questionsWithAnswers;
     }
-  },
+  } /* ,
   created() {
     this.$store.dispatch("getQuestions").then(response => {
       this.loaded = true;
     });
-  }
+  } */
 };
 </script>

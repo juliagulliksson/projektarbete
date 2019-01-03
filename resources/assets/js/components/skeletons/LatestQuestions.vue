@@ -18,16 +18,10 @@
 </template>
 
 <script>
-// import QuestionCard from "./QuestionCard";
 export default {
-  data() {
-    return {
-      count: 10
-    };
-  },
   computed: {
     questionLength() {
-      return this.$store.getters.questionsWithoutAnswers.length;
+      return this.$store.getters.unAnsweredQuestions.length;
     }
   }
 };

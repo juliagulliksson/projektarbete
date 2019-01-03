@@ -13,7 +13,10 @@ const userExists = user !== null;
 export const store = new Vuex.Store({
   state: {
     user: userExists ? JSON.parse(user) : {},
-    questions: [],
+    unAnsweredQuestions: [],
+    answeredQuestions: [],
+    answeredQuestionsPageInfo: {},
+    unAnsweredQuestionsPageInfo: {},
     answers: [],
     userQuestions: [],
     userAnswers: [],

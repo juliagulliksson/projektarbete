@@ -1,14 +1,22 @@
 <template>
   <div class="questions-homepage">
-    <h4>Latest unanswered questions</h4>
-    <template v-if="loaded">
-      <template v-for="question in questionsWithoutAnswers">
-        <question-card :question="question" :key="question.id"></question-card>
+    <div>
+      <h4>Latest unanswered questions</h4>
+      <template v-if="loaded">
+        <template v-for="question in questions">
+          <question-card :question="question" :key="question.id"></question-card>
+        </template>
       </template>
-    </template>
-    <template v-else>
-      <skeleton></skeleton>
-    </template>
+      <template v-else>
+        <skeleton></skeleton>
+      </template>
+    </div>
+    <div class="text-center">
+      <button @click="loadMore" class="btn btn-main btn-load-more">
+        Load more
+        <i v-if="loading" class="fas fa-spinner fa-spin"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -18,7 +26,8 @@ import Skeleton from "./../skeletons/LatestQuestions";
 export default {
   data() {
     return {
-      loaded: false
+      loaded: false,
+      loading: false
     };
   },
   components: {
@@ -26,14 +35,28 @@ export default {
     Skeleton
   },
   computed: {
-    questionsWithoutAnswers() {
-      return this.$store.getters.questionsWithoutAnswers;
+    questions() {
+      return this.$store.getters.unAnsweredQuestions;
+    },
+    pageInfo() {
+      return this.$store.getters.unAnsweredQuestionsPageInfo;
+    }
+  },
+  methods: {
+    getQuestions(page) {
+      this.$store.dispatch("getUnansweredQuestions", page).then(response => {
+        this.loaded = true;
+        this.loading = false;
+      });
+    },
+    loadMore() {
+      this.loading = true;
+      let nextPage = this.pageInfo.current_page + 1;
+      this.getQuestions(nextPage);
     }
   },
   created() {
-    this.$store.dispatch("getQuestions").then(response => {
-      this.loaded = true;
-    });
+    this.getQuestions("1");
   }
 };
 </script>

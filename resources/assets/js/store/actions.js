@@ -175,14 +175,34 @@ export default {
       });
     });
   },
-  getQuestions(context) {
+  getAnsweredQuestions(context, data) {
     return new Promise((resolve, reject) => {
       axios
-        .get("api/questions")
+        .get("api/questions/answered/true?page=" + data)
         .then(response => {
-          console.log(response);
+          console.log("QUESTIONS", response);
+          context.commit("setAnsweredQuestions", response.data.data);
+          delete response.data.data;
+          context.commit("setAnsweredQuestionsPageInfo", response.data);
           resolve(response);
-          context.commit("setQuestions", response.data);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  },
+  getUnansweredQuestions(context, data) {
+    return new Promise((resolve, reject) => {
+      axios
+        .get("api/questions/answered/false?page=" + data)
+        .then(response => {
+          console.log("QUESTIONS", response);
+          context.commit("setUnansweredQuestions", response.data.data);
+          delete response.data.data;
+
+          context.commit("setUnAnsweredQuestionsPageInfo", response.data);
+
+          resolve(response);
         })
         .catch(error => {
           reject(error);
@@ -375,6 +395,8 @@ export default {
           axios
             .delete("api/answers/" + answerID)
             .then(response => {
+              console.log("response", response);
+
               if (response.data.status === 200) {
                 context.commit("deleteUserAnswer", answerID);
                 resolve(response);

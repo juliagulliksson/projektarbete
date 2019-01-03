@@ -2,8 +2,31 @@ export default {
   resetUser(state) {
     state.user = {};
   },
-  setQuestions(state, questions) {
-    state.questions = questions;
+  setAnsweredQuestions(state, questions) {
+    if (state.answeredQuestions.length === 0) {
+      state.answeredQuestions = questions;
+    } else {
+      /**
+       * Combine the existing questions with the new ones for pagination
+       */
+      state.answeredQuestions = state.answeredQuestions.concat(questions);
+    }
+  },
+  setAnsweredQuestionsPageInfo(state, pageInfo) {
+    state.answeredQuestionsPageInfo = pageInfo;
+  },
+  setUnansweredQuestions(state, questions) {
+    if (state.unAnsweredQuestions.length === 0) {
+      state.unAnsweredQuestions = questions;
+    } else {
+      /**
+       * Combine the existing questions with the new ones for pagination
+       */
+      state.unAnsweredQuestions = state.unAnsweredQuestions.concat(questions);
+    }
+  },
+  setUnAnsweredQuestionsPageInfo(state, pageInfo) {
+    state.unAnsweredQuestionsPageInfo = pageInfo;
   },
   setAnswers(state, answers) {
     state.answers = answers;
