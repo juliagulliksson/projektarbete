@@ -1,5 +1,5 @@
 <template>
-  <div class="questions-with-answer">
+  <div v-if="loaded" class="questions-with-answer">
     <div>
       <template v-for="question in questions">
         <question-with-answers-card :key="'q' + question.id" :question="question"></question-with-answers-card>
@@ -20,8 +20,8 @@ import QuestionWithAnswersCard from "./QuestionWithAnswersCard";
 export default {
   data() {
     return {
-      page: "",
-      loading: false
+      loading: false,
+      loaded: false
     };
   },
   components: {
@@ -29,8 +29,9 @@ export default {
   },
   mixins: [formatDate],
   methods: {
-    getQuestions(page) {
+    getQuestions(page = "1") {
       this.$store.dispatch("getAnsweredQuestions", page).then(response => {
+        this.loaded = true;
         this.loading = false;
       });
     },
@@ -49,7 +50,12 @@ export default {
     }
   },
   created() {
-    this.getQuestions("1");
+    this.$store.commit("clearState", [
+      "answeredQuestions",
+      "answeredQuestionsPageInfo"
+    ]);
+
+    this.getQuestions();
   }
 };
 </script>

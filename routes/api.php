@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 /**
- * All routes passing through middleware is going to require an authorization token in header
+ * All routes passing through middleware is going to require an authorization token in header when requesting them
  */
 Route::middleware('auth:api')->group(function () {
   Route::get('/user', function (Request $request) {
@@ -34,8 +34,6 @@ Route::middleware('auth:api')->group(function () {
   Route::post('answers/votes', 'VotesController@upvoteAnswer');
   Route::put('/user/{id}', 'UsersController@changeUsername');
 }); 
-
-
 
 Route::get('answers', 'API\AnswersController@index');
 

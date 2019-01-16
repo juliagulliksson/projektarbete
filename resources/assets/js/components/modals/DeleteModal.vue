@@ -54,28 +54,10 @@ export default {
       }
     },
     deleteAnswer() {
-      // this.deleteLoading = true;
-
-      this.$store
-        .dispatch("deleteAnswer", { id: this.id })
-        .then(response => {
-          // this.deleteLoading = false;
-        })
-        .catch(error => {
-          // this.deleteLoading = false;
-        });
+      this.$store.dispatch("deleteAnswer", { id: this.id });
     },
     deleteQuestion() {
-      console.log("ye");
-      this.$store
-        .dispatch("deleteQuestion", { id: this.id })
-        .then(response => {
-          // this.deleteLoading = false;
-        })
-        .catch(error => {
-          // this.deleteLoading = false;
-          // EMIT SOMETHING INSTEAD
-        });
+      this.$store.dispatch("deleteQuestion", { id: this.id });
     }
   }
 };

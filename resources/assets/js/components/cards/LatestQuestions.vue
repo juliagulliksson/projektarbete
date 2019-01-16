@@ -3,19 +3,21 @@
     <div>
       <h4>Latest unanswered questions</h4>
       <template v-if="loaded">
-        <template v-for="question in questions">
-          <question-card :question="question" :key="question.id"></question-card>
-        </template>
+        <div>
+          <template v-for="question in questions">
+            <question-card :question="question" :key="question.id"></question-card>
+          </template>
+        </div>
+        <div class="text-center">
+          <button @click="loadMore" class="btn btn-main btn-load-more">
+            Load more
+            <i v-if="loading" class="fas fa-spinner fa-spin"></i>
+          </button>
+        </div>
       </template>
       <template v-else>
         <skeleton></skeleton>
       </template>
-    </div>
-    <div class="text-center">
-      <button @click="loadMore" class="btn btn-main btn-load-more">
-        Load more
-        <i v-if="loading" class="fas fa-spinner fa-spin"></i>
-      </button>
     </div>
   </div>
 </template>
@@ -43,7 +45,7 @@ export default {
     }
   },
   methods: {
-    getQuestions(page) {
+    getQuestions(page = "1") {
       this.$store.dispatch("getUnansweredQuestions", page).then(response => {
         this.loaded = true;
         this.loading = false;
@@ -56,7 +58,11 @@ export default {
     }
   },
   created() {
-    this.getQuestions("1");
+    this.$store.commit("clearState", [
+      "unAnsweredQuestions",
+      "unAnsweredQuestionsPageInfo"
+    ]);
+    this.getQuestions();
   }
 };
 </script>

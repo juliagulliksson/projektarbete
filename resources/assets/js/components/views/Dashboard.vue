@@ -49,19 +49,34 @@
         <div class="questions">
           <new-question-form></new-question-form>
           <h4 v-if="questions.length <= 0" class="text-center none-yet">You have no questions yet</h4>
-
-          <template v-else v-for="question in questions">
-            <user-question-card :question="question" :key="question.id"></user-question-card>
-          </template>
+          <div v-else>
+            <template v-for="question in questions">
+              <user-question-card :question="question" :key="question.id"></user-question-card>
+            </template>
+          </div>
+          <div class="text-center">
+            <button @click="loadMore('questions')" class="btn btn-main btn-load-more">
+              Load more
+              <i v-if="loading" class="fas fa-spinner fa-spin"></i>
+            </button>
+          </div>
         </div>
       </div>
 
       <div v-if="view === 'answers'" class="col-10_md-12_sm-12">
         <div class="answers">
           <h4 v-if="answers.length <= 0" class="text-center none-yet">You have no answers yet</h4>
-          <template v-else v-for="answer in answers">
-            <user-answer-card :question="answer.question" :key="answer.id" :answer="answer"></user-answer-card>
-          </template>
+          <div v-else>
+            <template v-for="answer in answers">
+              <user-answer-card :question="answer.question" :key="answer.id" :answer="answer"></user-answer-card>
+            </template>
+          </div>
+          <div class="text-center">
+            <button @click="loadMore('answers')" class="btn btn-main btn-load-more">
+              Load more
+              <i v-if="loading" class="fas fa-spinner fa-spin"></i>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -108,7 +123,8 @@ export default {
     return {
       title: "",
       view: "questions",
-      message: ""
+      message: "",
+      loading: false
     };
   },
   components: {
@@ -120,24 +136,40 @@ export default {
   },
   methods: {
     addDescription(content, type) {
-      this.$store.commit("changeLoading");
-
       this.$store
         .dispatch("postUserDescription", {
           description: content
         })
         .then(response => {
-          this.$store.commit("changeLoading");
           this.message = "Description " + type + "ed";
-          console.log(response);
         })
         .catch(error => {
-          this.$store.commit("changeLoading");
           this.message = "Something went wrong on the server";
         });
     },
     switchView(view) {
       this.view = view;
+    },
+    getQuestions(page = "1") {
+      this.$store.dispatch("getUserQuestions", page).then(response => {
+        this.loading = false;
+      });
+    },
+    getAnswers(page = "1") {
+      this.$store.dispatch("getUserAnswers", page).then(response => {
+        this.loading = false;
+      });
+    },
+    loadMore(type) {
+      this.loading = true;
+      let nextPage;
+      if (type === "questions") {
+        nextPage = this.questionsPageInfo.current_page + 1;
+        this.getQuestions(nextPage);
+      } else {
+        nextPage = this.answersPageInfo.current_page + 1;
+        this.getAnswers(nextPage);
+      }
     }
   },
   computed: {
@@ -146,6 +178,9 @@ export default {
     },
     questions() {
       return this.$store.getters.userQuestions;
+    },
+    questionsPageInfo() {
+      return this.$store.getters.userQuestionsPageInfo;
     },
     answers() {
       return this.$store.getters.userAnswers;
@@ -163,8 +198,14 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("getUserQuestions");
-    this.$store.dispatch("getUserAnswers");
+    this.$store.commit("clearState", [
+      "userQuestions",
+      "userQuestionsPageInfo",
+      "userAnswers",
+      "userAnswersPageInfo"
+    ]);
+    this.getQuestions();
+    this.getAnswers();
   }
 };
 </script>

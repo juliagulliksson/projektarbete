@@ -44,29 +44,20 @@ export default {
     return {
       username: "",
       password: "",
-      error: ""
+      error: "",
+      loading: false
     };
-  } /* ,
-  props: {
-    sessionError: {
-      type: String,
-      required: false,
-      default: ""
-    }
-  } */,
+  },
   computed: {
     sessionError() {
       return this.$route.query.sessionError || "";
-    },
-    loading() {
-      return this.$store.getters.loading;
     }
   },
   methods: {
     login() {
-      this.$store.commit("changeLoading");
+      this.loading = true;
       /**
-       * Retrieve the token from the API endpoint
+       * Attempt to retrieve the token from the API endpoint
        */
       this.$store
         .dispatch("retrieveToken", {
@@ -74,14 +65,11 @@ export default {
           password: this.password
         })
         .then(response => {
-          console.log(response);
-
           this.$router.push({ name: "dashboard" });
-          this.$store.commit("changeLoading");
+          this.loading = false;
         })
         .catch(error => {
-          console.log(error);
-          this.$store.commit("changeLoading");
+          this.loading = false;
           this.error = "Wrong username or password. Please try again";
         });
     }

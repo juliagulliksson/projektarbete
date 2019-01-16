@@ -27,7 +27,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
       if (store.getters.isAuthenticated) {
         /**
-         * Even if user is authenticated, run the check to see if cookie is stored
+         * Run the check to see if cookie is stored
          * and thereby hasn't expired, and if it isn't, renew the cookie to extend session
          */
         store
@@ -53,20 +53,15 @@ router.beforeEach((to, from, next) => {
           });
       } else {
         // User is guest and not authenticated to visit page
-
-        console.log("ROUTE KÖRS");
         next({
           path: "/login"
         });
       }
     } else if (to.matched.some(record => record.meta.requiresGuest)) {
-      console.log("requeres guest");
       if (store.getters.isAuthenticated) {
-        console.log("AUTHENTICATED");
         store
           .dispatch("checkIfCookie")
           .then(response => {
-            console.log("COOKIE RESPONSE", response);
             if (response) {
               next({
                 path: "/dashboard"
@@ -79,28 +74,23 @@ router.beforeEach((to, from, next) => {
             }
           })
           .catch(error => {
-            console.log("COOKIE ERROR", error);
             router.push({
               path: "/login",
               query: { sessionError: "Session expired" }
             });
           });
       } else {
-        console.log("IS GUEST");
         next();
       }
     } else {
-      console.log("NEITHER GUEST OR AUTH");
       /**
        * Both guests and logged in users can access page
        */
 
       if (store.getters.isAuthenticated) {
-        console.log("IS AUTH");
         store
           .dispatch("checkIfCookie")
           .then(response => {
-            console.log("COOKIE RESPONSE", response);
             if (response) {
               next();
             } else {
@@ -117,7 +107,6 @@ router.beforeEach((to, from, next) => {
             });
           });
       } else {
-        console.log("IS GUEST");
         next();
       }
     }

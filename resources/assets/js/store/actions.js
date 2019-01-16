@@ -10,11 +10,6 @@ export default {
           const token = response.data.token;
           const user = response.data.user;
           /**
-           * Prevent email from being shown in the client
-           */
-
-          delete user.email;
-          /**
            * Save token in an httponly cookie on the server side
            */
           axios
@@ -31,7 +26,6 @@ export default {
             })
             .catch(error => {
               reject(error);
-              console.log("COOKIE-ERROR", error);
             });
         })
         .catch(error => {
@@ -56,7 +50,6 @@ export default {
               axios
                 .post("/api/logout")
                 .then(response => {
-                  console.log("EXPECTED");
                   context.dispatch("logOut");
                   resolve(response.data.status);
                 })
@@ -65,13 +58,11 @@ export default {
                   reject(error);
                 });
             } else {
-              console.log("LOGOUT", response);
               context.dispatch("logOut");
               resolve(response.data.status);
             }
           })
           .catch(error => {
-            console.log("COOKIE-ERROR", error);
             context.dispatch("logOut");
             reject(error);
           });
@@ -107,7 +98,6 @@ export default {
                 title: data.title
               })
               .then(response => {
-                console.log(response);
                 resolve(response);
                 context.commit("updateUserQuestions", response.data.question);
               })
@@ -137,7 +127,6 @@ export default {
                 body: data.body
               })
               .then(response => {
-                console.log(response);
                 resolve(response);
               })
               .catch(error => {
@@ -164,13 +153,26 @@ export default {
               id: data.answerID
             })
             .then(response => {
-              console.log(response);
+              console.log(response, data.type);
+              const vote = response.data.vote;
               resolve(response);
-              context.commit("updateAnswerVotes", response.data.vote);
+              if (data.type === "singleQuestion") {
+                console.log("singleQuestion");
+                context.commit("updateSingleQuestionVotes", vote);
+              } else {
+                console.log("correct");
+
+                context.commit("updateAnswerVotes", {
+                  vote: vote,
+                  questionID: data.questionID
+                });
+              }
             })
             .catch(error => {
               reject(error);
             });
+        } else {
+          reject(error);
         }
       });
     });
@@ -180,8 +182,10 @@ export default {
       axios
         .get("api/questions/answered/true?page=" + data)
         .then(response => {
-          console.log("QUESTIONS", response);
-          context.commit("setAnsweredQuestions", response.data.data);
+          context.commit("setPaginatedContent", [
+            "answeredQuestions",
+            response.data.data
+          ]);
           delete response.data.data;
           context.commit("setAnsweredQuestionsPageInfo", response.data);
           resolve(response);
@@ -196,9 +200,10 @@ export default {
       axios
         .get("api/questions/answered/false?page=" + data)
         .then(response => {
-          console.log("QUESTIONS", response);
-          context.commit("setUnansweredQuestions", response.data.data);
-          delete response.data.data;
+          context.commit("setPaginatedContent", [
+            "unAnsweredQuestions",
+            response.data.data
+          ]);
 
           context.commit("setUnAnsweredQuestionsPageInfo", response.data);
 
@@ -209,44 +214,36 @@ export default {
         });
     });
   },
-  getAnswers(context) {
-    return new Promise((resolve, reject) => {
-      axios
-        .get("api/answers")
-        .then(response => {
-          console.log(response);
-          resolve(response);
-          context.commit("setAnswers", response.data);
-        })
-        .catch(error => {
-          reject(error);
-        });
-    });
-  },
-  getUserQuestions(context) {
+  getUserQuestions(context, data) {
     const userId = context.state.user.id;
     return new Promise((resolve, reject) => {
       axios
-        .get(`api/questions/user/${userId}`)
+        .get(`api/questions/user/${userId}?page=${data}`)
         .then(response => {
-          console.log(response);
           resolve(response);
-          context.commit("setUserQuestions", response.data);
+          context.commit("setPaginatedContent", [
+            "userQuestions",
+            response.data.data
+          ]);
+          context.commit("setUserQuestionsPageInfo", response.data);
         })
         .catch(error => {
           reject(error.data.message);
         });
     });
   },
-  getUserAnswers(context) {
+  getUserAnswers(context, data) {
     const userId = context.state.user.id;
     return new Promise((resolve, reject) => {
       axios
-        .get(`api/answers/user/${userId}`)
+        .get(`api/answers/user/${userId}?page=${data}`)
         .then(response => {
-          console.log(response);
           resolve(response);
-          context.commit("setUserAnswers", response.data);
+          context.commit("setPaginatedContent", [
+            "userAnswers",
+            response.data.data
+          ]);
+          context.commit("setUserAnswersPageInfo", response.data);
         })
         .catch(error => {
           reject(error);
@@ -258,9 +255,7 @@ export default {
       axios
         .get(`api/questions/${id}`)
         .then(response => {
-          console.log(response);
           if (response.data.status === 200) {
-            console.log(response);
             context.commit("setSingleQuestion", response.data.question);
             resolve(response);
           } else {
@@ -285,9 +280,8 @@ export default {
                 description: data.description
               })
               .then(response => {
-                console.log(response);
                 const user = response.data.user;
-                localStorage.setItem("user", JSON.stringify(user));
+                context.dispatch("updateUser", user);
                 context.commit("updateUser", user);
                 resolve(response);
               })
@@ -316,9 +310,10 @@ export default {
                 name: data.name
               })
               .then(response => {
-                context.commit("updateUser", response.data.user);
+                const user = response.data.user;
+                context.dispatch("updateUser", user);
+                context.commit("updateUser", user);
                 resolve(response);
-                console.log(response);
               })
               .catch(error => {
                 reject(error);
@@ -344,7 +339,6 @@ export default {
         .then(response => {
           if (response.data.status === 200) {
             const token = response.data.token;
-            console.log("IS COOKIE", response);
             /**
              * User is still authenticated and active, so renew session by setting the cookie again
              */
@@ -354,27 +348,18 @@ export default {
               })
               .then(response => {
                 if (response.status === 200) {
-                  console.log("YEAH");
                   resolve(true);
                 } else {
                   context.dispatch("logOut");
-                  /* localStorage.removeItem("user");
-                  context.commit("destroyToken"); */
                   resolve(false);
                 }
               });
           } else {
-            console.log("NO COOKIE", response);
-            /*  localStorage.removeItem("user");
-            context.commit("destroyToken"); */
             context.dispatch("logOut");
             resolve(false);
           }
         })
         .catch(error => {
-          console.log("ERROR", error);
-          /* localStorage.removeItem("user");
-          context.commit("destroyToken"); */
           context.dispatch("logOut");
           reject(false);
         });
@@ -384,6 +369,9 @@ export default {
     localStorage.removeItem("user");
     context.commit("resetUser");
   },
+  updateUser(context, user) {
+    localStorage.setItem("user", JSON.stringify(user));
+  },
   deleteAnswer(context, data) {
     const answerID = data.id;
     return new Promise((resolve, reject) => {
@@ -391,12 +379,9 @@ export default {
         if (response.data.status === 200) {
           const token = response.data.token;
           axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-
           axios
             .delete("api/answers/" + answerID)
             .then(response => {
-              console.log("response", response);
-
               if (response.data.status === 200) {
                 context.commit("deleteUserAnswer", answerID);
                 resolve(response);
@@ -482,7 +467,6 @@ export default {
             .delete("api/questions/" + questionID)
             .then(response => {
               if (response.data.status === 200) {
-                console.log(response);
                 context.commit("deleteUserQuestion", questionID);
                 resolve(response);
               } else {

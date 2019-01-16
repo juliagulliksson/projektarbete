@@ -32134,7 +32134,7 @@ router.beforeEach(function (to, from, next) {
     })) {
       if (__WEBPACK_IMPORTED_MODULE_4__store_store_js__["a" /* store */].getters.isAuthenticated) {
         /**
-         * Even if user is authenticated, run the check to see if cookie is stored
+         * Run the check to see if cookie is stored
          * and thereby hasn't expired, and if it isn't, renew the cookie to extend session
          */
         __WEBPACK_IMPORTED_MODULE_4__store_store_js__["a" /* store */].dispatch("checkIfCookie").then(function (response) {
@@ -32157,8 +32157,6 @@ router.beforeEach(function (to, from, next) {
         });
       } else {
         // User is guest and not authenticated to visit page
-
-        console.log("ROUTE KÖRS");
         next({
           path: "/login"
         });
@@ -32166,11 +32164,8 @@ router.beforeEach(function (to, from, next) {
     } else if (to.matched.some(function (record) {
       return record.meta.requiresGuest;
     })) {
-      console.log("requeres guest");
       if (__WEBPACK_IMPORTED_MODULE_4__store_store_js__["a" /* store */].getters.isAuthenticated) {
-        console.log("AUTHENTICATED");
         __WEBPACK_IMPORTED_MODULE_4__store_store_js__["a" /* store */].dispatch("checkIfCookie").then(function (response) {
-          console.log("COOKIE RESPONSE", response);
           if (response) {
             next({
               path: "/dashboard"
@@ -32182,26 +32177,21 @@ router.beforeEach(function (to, from, next) {
             });
           }
         }).catch(function (error) {
-          console.log("COOKIE ERROR", error);
           router.push({
             path: "/login",
             query: { sessionError: "Session expired" }
           });
         });
       } else {
-        console.log("IS GUEST");
         next();
       }
     } else {
-      console.log("NEITHER GUEST OR AUTH");
       /**
        * Both guests and logged in users can access page
        */
 
       if (__WEBPACK_IMPORTED_MODULE_4__store_store_js__["a" /* store */].getters.isAuthenticated) {
-        console.log("IS AUTH");
         __WEBPACK_IMPORTED_MODULE_4__store_store_js__["a" /* store */].dispatch("checkIfCookie").then(function (response) {
-          console.log("COOKIE RESPONSE", response);
           if (response) {
             next();
           } else {
@@ -32217,7 +32207,6 @@ router.beforeEach(function (to, from, next) {
           });
         });
       } else {
-        console.log("IS GUEST");
         next();
       }
     }
@@ -70413,30 +70402,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       name: "",
       email: "",
-      password: ""
+      password: "",
+      loading: false,
+      error: ""
     };
   },
 
-  computed: {
-    loading: function loading() {
-      return this.$store.getters.loading;
-    }
-  },
   methods: {
     register: function register() {
       var _this = this;
 
-      this.$store.commit("changeLoading");
-
+      this.loading = true;
       this.$store.dispatch("register", {
         name: this.name,
         email: this.email,
         password: this.password
       }).then(function (response) {
         _this.$router.push({ name: "login" });
-        _this.$store.commit("changeLoading");
+        _this.loading = false;
       }).catch(function (error) {
-        _this.$store.commit("changeLoading");
+        _this.loading = false;
+
+        _this.error = "Username or email already exists";
       });
     }
   }
@@ -70552,6 +70539,21 @@ var render = function() {
             _vm._v(" "),
             _vm._m(0),
             _vm._v(" "),
+            _vm.error != ""
+              ? _c(
+                  "div",
+                  {
+                    staticClass: "alert alert-danger",
+                    attrs: { role: "alert" }
+                  },
+                  [
+                    _c("p", { staticClass: "text-center" }, [
+                      _vm._v(_vm._s(_vm.error))
+                    ])
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "text-center" }, [
               _c(
                 "button",
@@ -70582,9 +70584,7 @@ var staticRenderFns = [
       }),
       _vm._v(" "),
       _c("label", { staticClass: "form-check-label", attrs: { for: "gdpr" } }, [
-        _vm._v(
-          "By signing this form you agree to the storing of your information"
-        )
+        _vm._v("I agree to my the storing of my information")
       ])
     ])
   }
@@ -70697,44 +70697,32 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       username: "",
       password: "",
-      error: ""
+      error: "",
+      loading: false
     };
-  } /* ,
-    props: {
-    sessionError: {
-      type: String,
-      required: false,
-      default: ""
-    }
-    } */
-  ,
+  },
+
   computed: {
     sessionError: function sessionError() {
       return this.$route.query.sessionError || "";
-    },
-    loading: function loading() {
-      return this.$store.getters.loading;
     }
   },
   methods: {
     login: function login() {
       var _this = this;
 
-      this.$store.commit("changeLoading");
+      this.loading = true;
       /**
-       * Retrieve the token from the API endpoint
+       * Attempt to retrieve the token from the API endpoint
        */
       this.$store.dispatch("retrieveToken", {
         username: this.username,
         password: this.password
       }).then(function (response) {
-        console.log(response);
-
         _this.$router.push({ name: "dashboard" });
-        _this.$store.commit("changeLoading");
+        _this.loading = false;
       }).catch(function (error) {
-        console.log(error);
-        _this.$store.commit("changeLoading");
+        _this.loading = false;
         _this.error = "Wrong username or password. Please try again";
       });
     }
@@ -71039,6 +71027,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -71051,7 +71054,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return {
       title: "",
       view: "questions",
-      message: ""
+      message: "",
+      loading: false
     };
   },
 
@@ -71066,21 +71070,45 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     addDescription: function addDescription(content, type) {
       var _this = this;
 
-      this.$store.commit("changeLoading");
-
       this.$store.dispatch("postUserDescription", {
         description: content
       }).then(function (response) {
-        _this.$store.commit("changeLoading");
         _this.message = "Description " + type + "ed";
-        console.log(response);
       }).catch(function (error) {
-        _this.$store.commit("changeLoading");
         _this.message = "Something went wrong on the server";
       });
     },
     switchView: function switchView(view) {
       this.view = view;
+    },
+    getQuestions: function getQuestions() {
+      var _this2 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "1";
+
+      this.$store.dispatch("getUserQuestions", page).then(function (response) {
+        _this2.loading = false;
+      });
+    },
+    getAnswers: function getAnswers() {
+      var _this3 = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "1";
+
+      this.$store.dispatch("getUserAnswers", page).then(function (response) {
+        _this3.loading = false;
+      });
+    },
+    loadMore: function loadMore(type) {
+      this.loading = true;
+      var nextPage = void 0;
+      if (type === "questions") {
+        nextPage = this.questionsPageInfo.current_page + 1;
+        this.getQuestions(nextPage);
+      } else {
+        nextPage = this.answersPageInfo.current_page + 1;
+        this.getAnswers(nextPage);
+      }
     }
   },
   computed: {
@@ -71089,6 +71117,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     questions: function questions() {
       return this.$store.getters.userQuestions;
+    },
+    questionsPageInfo: function questionsPageInfo() {
+      return this.$store.getters.userQuestionsPageInfo;
     },
     answers: function answers() {
       return this.$store.getters.userAnswers;
@@ -71106,8 +71137,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   created: function created() {
-    this.$store.dispatch("getUserQuestions");
-    this.$store.dispatch("getUserAnswers");
+    this.$store.commit("clearState", ["userQuestions", "userQuestionsPageInfo", "userAnswers", "userAnswersPageInfo"]);
+    this.getQuestions();
+    this.getAnswers();
   }
 });
 
@@ -71366,22 +71398,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     deleteAnswer: function deleteAnswer() {
-      // this.deleteLoading = true;
-
-      this.$store.dispatch("deleteAnswer", { id: this.id }).then(function (response) {
-        // this.deleteLoading = false;
-      }).catch(function (error) {
-        // this.deleteLoading = false;
-      });
+      this.$store.dispatch("deleteAnswer", { id: this.id });
     },
     deleteQuestion: function deleteQuestion() {
-      console.log("ye");
-      this.$store.dispatch("deleteQuestion", { id: this.id }).then(function (response) {
-        // this.deleteLoading = false;
-      }).catch(function (error) {
-        // this.deleteLoading = false;
-        // EMIT SOMETHING INSTEAD
-      });
+      this.$store.dispatch("deleteQuestion", { id: this.id });
     }
   }
 });
@@ -71552,7 +71572,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 
-// @click="$emit('clicked', content)"
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     id: Number,
@@ -71577,10 +71596,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }
     },
     editAnswer: function editAnswer() {
-      console.log("answer");
-      this.$store.dispatch("editAnswer", { body: this.content, id: this.id }).then(function (response) {
-        console.log(response);
-      });
+      this.$store.dispatch("editAnswer", { body: this.content, id: this.id }).then(function (response) {});
     },
     editQuestion: function editQuestion() {
       var _this = this;
@@ -71954,6 +71970,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -71961,9 +71985,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      error: ""
-      /* editLoading: false,
-      deleteLoading: false */
+      error: "",
+      expand: false
     };
   },
 
@@ -71977,6 +72000,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     EditModal: __WEBPACK_IMPORTED_MODULE_2__modals_EditModal___default.a
   },
   computed: {
+    expandableAnswer: function expandableAnswer() {
+      if (this.answer.body.length > 400) {
+        return true;
+      }
+      return false;
+    },
     questionUrl: function questionUrl(id) {
       return function (id) {
         return "/question-" + id;
@@ -71996,29 +72025,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     loading: function loading() {
       return this.$store.getters.loading;
     }
-  },
-  methods: {
-    /*  deleteAnswer() {
-      this.deleteLoading = true;
-        this.$store
-        .dispatch("deleteAnswer", { id: this.answer.id })
-        .then(response => {
-          this.deleteLoading = false;
-        })
-        .catch(error => {
-          this.deleteLoading = false;
-          this.error = "Something went wrong on the server.";
-        });
-    } */
-    /*  editAnswer(content) {
-      this.$store.commit("changeLoading");
-        this.$store
-        .dispatch("editAnswer", { body: content, id: this.answer.id })
-        .then(response => {
-          console.log(response);
-          this.$store.commit("changeLoading");
-        });
-    } */
   }
 });
 
@@ -72030,107 +72036,128 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "user-answer" }, [
-    _c(
-      "div",
-      { staticClass: "question" },
-      [
-        _c(
-          "h3",
-          { staticClass: "question-title" },
-          [
-            _c(
-              "router-link",
-              { attrs: { to: _vm.questionUrl(_vm.question.id) } },
-              [_vm._v(_vm._s(_vm.question.title))]
+  return _c(
+    "div",
+    { staticClass: "question-with-answer" },
+    [
+      _c(
+        "h3",
+        { staticClass: "question-title" },
+        [
+          _c(
+            "router-link",
+            { attrs: { to: _vm.questionUrl(_vm.question.id) } },
+            [_vm._v(_vm._s(_vm.question.title))]
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("question-details", { attrs: { question: _vm.question } }),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "answer",
+          class: {
+            expanded: _vm.expand === true,
+            "unexpanded-answer": _vm.expandableAnswer && !_vm.expand
+          }
+        },
+        [
+          _c("p", {
+            staticClass: "answer-body",
+            domProps: { innerHTML: _vm._s(_vm.answer.body) }
+          })
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "text-center" }, [
+        _vm.expandableAnswer && !_vm.expand
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-default btn-expand",
+                on: {
+                  click: function($event) {
+                    _vm.expand = true
+                  }
+                }
+              },
+              [_vm._v("Read more")]
             )
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c("question-details", { attrs: { question: _vm.question } }),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "answer" },
-          [
-            _c("p", {
-              staticClass: "answer-body",
-              domProps: { innerHTML: _vm._s(_vm.answer.body) }
-            }),
-            _vm._v(" "),
-            _c("p", { staticClass: "answer-details" }, [
-              _c("span", { staticClass: "date" }, [
-                _vm._v(
-                  "Answered " + _vm._s(_vm.formattedDate(_vm.answer.created_at))
-                )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("p", { staticClass: "answer-details" }, [
+        _c("span", { staticClass: "date" }, [
+          _vm._v("Answered " + _vm._s(_vm.formattedDate(_vm.answer.created_at)))
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "grid edit-buttons" },
+        [
+          _c("div", { staticClass: "col-3_md-6_sm-6" }, [
+            _c("p", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-main btn-edit",
+                  attrs: {
+                    "data-toggle": "modal",
+                    "data-target": "#editModal" + _vm.answer.id
+                  }
+                },
+                [
+                  _vm._v("\n          Edit\n          "),
+                  _c("i", { staticClass: "fas fa-edit" })
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-3_md-6_sm-6" }, [
+            _c("p", [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-inverted btn-edit",
+                  attrs: {
+                    "data-toggle": "modal",
+                    "data-target": "#deleteModal" + _vm.answer.id
+                  }
+                },
+                [
+                  _vm._v("\n          Delete\n          "),
+                  _c("i", { staticClass: "fas fa-trash-alt" })
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _vm.error != ""
+            ? _c("div", { staticClass: "alert alert-danger" }, [
+                _c("p", [_vm._v(_vm._s(_vm.error))])
               ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "grid edit-buttons" }, [
-              _c("div", { staticClass: "col-3_md-6_sm-6" }, [
-                _c("p", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-main btn-edit",
-                      attrs: {
-                        "data-toggle": "modal",
-                        "data-target": "#editModal" + _vm.answer.id
-                      }
-                    },
-                    [
-                      _vm._v("\n              Edit\n              "),
-                      _c("i", { staticClass: "fas fa-edit" })
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "col-3_md-6_sm-6" }, [
-                _c("p", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-inverted btn-edit",
-                      attrs: {
-                        "data-toggle": "modal",
-                        "data-target": "#deleteModal" + _vm.answer.id
-                      }
-                    },
-                    [
-                      _vm._v("\n              Delete\n              "),
-                      _c("i", { staticClass: "fas fa-trash-alt" })
-                    ]
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _vm.error != ""
-                ? _c("div", { staticClass: "alert alert-danger" }, [
-                    _c("p", [_vm._v(_vm._s(_vm.error))])
-                  ])
-                : _vm._e()
-            ]),
-            _vm._v(" "),
-            _c("delete-modal", {
-              attrs: { id: _vm.answer.id, type: "answer" }
-            }),
-            _vm._v(" "),
-            _c("edit-modal", {
-              attrs: {
-                initialContent: _vm.answer.body,
-                type: "answer",
-                id: _vm.answer.id
-              }
-            })
-          ],
-          1
-        )
-      ],
-      1
-    )
-  ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("delete-modal", { attrs: { id: _vm.answer.id, type: "answer" } }),
+          _vm._v(" "),
+          _c("edit-modal", {
+            attrs: {
+              initialContent: _vm.answer.body,
+              type: "answer",
+              id: _vm.answer.id
+            }
+          })
+        ],
+        1
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -72218,28 +72245,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      title: ""
+      title: "",
+      loading: false
     };
   },
 
-  computed: {
-    loading: function loading() {
-      return this.$store.getters.loading;
-    }
-  },
   methods: {
     postQuestion: function postQuestion() {
       var _this = this;
 
-      this.$store.commit("changeLoading");
+      this.loading = true;
       this.$store.dispatch("postQuestion", {
         title: this.title
       }).then(function (response) {
-        console.log(response);
-        _this.$store.commit("changeLoading");
+        _this.loading = false;
         _this.title = "";
       }).catch(function (error) {
-        _this.$store.commit("changeLoading");
+        _this.loading = false;
         _this.title = "";
       });
     }
@@ -72733,41 +72755,88 @@ var render = function() {
                   ? _c("h4", { staticClass: "text-center none-yet" }, [
                       _vm._v("You have no questions yet")
                     ])
-                  : _vm._l(_vm.questions, function(question) {
-                      return [
-                        _c("user-question-card", {
-                          key: question.id,
-                          attrs: { question: question }
+                  : _c(
+                      "div",
+                      [
+                        _vm._l(_vm.questions, function(question) {
+                          return [
+                            _c("user-question-card", {
+                              key: question.id,
+                              attrs: { question: question }
+                            })
+                          ]
                         })
-                      ]
-                    })
+                      ],
+                      2
+                    ),
+                _vm._v(" "),
+                _c("div", { staticClass: "text-center" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-main btn-load-more",
+                      on: {
+                        click: function($event) {
+                          _vm.loadMore("questions")
+                        }
+                      }
+                    },
+                    [
+                      _vm._v("\n            Load more\n            "),
+                      _vm.loading
+                        ? _c("i", { staticClass: "fas fa-spinner fa-spin" })
+                        : _vm._e()
+                    ]
+                  )
+                ])
               ],
-              2
+              1
             )
           ])
         : _vm._e(),
       _vm._v(" "),
       _vm.view === "answers"
         ? _c("div", { staticClass: "col-10_md-12_sm-12" }, [
-            _c(
-              "div",
-              { staticClass: "answers" },
-              [
-                _vm.answers.length <= 0
-                  ? _c("h4", { staticClass: "text-center none-yet" }, [
-                      _vm._v("You have no answers yet")
-                    ])
-                  : _vm._l(_vm.answers, function(answer) {
-                      return [
-                        _c("user-answer-card", {
-                          key: answer.id,
-                          attrs: { question: answer.question, answer: answer }
-                        })
-                      ]
-                    })
-              ],
-              2
-            )
+            _c("div", { staticClass: "answers" }, [
+              _vm.answers.length <= 0
+                ? _c("h4", { staticClass: "text-center none-yet" }, [
+                    _vm._v("You have no answers yet")
+                  ])
+                : _c(
+                    "div",
+                    [
+                      _vm._l(_vm.answers, function(answer) {
+                        return [
+                          _c("user-answer-card", {
+                            key: answer.id,
+                            attrs: { question: answer.question, answer: answer }
+                          })
+                        ]
+                      })
+                    ],
+                    2
+                  ),
+              _vm._v(" "),
+              _c("div", { staticClass: "text-center" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-main btn-load-more",
+                    on: {
+                      click: function($event) {
+                        _vm.loadMore("answers")
+                      }
+                    }
+                  },
+                  [
+                    _vm._v("\n            Load more\n            "),
+                    _vm.loading
+                      ? _c("i", { staticClass: "fas fa-spinner fa-spin" })
+                      : _vm._e()
+                  ]
+                )
+              ])
+            ])
           ])
         : _vm._e(),
       _vm._v(" "),
@@ -72920,7 +72989,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         });
       }
     }).catch(function (error) {
-      console.log(error);
       _this.$router.push({
         name: "login",
         params: { sessionError: "Session expired" }
@@ -73050,20 +73118,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
-//
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      loaded: false
-    };
-  },
-
   components: {
     QuestionsWithAnswersCard: __WEBPACK_IMPORTED_MODULE_0__cards_QuestionsWithAnswers___default.a,
     LatestQuestions: __WEBPACK_IMPORTED_MODULE_1__cards_LatestQuestions___default.a
@@ -73072,12 +73130,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     isAuthenticated: function isAuthenticated() {
       return this.$store.getters.isAuthenticated;
     }
-  } /* ,
-    created() {
-    this.$store.dispatch("getQuestions").then(response => {
-      this.loaded = true;
-    });
-    } */
+  }
 });
 
 /***/ }),
@@ -73158,8 +73211,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      page: "",
-      loading: false
+      loading: false,
+      loaded: false
     };
   },
 
@@ -73168,10 +73221,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
   mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_formatDate_js__["a" /* default */]],
   methods: {
-    getQuestions: function getQuestions(page) {
+    getQuestions: function getQuestions() {
       var _this = this;
 
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "1";
+
       this.$store.dispatch("getAnsweredQuestions", page).then(function (response) {
+        _this.loaded = true;
         _this.loading = false;
       });
     },
@@ -73190,7 +73246,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   created: function created() {
-    this.getQuestions("1");
+    this.$store.commit("clearState", ["answeredQuestions", "answeredQuestionsPageInfo"]);
+
+    this.getQuestions();
   }
 });
 
@@ -73247,7 +73305,9 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_formatDate_js__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Upvote__ = __webpack_require__(542);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Upvote___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Upvote__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_formatDate_js__ = __webpack_require__(61);
 //
 //
 //
@@ -73280,6 +73340,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+
 
 
 
@@ -73293,7 +73355,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   props: {
     question: Object
   },
-  mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_formatDate_js__["a" /* default */]],
+  components: {
+    Upvote: __WEBPACK_IMPORTED_MODULE_0__Upvote___default.a
+  },
+  mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_formatDate_js__["a" /* default */]],
   computed: {
     expandableAnswer: function expandableAnswer() {
       if (this.question.answers[0].body.length > 400) {
@@ -73343,53 +73408,65 @@ var render = function() {
       _vm._v(" "),
       _vm._l(_vm.question.answers, function(answer) {
         return [
-          _c("div", { key: "a" + answer.id }, [
-            _c(
-              "div",
-              {
-                staticClass: "answer",
-                class: {
-                  expanded: _vm.expand === true,
-                  "unexpanded-answer": _vm.expandableAnswer && !_vm.expand
-                }
-              },
-              [
-                _c("p", { staticClass: "answer-details" }, [
-                  _c("i", { staticClass: "fas fa-user-circle" }),
-                  _vm._v(
-                    "\n          " + _vm._s(answer.user.name) + " |\n          "
-                  ),
-                  _c("span", { staticClass: "date" }, [
+          _c(
+            "div",
+            { key: "a" + answer.id },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "answer",
+                  class: {
+                    expanded: _vm.expand === true,
+                    "unexpanded-answer": _vm.expandableAnswer && !_vm.expand
+                  }
+                },
+                [
+                  _c("p", { staticClass: "answer-details" }, [
+                    _c("i", { staticClass: "fas fa-user-circle" }),
                     _vm._v(
-                      "Answered " + _vm._s(_vm.formattedDate(answer.created_at))
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("p", {
-                  staticClass: "answer-body",
-                  domProps: { innerHTML: _vm._s(answer.body) }
-                })
-              ]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "text-center" }, [
-              _vm.expandableAnswer && !_vm.expand
-                ? _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-default btn-expand",
-                      on: {
-                        click: function($event) {
-                          _vm.expand = true
+                      "\n          " +
+                        _vm._s(answer.user.name) +
+                        " |\n          "
+                    ),
+                    _c("span", { staticClass: "date" }, [
+                      _vm._v(
+                        "Answered " +
+                          _vm._s(_vm.formattedDate(answer.created_at))
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("p", {
+                    staticClass: "answer-body",
+                    domProps: { innerHTML: _vm._s(answer.body) }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "text-center" }, [
+                _vm.expandableAnswer && !_vm.expand
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-default btn-expand",
+                        on: {
+                          click: function($event) {
+                            _vm.expand = true
+                          }
                         }
-                      }
-                    },
-                    [_vm._v("Read more")]
-                  )
-                : _vm._e()
-            ])
-          ])
+                      },
+                      [_vm._v("Read more")]
+                    )
+                  : _vm._e()
+              ]),
+              _vm._v(" "),
+              _c("upvote", {
+                attrs: { answer: answer, type: "questionWithAnswer" }
+              })
+            ],
+            1
+          )
         ]
       })
     ],
@@ -73414,38 +73491,40 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "questions-with-answer" }, [
-    _c(
-      "div",
-      [
-        _vm._l(_vm.questions, function(question) {
-          return [
-            _c("question-with-answers-card", {
-              key: "q" + question.id,
-              attrs: { question: question }
+  return _vm.loaded
+    ? _c("div", { staticClass: "questions-with-answer" }, [
+        _c(
+          "div",
+          [
+            _vm._l(_vm.questions, function(question) {
+              return [
+                _c("question-with-answers-card", {
+                  key: "q" + question.id,
+                  attrs: { question: question }
+                })
+              ]
             })
-          ]
-        })
-      ],
-      2
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "text-center" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-main btn-load-more",
-          on: { click: _vm.loadMore }
-        },
-        [
-          _vm._v("\n      Load more\n      "),
-          _vm.loading
-            ? _c("i", { staticClass: "fas fa-spinner fa-spin" })
-            : _vm._e()
-        ]
-      )
-    ])
-  ])
+          ],
+          2
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "text-center" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-main btn-load-more",
+              on: { click: _vm.loadMore }
+            },
+            [
+              _vm._v("\n      Load more\n      "),
+              _vm.loading
+                ? _c("i", { staticClass: "fas fa-spinner fa-spin" })
+                : _vm._e()
+            ]
+          )
+        ])
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -73467,6 +73546,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__QuestionCard___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__QuestionCard__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__skeletons_LatestQuestions__ = __webpack_require__(492);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__skeletons_LatestQuestions___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__skeletons_LatestQuestions__);
+//
+//
 //
 //
 //
@@ -73513,8 +73594,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   methods: {
-    getQuestions: function getQuestions(page) {
+    getQuestions: function getQuestions() {
       var _this = this;
+
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "1";
 
       this.$store.dispatch("getUnansweredQuestions", page).then(function (response) {
         _this.loaded = true;
@@ -73528,7 +73611,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   created: function created() {
-    this.getQuestions("1");
+    this.$store.commit("clearState", ["unAnsweredQuestions", "unAnsweredQuestionsPageInfo"]);
+    this.getQuestions();
   }
 });
 
@@ -73802,35 +73886,41 @@ var render = function() {
         _vm._v(" "),
         _vm.loaded
           ? [
-              _vm._l(_vm.questions, function(question) {
-                return [
-                  _c("question-card", {
-                    key: question.id,
-                    attrs: { question: question }
+              _c(
+                "div",
+                [
+                  _vm._l(_vm.questions, function(question) {
+                    return [
+                      _c("question-card", {
+                        key: question.id,
+                        attrs: { question: question }
+                      })
+                    ]
                   })
-                ]
-              })
+                ],
+                2
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "text-center" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-main btn-load-more",
+                    on: { click: _vm.loadMore }
+                  },
+                  [
+                    _vm._v("\n          Load more\n          "),
+                    _vm.loading
+                      ? _c("i", { staticClass: "fas fa-spinner fa-spin" })
+                      : _vm._e()
+                  ]
+                )
+              ])
             ]
           : [_c("skeleton")]
       ],
       2
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "text-center" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-main btn-load-more",
-          on: { click: _vm.loadMore }
-        },
-        [
-          _vm._v("\n      Load more\n      "),
-          _vm.loading
-            ? _c("i", { staticClass: "fas fa-spinner fa-spin" })
-            : _vm._e()
-        ]
-      )
-    ])
+    )
   ])
 }
 var staticRenderFns = []
@@ -74047,7 +74137,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 
@@ -74063,7 +74152,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
   components: {
     QuestionDetails: __WEBPACK_IMPORTED_MODULE_0__cards_QuestionDetails___default.a,
-
     LatestQuestions: __WEBPACK_IMPORTED_MODULE_1__cards_LatestQuestions___default.a,
     AnswerCard: __WEBPACK_IMPORTED_MODULE_2__cards_AnswerCard___default.a,
     NewAnswerForm: __WEBPACK_IMPORTED_MODULE_3__forms_NewAnswerForm___default.a
@@ -74098,7 +74186,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     postAnswer: function postAnswer(answer) {
       var _this2 = this;
 
-      this.$store.commit("changeLoading");
       this.$store.dispatch("postAnswer", {
         question_id: this.$route.params.id,
         body: answer
@@ -74109,7 +74196,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         answer.votes_count = 0;
         _this2.question.answers.push(answer);
         _this2.answer = "";
-        _this2.$store.commit("changeLoading");
       });
     },
     getQuestion: function getQuestion() {
@@ -74127,6 +74213,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
   },
 
   watch: {
+    /**
+     * Whenever the route changes, get the new question from API based on route parameter id
+     */
     $route: function $route(to, from) {
       this.getQuestion();
     }
@@ -74186,7 +74275,9 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mixins_formatDate_js__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Upvote__ = __webpack_require__(542);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Upvote___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Upvote__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mixins_formatDate_js__ = __webpack_require__(61);
 //
 //
 //
@@ -74208,23 +74299,42 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     answer: Object
   },
-  data: function data() {
-    return {
-      loading: false
-    };
+  // data() {
+  //   return {
+  //     loading: false
+  //   };
+  // },
+  components: {
+    Upvote: __WEBPACK_IMPORTED_MODULE_0__Upvote___default.a
   },
-
-  mixins: [__WEBPACK_IMPORTED_MODULE_0__mixins_formatDate_js__["a" /* default */]],
+  mixins: [__WEBPACK_IMPORTED_MODULE_1__mixins_formatDate_js__["a" /* default */]],
   computed: {
-    isAuthenticated: function isAuthenticated() {
-      return this.$store.getters.isAuthenticated;
+    userDescription: function userDescription() {
+      if (this.answer.user.description != null) {
+        if (this.answer.user.description.length > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
     },
+
+    // isAuthenticated() {
+    //   return this.$store.getters.isAuthenticated;
+    // },
     user: function user() {
       return this.$store.getters.user;
     },
@@ -74234,32 +74344,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       return function (date) {
         return _this.formatDate(date);
       };
-    },
-    userHasVoted: function userHasVoted() {
-      var _this2 = this;
-
-      var userVote = this.answer.votes.filter(function (vote) {
-        return vote.user_id === _this2.user.id;
-      });
-      return userVote.length > 0;
     }
-  },
-  methods: {
-    upvote: function upvote() {
-      var _this3 = this;
+    // userHasVoted() {
+    //   let userVote = this.answer.votes.filter(
+    //     vote => vote.user_id === this.user.id
+    //   );
+    //   return userVote.length > 0;
+    // }
 
-      this.loading = true;
-      if (!this.isAuthenticated) {
-        this.loading = false;
-
-        this.$router.push({ name: "login" });
-      } else {
-        this.$store.dispatch("upvoteAnswer", { answerID: this.answer.id }).then(function (response) {
-          _this3.loading = false;
-        });
-      }
-    }
   }
+  // methods: {
+  //   upvote() {
+  //     this.loading = true;
+  //     if (!this.isAuthenticated) {
+  //       this.loading = false;
+
+  //       this.$router.push({ name: "login" });
+  //     } else {
+  //       this.$store
+  //         .dispatch("upvoteAnswer", { answerID: this.answer.id })
+  //         .then(response => {
+  //           this.loading = false;
+  //         });
+  //     }
+  //   }
+  // }
 });
 
 /***/ }),
@@ -74270,43 +74379,37 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "answer" }, [
-    _c("p", { staticClass: "answer-details" }, [
-      _c("i", { staticClass: "fas fa-user-circle" }),
-      _vm._v(
-        "\n    " +
-          _vm._s(_vm.answer.user.name) +
-          " |\n    " +
-          _vm._s(_vm.answer.user.description) +
-          "\n  "
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", { staticClass: "date" }, [
-      _vm._v("Answered " + _vm._s(_vm.formattedDate(_vm.answer.created_at)))
-    ]),
-    _vm._v(" "),
-    _c("p", {
-      staticClass: "answer-body",
-      domProps: { innerHTML: _vm._s(_vm.answer.body) }
-    }),
-    _vm._v(" "),
-    _c("div", { staticClass: "upvote", class: { voted: _vm.userHasVoted } }, [
-      _c("span", { staticClass: "vote-button", on: { click: _vm.upvote } }, [
-        _c("i", { staticClass: "fas fa-arrow-up" }),
-        _vm._v(" "),
-        _c("span", { staticClass: "upvote-text" }, [_vm._v("Upvote")]),
-        _vm._v(" "),
-        _c("span", { staticClass: "bullet" }, [_vm._v("|")]),
-        _vm._v(" "),
-        !_vm.loading
-          ? _c("span", { staticClass: "nr-of-votes" }, [
-              _vm._v(_vm._s(_vm.answer.votes_count))
+  return _c(
+    "div",
+    { staticClass: "answer" },
+    [
+      _c("p", { staticClass: "answer-details" }, [
+        _c("i", { staticClass: "fas fa-user-circle" }),
+        _vm._v("\n    " + _vm._s(_vm.answer.user.name) + "\n    "),
+        _vm.userDescription
+          ? _c("span", [
+              _vm._v(
+                "\n      |\n      " +
+                  _vm._s(_vm.answer.user.description) +
+                  "\n    "
+              )
             ])
-          : _c("i", { staticClass: "fas fa-spinner fa-spin" })
-      ])
-    ])
-  ])
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c("p", { staticClass: "date" }, [
+        _vm._v("Answered " + _vm._s(_vm.formattedDate(_vm.answer.created_at)))
+      ]),
+      _vm._v(" "),
+      _c("p", {
+        staticClass: "answer-body",
+        domProps: { innerHTML: _vm._s(_vm.answer.body) }
+      }),
+      _vm._v(" "),
+      _c("upvote", { attrs: { answer: _vm.answer, type: "singleQuestion" } })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -74673,11 +74776,10 @@ var store = new __WEBPACK_IMPORTED_MODULE_2_vuex__["a" /* default */].Store({
     answeredQuestions: [],
     answeredQuestionsPageInfo: {},
     unAnsweredQuestionsPageInfo: {},
-    answers: [],
     userQuestions: [],
+    userQuestionsPageInfo: {},
     userAnswers: [],
-    question: {},
-    loading: false
+    question: {}
   },
   getters: __WEBPACK_IMPORTED_MODULE_3__getters_js__["a" /* default */],
   mutations: __WEBPACK_IMPORTED_MODULE_5__mutations_js__["a" /* default */],
@@ -76873,14 +76975,14 @@ var index_esm = {
   userQuestions: function userQuestions(state) {
     return state.userQuestions;
   },
+  userQuestionsPageInfo: function userQuestionsPageInfo(state) {
+    return state.userQuestionsPageInfo;
+  },
   userAnswers: function userAnswers(state) {
     return state.userAnswers;
   },
   singleQuestion: function singleQuestion(state) {
     return state.question;
-  },
-  loading: function loading(state) {
-    return state.loading;
   }
 });
 
@@ -76899,11 +77001,6 @@ var index_esm = {
         var token = response.data.token;
         var user = response.data.user;
         /**
-         * Prevent email from being shown in the client
-         */
-
-        delete user.email;
-        /**
          * Save token in an httponly cookie on the server side
          */
         axios.post("api/setcookie", {
@@ -76917,7 +77014,6 @@ var index_esm = {
           resolve(response);
         }).catch(function (error) {
           reject(error);
-          console.log("COOKIE-ERROR", error);
         });
       }).catch(function (error) {
         reject(error);
@@ -76936,7 +77032,6 @@ var index_esm = {
             var token = response.data.token;
             axios.defaults.headers.common["Authorization"] = "Bearer " + token;
             axios.post("/api/logout").then(function (response) {
-              console.log("EXPECTED");
               context.dispatch("logOut");
               resolve(response.data.status);
             }).catch(function (error) {
@@ -76944,12 +77039,10 @@ var index_esm = {
               reject(error);
             });
           } else {
-            console.log("LOGOUT", response);
             context.dispatch("logOut");
             resolve(response.data.status);
           }
         }).catch(function (error) {
-          console.log("COOKIE-ERROR", error);
           context.dispatch("logOut");
           reject(error);
         });
@@ -76977,7 +77070,6 @@ var index_esm = {
           axios.post("api/questions", {
             title: data.title
           }).then(function (response) {
-            console.log(response);
             resolve(response);
             context.commit("updateUserQuestions", response.data.question);
           }).catch(function (error) {
@@ -77000,7 +77092,6 @@ var index_esm = {
             question_id: data.question_id,
             body: data.body
           }).then(function (response) {
-            console.log(response);
             resolve(response);
           }).catch(function (error) {
             reject(error);
@@ -77022,12 +77113,25 @@ var index_esm = {
             type: "App\\Answer",
             id: data.answerID
           }).then(function (response) {
-            console.log(response);
+            console.log(response, data.type);
+            var vote = response.data.vote;
             resolve(response);
-            context.commit("updateAnswerVotes", response.data.vote);
+            if (data.type === "singleQuestion") {
+              console.log("singleQuestion");
+              context.commit("updateSingleQuestionVotes", vote);
+            } else {
+              console.log("correct");
+
+              context.commit("updateAnswerVotes", {
+                vote: vote,
+                questionID: data.questionID
+              });
+            }
           }).catch(function (error) {
             reject(error);
           });
+        } else {
+          reject(error);
         }
       });
     });
@@ -77035,8 +77139,7 @@ var index_esm = {
   getAnsweredQuestions: function getAnsweredQuestions(context, data) {
     return new Promise(function (resolve, reject) {
       axios.get("api/questions/answered/true?page=" + data).then(function (response) {
-        console.log("QUESTIONS", response);
-        context.commit("setAnsweredQuestions", response.data.data);
+        context.commit("setPaginatedContent", ["answeredQuestions", response.data.data]);
         delete response.data.data;
         context.commit("setAnsweredQuestionsPageInfo", response.data);
         resolve(response);
@@ -77048,9 +77151,7 @@ var index_esm = {
   getUnansweredQuestions: function getUnansweredQuestions(context, data) {
     return new Promise(function (resolve, reject) {
       axios.get("api/questions/answered/false?page=" + data).then(function (response) {
-        console.log("QUESTIONS", response);
-        context.commit("setUnansweredQuestions", response.data.data);
-        delete response.data.data;
+        context.commit("setPaginatedContent", ["unAnsweredQuestions", response.data.data]);
 
         context.commit("setUnAnsweredQuestionsPageInfo", response.data);
 
@@ -77060,36 +77161,25 @@ var index_esm = {
       });
     });
   },
-  getAnswers: function getAnswers(context) {
-    return new Promise(function (resolve, reject) {
-      axios.get("api/answers").then(function (response) {
-        console.log(response);
-        resolve(response);
-        context.commit("setAnswers", response.data);
-      }).catch(function (error) {
-        reject(error);
-      });
-    });
-  },
-  getUserQuestions: function getUserQuestions(context) {
+  getUserQuestions: function getUserQuestions(context, data) {
     var userId = context.state.user.id;
     return new Promise(function (resolve, reject) {
-      axios.get("api/questions/user/" + userId).then(function (response) {
-        console.log(response);
+      axios.get("api/questions/user/" + userId + "?page=" + data).then(function (response) {
         resolve(response);
-        context.commit("setUserQuestions", response.data);
+        context.commit("setPaginatedContent", ["userQuestions", response.data.data]);
+        context.commit("setUserQuestionsPageInfo", response.data);
       }).catch(function (error) {
         reject(error.data.message);
       });
     });
   },
-  getUserAnswers: function getUserAnswers(context) {
+  getUserAnswers: function getUserAnswers(context, data) {
     var userId = context.state.user.id;
     return new Promise(function (resolve, reject) {
-      axios.get("api/answers/user/" + userId).then(function (response) {
-        console.log(response);
+      axios.get("api/answers/user/" + userId + "?page=" + data).then(function (response) {
         resolve(response);
-        context.commit("setUserAnswers", response.data);
+        context.commit("setPaginatedContent", ["userAnswers", response.data.data]);
+        context.commit("setUserAnswersPageInfo", response.data);
       }).catch(function (error) {
         reject(error);
       });
@@ -77098,9 +77188,7 @@ var index_esm = {
   getSingleQuestion: function getSingleQuestion(context, id) {
     return new Promise(function (resolve, reject) {
       axios.get("api/questions/" + id).then(function (response) {
-        console.log(response);
         if (response.data.status === 200) {
-          console.log(response);
           context.commit("setSingleQuestion", response.data.question);
           resolve(response);
         } else {
@@ -77120,9 +77208,8 @@ var index_esm = {
           axios.post("api/userdescription", {
             description: data.description
           }).then(function (response) {
-            console.log(response);
             var user = response.data.user;
-            localStorage.setItem("user", JSON.stringify(user));
+            context.dispatch("updateUser", user);
             context.commit("updateUser", user);
             resolve(response);
           }).catch(function (error) {
@@ -77145,9 +77232,10 @@ var index_esm = {
           axios.put("api/user/" + data.id, {
             name: data.name
           }).then(function (response) {
-            context.commit("updateUser", response.data.user);
+            var user = response.data.user;
+            context.dispatch("updateUser", user);
+            context.commit("updateUser", user);
             resolve(response);
-            console.log(response);
           }).catch(function (error) {
             reject(error);
           });
@@ -77169,7 +77257,6 @@ var index_esm = {
       axios.get("api/returncookie").then(function (response) {
         if (response.data.status === 200) {
           var token = response.data.token;
-          console.log("IS COOKIE", response);
           /**
            * User is still authenticated and active, so renew session by setting the cookie again
            */
@@ -77177,26 +77264,17 @@ var index_esm = {
             token: token
           }).then(function (response) {
             if (response.status === 200) {
-              console.log("YEAH");
               resolve(true);
             } else {
               context.dispatch("logOut");
-              /* localStorage.removeItem("user");
-              context.commit("destroyToken"); */
               resolve(false);
             }
           });
         } else {
-          console.log("NO COOKIE", response);
-          /*  localStorage.removeItem("user");
-          context.commit("destroyToken"); */
           context.dispatch("logOut");
           resolve(false);
         }
       }).catch(function (error) {
-        console.log("ERROR", error);
-        /* localStorage.removeItem("user");
-        context.commit("destroyToken"); */
         context.dispatch("logOut");
         reject(false);
       });
@@ -77206,6 +77284,9 @@ var index_esm = {
     localStorage.removeItem("user");
     context.commit("resetUser");
   },
+  updateUser: function updateUser(context, user) {
+    localStorage.setItem("user", JSON.stringify(user));
+  },
   deleteAnswer: function deleteAnswer(context, data) {
     var answerID = data.id;
     return new Promise(function (resolve, reject) {
@@ -77213,10 +77294,7 @@ var index_esm = {
         if (response.data.status === 200) {
           var token = response.data.token;
           axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-
           axios.delete("api/answers/" + answerID).then(function (response) {
-            console.log("response", response);
-
             if (response.data.status === 200) {
               context.commit("deleteUserAnswer", answerID);
               resolve(response);
@@ -77293,7 +77371,6 @@ var index_esm = {
           axios.defaults.headers.common["Authorization"] = "Bearer " + token;
           axios.delete("api/questions/" + questionID).then(function (response) {
             if (response.data.status === 200) {
-              console.log(response);
               context.commit("deleteUserQuestion", questionID);
               resolve(response);
             } else {
@@ -77315,47 +77392,40 @@ var index_esm = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 /* harmony default export */ __webpack_exports__["a"] = ({
   resetUser: function resetUser(state) {
     state.user = {};
   },
-  setAnsweredQuestions: function setAnsweredQuestions(state, questions) {
-    if (state.answeredQuestions.length === 0) {
-      state.answeredQuestions = questions;
+  setPaginatedContent: function setPaginatedContent(state, _ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        name = _ref2[0],
+        data = _ref2[1];
+
+    if (state[name].length === 0) {
+      state[name] = data;
     } else {
       /**
-       * Combine the existing questions with the new ones for pagination
+       * Combine the existing array with the new one for pagination
        */
-      state.answeredQuestions = state.answeredQuestions.concat(questions);
+      state[name] = state[name].concat(data);
     }
   },
   setAnsweredQuestionsPageInfo: function setAnsweredQuestionsPageInfo(state, pageInfo) {
     state.answeredQuestionsPageInfo = pageInfo;
   },
-  setUnansweredQuestions: function setUnansweredQuestions(state, questions) {
-    if (state.unAnsweredQuestions.length === 0) {
-      state.unAnsweredQuestions = questions;
-    } else {
-      /**
-       * Combine the existing questions with the new ones for pagination
-       */
-      state.unAnsweredQuestions = state.unAnsweredQuestions.concat(questions);
-    }
-  },
   setUnAnsweredQuestionsPageInfo: function setUnAnsweredQuestionsPageInfo(state, pageInfo) {
     state.unAnsweredQuestionsPageInfo = pageInfo;
-  },
-  setAnswers: function setAnswers(state, answers) {
-    state.answers = answers;
   },
   setUser: function setUser(state, user) {
     state.user = user;
   },
-  setUserQuestions: function setUserQuestions(state, questions) {
-    state.userQuestions = questions;
+  setUserQuestionsPageInfo: function setUserQuestionsPageInfo(state, pageInfo) {
+    state.userQuestionsPageInfo = pageInfo;
   },
-  setUserAnswers: function setUserAnswers(state, answers) {
-    state.userAnswers = answers;
+  setUserAnswersPageInfo: function setUserAnswersPageInfo(state, pageInfo) {
+    state.userAnswersPageInfo = pageInfo;
   },
   updateUserQuestions: function updateUserQuestions(state, question) {
     state.userQuestions.unshift(question);
@@ -77386,19 +77456,46 @@ var index_esm = {
   },
   updateUser: function updateUser(state, user) {
     state.user = user;
-    delete user.email;
-    localStorage.setItem("user", JSON.stringify(user));
   },
-  changeLoading: function changeLoading(state) {
-    state.loading = !state.loading;
+  updateAnswerVotes: function updateAnswerVotes(state, payload) {
+    /**
+     * Find the question
+     */
+    // state.answeredQuestions = [];
+    // return;
+    var index = state.answeredQuestions.findIndex(function (question) {
+      return question.id === payload.questionID;
+    });
+
+    var answerIndex = state.answeredQuestions[index].answers.findIndex(function (answer) {
+      return answer.id === payload.vote.voteables_id;
+    });
+    if (payload.vote.deleted_at === null) {
+      /**
+       * Add to the vote count of the answer and add the vote into the votes array
+       */
+      state.answeredQuestions[index].answers[answerIndex].votes_count++;
+      state.answeredQuestions[index].answers[answerIndex].votes.push(payload.vote);
+      return state.answeredQuestions;
+    } else {
+      /**
+       * The vote has been deleted, so remove from vote count and filter out the vote from array
+       */
+      state.answeredQuestions[index].answers[answerIndex].votes_count--;
+      state.answeredQuestions[index].answers[answerIndex].votes = state.answeredQuestions[index].answers[answerIndex].votes.filter(function (initialVote) {
+        return initialVote.id !== payload.vote.id;
+      });
+      return state.answeredQuestions;
+    }
   },
-  updateAnswerVotes: function updateAnswerVotes(state, vote) {
+  updateSingleQuestionVotes: function updateSingleQuestionVotes(state, vote) {
     /**
      * Find the associated answer
      */
     var index = state.question.answers.findIndex(function (answer) {
       return answer.id === vote.voteables_id;
     });
+
     if (vote.deleted_at === null) {
       /**
        * Add to the vote count of the answer and add the vote into the votes array
@@ -77419,6 +77516,36 @@ var index_esm = {
   },
   setSingleQuestion: function setSingleQuestion(state, question) {
     state.question = question;
+  },
+  clearState: function clearState(state, names) {
+    /**
+     * Clear the arrays of paginated content, to not load the api response arrays
+     * again and again on component mount
+     */
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = names[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        name = _step.value;
+
+        state[name] = [];
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
   }
 });
 
@@ -78142,7 +78269,7 @@ var render = function() {
       _c("transition", { attrs: { name: "cookie" } }, [
         !_vm.agreed && _vm.show
           ? _c("div", { staticClass: "cookie-consent" }, [
-              _c("div", { staticClass: "grid-center-middle" }, [
+              _c("div", { staticClass: "grid-center-middle-noGutter" }, [
                 _c("div", { staticClass: "col-2_md-3_sm-6" }, [
                   _c("p", { staticClass: "text-center" }, [
                     _vm._v("This page uses cookies")
@@ -78182,6 +78309,184 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 522 */,
+/* 523 */,
+/* 524 */,
+/* 525 */,
+/* 526 */,
+/* 527 */,
+/* 528 */,
+/* 529 */,
+/* 530 */,
+/* 531 */,
+/* 532 */,
+/* 533 */,
+/* 534 */,
+/* 535 */,
+/* 536 */,
+/* 537 */,
+/* 538 */,
+/* 539 */,
+/* 540 */,
+/* 541 */,
+/* 542 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(6)
+/* script */
+var __vue_script__ = __webpack_require__(543)
+/* template */
+var __vue_template__ = __webpack_require__(544)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/cards/Upvote.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-bbdd8d30", Component.options)
+  } else {
+    hotAPI.reload("data-v-bbdd8d30", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 543 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      loading: false
+    };
+  },
+
+  props: {
+    answer: Object,
+    type: String
+  },
+  computed: {
+    user: function user() {
+      return this.$store.getters.user;
+    },
+    userHasVoted: function userHasVoted() {
+      var _this = this;
+
+      var userVote = this.answer.votes.filter(function (vote) {
+        return vote.user_id === _this.user.id;
+      });
+      return userVote.length > 0;
+    },
+    isAuthenticated: function isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    }
+  },
+  methods: {
+    upvote: function upvote() {
+      var _this2 = this;
+
+      this.loading = true;
+      if (!this.isAuthenticated) {
+        this.loading = false;
+
+        this.$router.push({ name: "login" });
+      } else {
+        this.$store.dispatch("upvoteAnswer", {
+          answerID: this.answer.id,
+          type: this.type,
+          questionID: this.answer.question_id
+        }).then(function (response) {
+          _this2.loading = false;
+        }).catch(function (error) {
+          _this2.$router.push({
+            path: "/login",
+            query: { sessionError: "Session expired" }
+          });
+        });
+      }
+    }
+  }
+});
+
+/***/ }),
+/* 544 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "upvote", class: { voted: _vm.userHasVoted } },
+    [
+      _c("span", { staticClass: "vote-button", on: { click: _vm.upvote } }, [
+        _c("i", { staticClass: "fas fa-arrow-up" }),
+        _vm._v(" "),
+        _c("span", { staticClass: "upvote-text" }, [_vm._v("Upvote")]),
+        _vm._v(" "),
+        _c("span", { staticClass: "bullet" }, [_vm._v("|")]),
+        _vm._v(" "),
+        !_vm.loading
+          ? _c("span", { staticClass: "nr-of-votes" }, [
+              _vm._v(_vm._s(_vm.answer.votes_count))
+            ])
+          : _c("i", { staticClass: "fas fa-spinner fa-spin" })
+      ])
+    ]
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-bbdd8d30", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

@@ -2,43 +2,30 @@ export default {
   resetUser(state) {
     state.user = {};
   },
-  setAnsweredQuestions(state, questions) {
-    if (state.answeredQuestions.length === 0) {
-      state.answeredQuestions = questions;
+  setPaginatedContent(state, [name, data]) {
+    if (state[name].length === 0) {
+      state[name] = data;
     } else {
       /**
-       * Combine the existing questions with the new ones for pagination
+       * Combine the existing array with the new one for pagination
        */
-      state.answeredQuestions = state.answeredQuestions.concat(questions);
+      state[name] = state[name].concat(data);
     }
   },
   setAnsweredQuestionsPageInfo(state, pageInfo) {
     state.answeredQuestionsPageInfo = pageInfo;
   },
-  setUnansweredQuestions(state, questions) {
-    if (state.unAnsweredQuestions.length === 0) {
-      state.unAnsweredQuestions = questions;
-    } else {
-      /**
-       * Combine the existing questions with the new ones for pagination
-       */
-      state.unAnsweredQuestions = state.unAnsweredQuestions.concat(questions);
-    }
-  },
   setUnAnsweredQuestionsPageInfo(state, pageInfo) {
     state.unAnsweredQuestionsPageInfo = pageInfo;
-  },
-  setAnswers(state, answers) {
-    state.answers = answers;
   },
   setUser(state, user) {
     state.user = user;
   },
-  setUserQuestions(state, questions) {
-    state.userQuestions = questions;
+  setUserQuestionsPageInfo(state, pageInfo) {
+    state.userQuestionsPageInfo = pageInfo;
   },
-  setUserAnswers(state, answers) {
-    state.userAnswers = answers;
+  setUserAnswersPageInfo(state, pageInfo) {
+    state.userAnswersPageInfo = pageInfo;
   },
   updateUserQuestions(state, question) {
     state.userQuestions.unshift(question);
@@ -69,19 +56,50 @@ export default {
   },
   updateUser(state, user) {
     state.user = user;
-    delete user.email;
-    localStorage.setItem("user", JSON.stringify(user));
   },
-  changeLoading(state) {
-    state.loading = !state.loading;
+  updateAnswerVotes(state, payload) {
+    /**
+     * Find the question
+     */
+    // state.answeredQuestions = [];
+    // return;
+    const index = state.answeredQuestions.findIndex(
+      question => question.id === payload.questionID
+    );
+
+    const answerIndex = state.answeredQuestions[index].answers.findIndex(
+      answer => answer.id === payload.vote.voteables_id
+    );
+    if (payload.vote.deleted_at === null) {
+      /**
+       * Add to the vote count of the answer and add the vote into the votes array
+       */
+      state.answeredQuestions[index].answers[answerIndex].votes_count++;
+      state.answeredQuestions[index].answers[answerIndex].votes.push(
+        payload.vote
+      );
+      return state.answeredQuestions;
+    } else {
+      /**
+       * The vote has been deleted, so remove from vote count and filter out the vote from array
+       */
+      state.answeredQuestions[index].answers[answerIndex].votes_count--;
+      state.answeredQuestions[index].answers[
+        answerIndex
+      ].votes = state.answeredQuestions[index].answers[
+        answerIndex
+      ].votes.filter(initialVote => initialVote.id !== payload.vote.id);
+      return state.answeredQuestions;
+    }
   },
-  updateAnswerVotes(state, vote) {
+  updateSingleQuestionVotes(state, vote) {
     /**
      * Find the associated answer
      */
     const index = state.question.answers.findIndex(
       answer => answer.id === vote.voteables_id
     );
+
     if (vote.deleted_at === null) {
       /**
        * Add to the vote count of the answer and add the vote into the votes array
@@ -102,5 +120,14 @@ export default {
   },
   setSingleQuestion(state, question) {
     state.question = question;
+  },
+  clearState(state, names) {
+    /**
+     * Clear the arrays of paginated content, to not load the api response arrays
+     * again and again on component mount
+     */
+    for (name of names) {
+      state[name] = [];
+    }
   }
 };

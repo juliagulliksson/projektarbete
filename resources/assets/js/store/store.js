@@ -17,11 +17,10 @@ export const store = new Vuex.Store({
     answeredQuestions: [],
     answeredQuestionsPageInfo: {},
     unAnsweredQuestionsPageInfo: {},
-    answers: [],
     userQuestions: [],
+    userQuestionsPageInfo: {},
     userAnswers: [],
-    question: {},
-    loading: false
+    question: {}
   },
   getters,
   mutations,

@@ -21,28 +21,23 @@
 export default {
   data() {
     return {
-      title: ""
+      title: "",
+      loading: false
     };
-  },
-  computed: {
-    loading() {
-      return this.$store.getters.loading;
-    }
   },
   methods: {
     postQuestion() {
-      this.$store.commit("changeLoading");
+      this.loading = true;
       this.$store
         .dispatch("postQuestion", {
           title: this.title
         })
         .then(response => {
-          console.log(response);
-          this.$store.commit("changeLoading");
+          this.loading = false;
           this.title = "";
         })
         .catch(error => {
-          this.$store.commit("changeLoading");
+          this.loading = false;
           this.title = "";
         });
     }

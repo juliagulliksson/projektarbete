@@ -25,7 +25,6 @@
         </span>
       </div>
     </div>
-
     <div class="col-4_sm-12">
       <latest-questions></latest-questions>
     </div>
@@ -46,7 +45,6 @@ export default {
   },
   components: {
     QuestionDetails,
-
     LatestQuestions,
     AnswerCard,
     NewAnswerForm
@@ -77,7 +75,6 @@ export default {
   },
   methods: {
     postAnswer(answer) {
-      this.$store.commit("changeLoading");
       this.$store
         .dispatch("postAnswer", {
           question_id: this.$route.params.id,
@@ -90,7 +87,6 @@ export default {
           answer.votes_count = 0;
           this.question.answers.push(answer);
           this.answer = "";
-          this.$store.commit("changeLoading");
         });
     },
     getQuestion() {
@@ -108,6 +104,9 @@ export default {
     this.getQuestion();
   },
   watch: {
+    /**
+     * Whenever the route changes, get the new question from API based on route parameter id
+     */
     $route(to, from) {
       this.getQuestion();
     }

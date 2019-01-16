@@ -16,8 +16,7 @@ class AnswersController extends Controller
      */
     public function index()
     {
-      //Not used
-      return Answer::with('votes', 'votes.user')->withCount('votes')->orderBy('votes_count', 'desc')->get();
+    
     }
 
     /**
@@ -28,8 +27,6 @@ class AnswersController extends Controller
      */
     public function store(Request $request)
     {
-     
-   
       $question = Question::find($request->question_id);
       if ($question) {
          /**
@@ -99,6 +96,9 @@ class AnswersController extends Controller
         $answer->delete();
         $answers = Answer::where('question_id', $answer->question_id)->count();
         if($answers < 1){
+          /**
+           * If the associated question has no more answers, reset answered_at to null
+           */
           $question = Question::find($answer->question_id);
           $question->answered_at = NULL;
           $question->save();
@@ -111,6 +111,7 @@ class AnswersController extends Controller
     }
 
     public function userAnswers($user_id){
-      return Answer::where('user_id', $user_id)->with('question', 'question.user')->orderBy('created_at', 'desc')->get();
+      return Answer::where('user_id', $user_id)->with('question', 'question.user')
+      ->orderBy('created_at', 'desc')->simplePaginate(6);
     }
 }

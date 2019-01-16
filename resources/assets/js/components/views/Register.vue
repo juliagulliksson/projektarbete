@@ -25,10 +25,10 @@
           </div>
           <div class="form-group">
             <input type="checkbox" class="form-check-input" name="gdpr" required>
-            <label
-              for="gdpr"
-              class="form-check-label"
-            >By signing this form you agree to the storing of your information</label>
+            <label for="gdpr" class="form-check-label">I agree to my the storing of my information</label>
+          </div>
+          <div v-if="error != ''" class="alert alert-danger" role="alert">
+            <p class="text-center">{{error }}</p>
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-main">
@@ -48,18 +48,14 @@ export default {
     return {
       name: "",
       email: "",
-      password: ""
+      password: "",
+      loading: false,
+      error: ""
     };
-  },
-  computed: {
-    loading() {
-      return this.$store.getters.loading;
-    }
   },
   methods: {
     register() {
-      this.$store.commit("changeLoading");
-
+      this.loading = true;
       this.$store
         .dispatch("register", {
           name: this.name,
@@ -68,10 +64,12 @@ export default {
         })
         .then(response => {
           this.$router.push({ name: "login" });
-          this.$store.commit("changeLoading");
+          this.loading = false;
         })
         .catch(error => {
-          this.$store.commit("changeLoading");
+          this.loading = false;
+
+          this.error = "Username or email already exists";
         });
     }
   }

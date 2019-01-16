@@ -30,10 +30,6 @@
             </div>
             <div class="answers-homepage">
               <h4>Latest answers</h4>
-
-              <!-- <template v-for="question in questionsWithAnswers"> -->
-              <!-- <questions-with-answers-card :key="'q' + question.id" :question="question"></questions-with-answers-card> -->
-              <!-- </template> -->
               <questions-with-answers-card></questions-with-answers-card>
             </div>
           </div>
@@ -50,11 +46,6 @@
 import QuestionsWithAnswersCard from "./../cards/QuestionsWithAnswers";
 import LatestQuestions from "./../cards/LatestQuestions";
 export default {
-  data() {
-    return {
-      loaded: false
-    };
-  },
   components: {
     QuestionsWithAnswersCard,
     LatestQuestions
@@ -63,11 +54,6 @@ export default {
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;
     }
-  } /* ,
-  created() {
-    this.$store.dispatch("getQuestions").then(response => {
-      this.loaded = true;
-    });
-  } */
+  }
 };
 </script>

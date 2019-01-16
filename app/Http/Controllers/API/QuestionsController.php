@@ -20,12 +20,12 @@ class QuestionsController extends Controller
 
           return Question::whereNotNull('answered_at')->with('user', 'answers', 'answers.user', 'answers.votes','answers.votes.user')
           ->orderBy('answered_at', 'desc')
-          ->orderBy('created_at', 'desc')->simplePaginate(3);
+          ->orderBy('created_at', 'desc')->simplePaginate(6);
         } else {
 
           return Question::whereNull('answered_at')->with('user', 'answers', 'answers.user', 'answers.votes','answers.votes.user')
             ->orderBy('answered_at', 'desc')
-            ->orderBy('created_at', 'desc')->simplePaginate(3);
+            ->orderBy('created_at', 'desc')->simplePaginate(6);
         }
     }
 
@@ -55,7 +55,6 @@ class QuestionsController extends Controller
     {
       $question = Question::with('user', 'answers', 'answers.user',  'answers.votes')->where('id', $id)->first();
       if($question) {
-
         return response()->json(['status' => 200, 'question' => $question]);
       } else {
         return response()->json(['status' => 500]);
@@ -99,6 +98,6 @@ class QuestionsController extends Controller
     }
 
     public function userQuestions($user_id){
-      return Question::where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+      return Question::where('user_id', $user_id)->orderBy('created_at', 'desc')->simplePaginate(6);
     }
 }

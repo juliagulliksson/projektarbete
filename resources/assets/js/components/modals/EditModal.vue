@@ -47,7 +47,6 @@
 
 <script>
 import { VueEditor } from "vue2-editor";
-// @click="$emit('clicked', content)"
 export default {
   props: {
     id: Number,
@@ -71,12 +70,9 @@ export default {
       }
     },
     editAnswer() {
-      console.log("answer");
       this.$store
         .dispatch("editAnswer", { body: this.content, id: this.id })
-        .then(response => {
-          console.log(response);
-        });
+        .then(response => {});
     },
     editQuestion() {
       this.$store

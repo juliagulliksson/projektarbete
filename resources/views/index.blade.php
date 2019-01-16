@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,300i" rel="stylesheet">
     <!-- Gridlex -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gridlex/2.7.1/gridlex.min.css">
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>What's what</title>
       <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
   </head>

@@ -25,12 +25,14 @@
             @click="expand = true"
           >Read more</button>
         </div>
+        <upvote :answer="answer" :type="'questionWithAnswer'"/>
       </div>
     </template>
   </div>
 </template>
 
 <script>
+import Upvote from "./Upvote";
 import formatDate from "./../mixins/formatDate.js";
 
 export default {
@@ -41,6 +43,9 @@ export default {
   },
   props: {
     question: Object
+  },
+  components: {
+    Upvote
   },
   mixins: [formatDate],
   computed: {

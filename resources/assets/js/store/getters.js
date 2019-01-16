@@ -20,7 +20,7 @@ export default {
   },
   user: state => state.user,
   userQuestions: state => state.userQuestions,
+  userQuestionsPageInfo: state => state.userQuestionsPageInfo,
   userAnswers: state => state.userAnswers,
-  singleQuestion: state => state.question,
-  loading: state => state.loading
+  singleQuestion: state => state.question
 };
